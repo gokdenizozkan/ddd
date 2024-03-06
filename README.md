@@ -123,13 +123,13 @@ classDiagram
     }
 
     class Address {
-        <<abstract>>
-        -BigDecimal? latitude
-        -BigDecimal? longitude
-        -String country
+        -BigDecimal latitude
+        -BigDecimal longitude
+        -String countryCode
         -String city
         -String region
-        -String address
+        -String addressLine
+        -String addressDetails
         -String contactPhone
     }
 
