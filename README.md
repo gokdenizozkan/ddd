@@ -40,7 +40,7 @@ which is an extended version of Semantic Versioning (SemVer).
 
 ~~1. Write Address class, it can be owned => unidirectional relationship.~~    
 ~~2. Represent a collection of addresses with "AddressCollection" class.~~  
-3. A buyer must have an "AddressCollection".  
+~~3. A buyer must have an "AddressCollection".  => currently unidirectional relationship to allow AddressCollection to be used by any entity.~~  
 4. A store must have an "Address".  
 5. A legal entity must have an "Address"  
 
