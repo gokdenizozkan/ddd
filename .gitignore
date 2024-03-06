@@ -1,5 +1,6 @@
 .idea/
 HELP.md
+target/
 
 # Compiled class file
 *.class
