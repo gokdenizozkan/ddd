@@ -38,7 +38,7 @@ which is an extended version of Semantic Versioning (SemVer).
 
 #### f4: Represent an address
 
-1. Write Address class, it can be owned => unidirectional relationship.
+~~1. Write Address class, it can be owned => unidirectional relationship.~~
 2. Represent a collection of addresses with "AddressCollection" class.
 3. A buyer must have an "AddressCollection".
 4. A store must have an "Address".
@@ -134,7 +134,7 @@ classDiagram
     }
 
     class AddressCollection {
-        -List~Address~ address
+        -List~Address~ addressCollection
     }
 
     class LegalEntity {
@@ -152,10 +152,12 @@ classDiagram
 
     class Rating {
         <<enumeration>>
-        +EXCELLENT(5)
-        +SATISFACTORY(4)
-        +DECENT(3)
-        +LACKING(2)
-        +POOR(1)
+        +EXCELLENT
+        +SATISFACTORY
+        +DECENT
+        +LACKING
+        +POOR
+        -Rating(Integer value)
+        +Double normalized()
     }
 ```
