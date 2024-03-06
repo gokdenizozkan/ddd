@@ -17,13 +17,13 @@ which is an extended version of Semantic Versioning (SemVer).
 
 ### Features
 
-#### f1: Allow auiditing for entities
+#### ~~f1: Allow auiditing for entities~~
 
-1. Write "AuditableEntity" to be extended by all auditable entities
+~~1. Write "AuditableEntity" to be extended by all auditable entities~~
 
 #### f2: Represent an individual
 
-1. Write "User" to be extended by all individual types.
+~~1. Write "User" to be extended by all individual types.~~
 2. Write "Buyer" to represent a customer.
 3. Write "Seller" to represent a any kind of seller.
 4. Write "SellerRoles" to represent the roles a seller can have.
