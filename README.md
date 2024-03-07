@@ -26,15 +26,14 @@ which is an extended version of Semantic Versioning (SemVer).
 ~~1. Write "User" to be extended by all individual types.~~  
 ~~2. Write "Buyer" to represent a customer.~~  
 3. Write "Seller" to represent a any kind of seller.  
-4. Write "SellerRoles" to represent the roles a seller can have.  
+4. Write "SellerAuthority" to represent the roles a seller can have.  
 
 #### f3: Represent a store
 
 1. A store must have a "LegalEntity", thus write "LegalEntity" to represent a legal entity.  
 2. Write "Store" to be extended by all store types.  
 3. Write "Restaurant" to represent a restaurant.  
-4. Write "ManagerCollection" to represent the managers of a store. Store is the only owner, thus it is a unidirectional
-   relationship.  
+4. A store must have Sellers to manage it. (bidirectional one to many)
 
 #### f4: Represent an address
 
@@ -43,6 +42,7 @@ which is an extended version of Semantic Versioning (SemVer).
 ~~3. A buyer must have an "AddressCollection".  => currently unidirectional relationship to allow AddressCollection to be used by any entity.~~  
 4. A store must have an "Address".  
 5. A legal entity must have an "Address"  
+6. Change address collection to be a list of addresses. Still address is not ownership of any relationships it has. But no more middle class anymore.
 
 #### f5: Represent a review
 
@@ -60,20 +60,18 @@ classDiagram
     direction TB
     AuditableEntity <|-- User
     AuditableEntity <|-- Address
-    AuditableEntity <|-- AddressCollection
     AuditableEntity <|-- Store
     AuditableEntity <|-- LegalEntity
     AuditableEntity <|-- Review
     User <|-- Buyer
     User <|-- Seller
     Store <|-- Restaurant
-    Address "1" *-- "1" Store
-    Address "*" *-- "1" AddressCollection
-    Buyer "1" --* "1" AddressCollection
+    Address "1" --* "1" Store
+    Address "1" --* "1" LegalEntity
+    Address "*" --* "1" Buyer
     Store "*" *--* "1" LegalEntity
-    Store "1" *--* "1" ManagerCollection
-    Seller "*" --* "1" ManagerCollection
-    Seller "1" *-- "*" SellerRoles
+    Store "1" *--* "*" Seller
+    SellerAuthority "*" --* "1" Seller  
     Review "*" *--* "1" Buyer
     Review "*" --* "1" Rating
 
@@ -95,15 +93,15 @@ classDiagram
     }
 
     class Buyer {
-        -AddressCollection addressCollection
+        -List~Address~ addresses
     }
 
     class Seller {
         -Store store
-        -SellerRoles roles
+        -SellerAuthority authority
     }
 
-    class SellerRoles {
+    class SellerAuthority {
         <<enumeration>>
         +MANAGER $
     }
@@ -115,11 +113,7 @@ classDiagram
         -String phone
         -LegalEntity legalEntity
         -Address address
-    }
-
-    class ManagerCollection {
-        -Store store
-        -List~Seller~ managers
+        -List~Seller~ sellers
     }
 
     class Address {
@@ -133,15 +127,12 @@ classDiagram
         -String contactPhone
     }
 
-    class AddressCollection {
-        -List~Address~ addressCollection
-    }
-
     class LegalEntity {
         -String name
         -String email
         -String phone
         -Address address
+        -List~Store~ stores
     }
 
     class Review {
