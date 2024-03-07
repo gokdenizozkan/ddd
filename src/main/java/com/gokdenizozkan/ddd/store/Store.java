@@ -60,4 +60,7 @@ public class Store extends AuditableEntity {
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "legal_entity_id", referencedColumnName = "id")
     private LegalEntity legalEntity;
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Address address;
 }

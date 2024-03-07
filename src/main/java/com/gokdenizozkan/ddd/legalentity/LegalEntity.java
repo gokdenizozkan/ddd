@@ -38,16 +38,16 @@ public class LegalEntity extends AuditableEntity {
 
     @NotNull(message = "Legal name is required")
     @Column(name = "legal_name", nullable = false)
-    String legalName;
+    private String legalName;
 
     @NotNull(message = "Email is required")
     @Email(message = "Email should be valid")
-    String email;
+    private String email;
 
     @NotNull(message = "Phone number is required")
     @Pattern(regexp = "^[\\d()+\\s]*$", message = "Phone number can contain only digits, spaces and parentheses")
     @Size(min = 2, max = 20, message = "Phone number must be between 2 and 20 characters")
-    String phone;
+    private String phone;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Address address;

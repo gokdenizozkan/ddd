@@ -33,15 +33,15 @@ which is an extended version of Semantic Versioning (SemVer).
 ~~1. A store must have a "LegalEntity", thus write "LegalEntity" to represent a legal entity.~~  
 ~~2. Write "Store" to represent stores.~~  
 ~~3. Write a StoreType enum to represent the type of store. Currently of no use, but for future scalability.~~    
-4. A store must have Sellers to manage it. (bidirectional one to many)  
+4. A store must have Sellers to manage it. (bidirectional one to many)
 
-#### f4: Represent an address
+~~#### f4: Represent an address~~  
 
 ~~1. Write Address class, it can be owned => unidirectional relationship.~~    
 ~~2. Represent a collection of addresses with "AddressCollection" class.~~  
 ~~3. A buyer must have an "AddressCollection".  => currently unidirectional relationship to allow AddressCollection to be used by any entity.~~  
-4. A store must have an "Address".  
-5. A legal entity must have an "Address"  
+~~4. A store must have an "Address".~~  
+~~5. A legal entity must have an "Address"~~    
 ~~6. Change address collection to be a list of addresses. Still address is not ownership of any relationships it has. But no more middle class anymore.~~
 
 #### f5: Represent a review
