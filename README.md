@@ -21,12 +21,12 @@ which is an extended version of Semantic Versioning (SemVer).
 
 ~~1. Write "AuditableEntity" to be extended by all auditable entities~~
 
-#### f2: Represent an individual
+#### ~~f2: Represent an individual~~  
 
 ~~1. Write "User" to be extended by all individual types.~~  
 ~~2. Write "Buyer" to represent a customer.~~  
-3. Write "Seller" to represent a any kind of seller.  
-4. Write "SellerAuthority" to represent the roles a seller can have.  
+~~3. Write "Seller" to represent a any kind of seller.~~  
+~~4. Write "SellerAuthority" to represent the roles a seller can have.~~    
 
 #### f3: Represent a store
 
