@@ -3,6 +3,7 @@ package com.gokdenizozkan.ddd.store;
 import com.gokdenizozkan.ddd.address.Address;
 import com.gokdenizozkan.ddd.core.AuditableEntity;
 import com.gokdenizozkan.ddd.legalentity.LegalEntity;
+import com.gokdenizozkan.ddd.user.seller.Seller;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,6 +18,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
@@ -27,6 +29,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "stores")
@@ -63,4 +67,7 @@ public class Store extends AuditableEntity {
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Address address;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<Seller> sellers;
 }
