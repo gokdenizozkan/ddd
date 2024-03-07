@@ -42,7 +42,7 @@ which is an extended version of Semantic Versioning (SemVer).
 ~~3. A buyer must have an "AddressCollection".  => currently unidirectional relationship to allow AddressCollection to be used by any entity.~~  
 4. A store must have an "Address".  
 5. A legal entity must have an "Address"  
-6. Change address collection to be a list of addresses. Still address is not ownership of any relationships it has. But no more middle class anymore.
+~~6. Change address collection to be a list of addresses. Still address is not ownership of any relationships it has. But no more middle class anymore.~~
 
 #### f5: Represent a review
 

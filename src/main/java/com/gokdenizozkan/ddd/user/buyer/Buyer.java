@@ -1,6 +1,6 @@
 package com.gokdenizozkan.ddd.user.buyer;
 
-import com.gokdenizozkan.ddd.addresscollection.AddressCollection;
+import com.gokdenizozkan.ddd.address.Address;
 import com.gokdenizozkan.ddd.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -9,12 +9,16 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity
 @Table(name = "buyers")
@@ -28,6 +32,11 @@ public class Buyer extends User {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private AddressCollection addressCollection;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @JoinTable(
+            name = "buyer_addresses",
+            joinColumns = @JoinColumn(name = "buyer_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "id", unique = true)
+    )
+    private List<Address> addresses;
 }
