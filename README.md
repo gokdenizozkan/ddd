@@ -31,8 +31,8 @@ which is an extended version of Semantic Versioning (SemVer).
 #### f3: Represent a store
 
 1. A store must have a "LegalEntity", thus write "LegalEntity" to represent a legal entity.  
-2. Write "Store" to be extended by all store types.  
-3. Write "Restaurant" to represent a restaurant.  
+2. Write "Store" to represent stores.  
+3. Write a StoreType enum to represent the type of store. Currently of no use, but for future scalability.  
 4. A store must have Sellers to manage it. (bidirectional one to many)
 
 #### f4: Represent an address
@@ -65,7 +65,6 @@ classDiagram
     AuditableEntity <|-- Review
     User <|-- Buyer
     User <|-- Seller
-    Store <|-- Restaurant
     Address "1" --* "1" Store
     Address "1" --* "1" LegalEntity
     Address "*" --* "1" Buyer
@@ -107,7 +106,6 @@ classDiagram
     }
 
     class Store {
-        <<abstract>>
         -String name
         -String email
         -String phone
