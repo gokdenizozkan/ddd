@@ -1,6 +1,7 @@
 package com.gokdenizozkan.ddd.user.buyer;
 
 import com.gokdenizozkan.ddd.address.Address;
+import com.gokdenizozkan.ddd.review.Review;
 import com.gokdenizozkan.ddd.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -39,4 +40,7 @@ public class Buyer extends User {
             inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "id", unique = true)
     )
     private List<Address> addresses;
+
+    @OneToMany(mappedBy = "buyer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews;
 }

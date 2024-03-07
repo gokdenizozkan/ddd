@@ -44,10 +44,10 @@ which is an extended version of Semantic Versioning (SemVer).
 ~~5. A legal entity must have an "Address"~~    
 ~~6. Change address collection to be a list of addresses. Still address is not ownership of any relationships it has. But no more middle class anymore.~~
 
-#### f5: Represent a review
+#### ~~f5: Represent a review~~ 
 
-1. Write "Rating" to be used by "Review" to represent a rating.  
-2. Write "Review" to represent a review.  
+~~1. Write "Rating" to be used by "Review" to represent a rating.~~    
+~~2. Write "Review" to represent a review.~~  
 
 ## Diagrams and Relationships
 
@@ -72,7 +72,7 @@ classDiagram
     Store "1" *--* "*" Seller
     SellerAuthority "*" --* "1" Seller  
     Review "*" *--* "1" Buyer
-    Review "*" --* "1" Rating
+    Review "*" *-- "1" Rating
 
     class AuditableEntity {
         <<abstract>>
@@ -146,7 +146,8 @@ classDiagram
         +DECENT
         +LACKING
         +POOR
-        -Rating(Integer value)
+        +int value
+        -Rating(int value)
         +Double normalized()
     }
 ```
