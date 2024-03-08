@@ -48,8 +48,82 @@ which is an extended version of Semantic Versioning (SemVer).
 
 ~~1. Write "Rating" to be used by "Review" to represent a rating.~~    
 ~~2. Write "Review" to represent a review.~~  
++3. Reviews should be owned by the store, as well.
+
+#### f6: Updatable store rating
+
+1. Store rating should be updatable without going through the entire review list and rating again.
+
+#### f7: Fundamental requests should be processable
+
+> 1. Buyer controller is written.
+> 2. Buyer service is written.
+> 3. Buyer repository is written.
+> 4. Buyer Response Dto(s) are written.
+> 5. Buyer Request Dto(s) are written.
+> 6. Buyer dto mapper(s) are written.
+
+> 7. Store controller is written.
+> 8. Store service is written.
+> 9. Store repository is written.
+> 10. Store Response Dto(s) are written.
+> 11. Store Request Dto(s) are written.
+> 12. Store dto mapper(s) are written.
+
+> 13. Review controller is written.
+> 14. Review service is written.
+> 15. Review repository is written.
+> 16. Review Response Dto(s) are written.
+> 17. Review Request Dto(s) are written.
+ 
+> 18. Address controller is written.
+> 19. Address service is written.
+> 20. Address repository is written.
+> 21. Address Response Dto(s) are written.
+> 22. Address Request Dto(s) are written.
+
+### Personal to-dos
+
+> - [ ] Figure out a way to sync `store` data with Solr.  
+> (Store service can, but is there a better way? Research DIH for newer versions of solar.)
 
 ## Diagrams and Relationships
+
+### Architecture
+
+Below is a summary of the service architecture flow for an incoming request.  
+
+Service named "Central Service" is composed of multiple controllers and services
+(like User controller, service and repository which uses PostgreSQL as its database).
+
+The entire central service architecture is shown as if it is composed of a single service
+for the sake of simplicity and purpose of this diagram.
+
+```mermaid
+---
+title: Service Architecture Flow -> Incoming Request
+---
+
+graph LR
+    ExternalRequest -->|sends| CentralControllers[Central Controllers]
+    CentralServices -->|asks| RecommendationController
+    
+    subgraph "External World"
+        ExternalRequest[Request]
+    end
+
+    subgraph "Central Service"
+        CentralControllers[Central Controllers] -->|directs| CentralServices
+        CentralServices[Central Services] -->|uses| DB[PostgreSQL Database]
+    end
+
+    subgraph "Recommendation Service"
+        RecommendationEngine[Recommendation Engine] -->|uses| Solr[Apache Solr]
+        RecommendationController[Recommendation Controller] -->|directs| RecommendationEngine
+    end
+```
+
+### Entity Relationships
 
 ```mermaid
 ---
@@ -72,6 +146,7 @@ classDiagram
     Store "1" *--* "*" Seller
     SellerAuthority "*" --* "1" Seller  
     Review "*" *--* "1" Buyer
+    Review "*" *--* "1" Store
     Review "*" *-- "1" Rating
 
     class AuditableEntity {
@@ -109,9 +184,12 @@ classDiagram
         -String name
         -String email
         -String phone
+        -Float storeRating
+        -Long reviewCount
         -LegalEntity legalEntity
         -Address address
         -List~Seller~ sellers
+        -List~Review~ reviews
     }
 
     class Address {
@@ -134,7 +212,8 @@ classDiagram
     }
 
     class Review {
-        -User customer
+        -Buyer buyer
+        -Store store
         -Rating rating
         -String experience
     }
@@ -151,3 +230,24 @@ classDiagram
         +Double normalized()
     }
 ```
+
+## Certain design decisions
+
+### Store data is shared between a Relational Database and Solr, why?
+
+For the purpose of the tools. Relational database is used to store info of the store.
+Solr is used to index the store related data, not data of the store, and provide search capabilities.
+
+- Store object, at first, was designed to be an abstract class to hold the common fields of a store.
+
+However, certain limitations prevented this approach. Thus, it was decided to use a single table for all store types.
+Still, though, store types have their own service layers. Currently, there is only one store type, which is FoodStore.
+But, it does not mean that the business will stay this way. It is possible that there will be more store types in the future.
+
+#### But wouldn't it be complicated to store all store types in a single table, in the future?
+
+In the future, store types can have their own tables. Such a refactoring can be handled as all store types will have their own services and layers.
+But of course, this does not lower the complexity of the service layer.
+
+To handle this, handwritten specifications will be used.
+For example, for restaurant service, such a specification would help the service layer work on restaurants only, without explicitly stating that we want to work with restaurants only.
