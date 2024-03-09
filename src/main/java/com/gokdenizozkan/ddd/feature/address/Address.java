@@ -1,6 +1,6 @@
 package com.gokdenizozkan.ddd.feature.address;
 
-import com.gokdenizozkan.ddd.core.AuditableEntity;
+import com.gokdenizozkan.ddd.core.auditableentity.AuditableEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

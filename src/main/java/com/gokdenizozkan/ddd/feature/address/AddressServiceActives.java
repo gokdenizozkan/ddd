@@ -1,10 +1,9 @@
 package com.gokdenizozkan.ddd.feature.address;
 
+import com.gokdenizozkan.ddd.config.Specifications;
 import com.gokdenizozkan.ddd.config.exception.ResourceNotFoundWithIdException;
-import com.gokdenizozkan.ddd.core.datastructure.Tuple;
 import com.gokdenizozkan.ddd.feature.address.dto.AddressEntityMapper;
 import com.gokdenizozkan.ddd.feature.address.dto.request.AddressSaveRequest;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -18,10 +17,9 @@ public class AddressServiceActives implements AddressService {
 
 
     public AddressServiceActives(AddressRepository repository,
-                                 @Qualifier("SpecificationActives") Specification<Address> specification,
                                  AddressEntityMapper entityMapper) {
         this.repository = repository;
-        this.specification = specification;
+        this.specification = Specifications.isActive(Address.class);
         this.entityMapper = entityMapper;
     }
 
@@ -32,7 +30,8 @@ public class AddressServiceActives implements AddressService {
 
     @Override
     public Address findById(Long id) {
-        return repository.findById(id, specification);
+        return repository.findById(specification, id)
+                .orElseThrow(() -> new ResourceNotFoundWithIdException(Address.class, id));
     }
 
     @Override
@@ -42,14 +41,18 @@ public class AddressServiceActives implements AddressService {
     }
 
     @Override
-    public Tuple<Address> update(Long id, AddressSaveRequest request) {
-        Address foundAddress = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundWithIdException(Address.class, id));
+    public Address update(Long id, AddressSaveRequest request) {
+        if (!repository.existsById(id)) {
+            throw new ResourceNotFoundWithIdException(Address.class, id);
+        }
 
-        Address updatedAddress = entityMapper.fromSaveRequest.apply(request);
-        repository.save(updatedAddress);
+        Address address = entityMapper.fromSaveRequest.apply(request);
+        address.setId(id);
 
-        return Tuple.of(foundAddress, updatedAddress);
+        repository.findActiveDetermingFields(id).copyTo(address);
+        repository.save(address);
+
+        return address;
     }
 
     @Override

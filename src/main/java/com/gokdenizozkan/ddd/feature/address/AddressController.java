@@ -1,6 +1,5 @@
 package com.gokdenizozkan.ddd.feature.address;
 
-import com.gokdenizozkan.ddd.config.response.ResponseTemplates;
 import com.gokdenizozkan.ddd.config.response.Structured;
 import com.gokdenizozkan.ddd.core.datastructure.Tuple;
 import com.gokdenizozkan.ddd.feature.address.dto.request.AddressSaveRequest;
@@ -36,11 +35,12 @@ public class AddressController {
 
     @PostMapping("/")
     public ResponseEntity<Structured<AddressResponseMirror>> save(@RequestBody AddressSaveRequest request) {
-        return responser.save(request);
+        ResponseEntity<Structured<AddressResponseMirror>> saved = responser.save(request);
+        return saved;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Structured<Tuple<AddressResponseMirror>>> update(@PathVariable Long id, @RequestBody AddressSaveRequest request) {
+    public ResponseEntity<Structured<AddressResponseMirror>> update(@PathVariable Long id, @RequestBody AddressSaveRequest request) {
         return responser.update(id, request);
     }
 

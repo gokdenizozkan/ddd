@@ -1,6 +1,6 @@
 package com.gokdenizozkan.ddd.feature.review;
 
-import com.gokdenizozkan.ddd.core.AuditableEntity;
+import com.gokdenizozkan.ddd.core.auditableentity.AuditableEntity;
 import com.gokdenizozkan.ddd.feature.store.Store;
 import com.gokdenizozkan.ddd.feature.user.buyer.Buyer;
 import jakarta.persistence.Column;

@@ -15,8 +15,8 @@ import java.util.Map;
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Structured<Object>> handleExceptionGlobal(Exception e, WebRequest request) {
-        return StructuredResponseEntityBuilder.builder()
+    public ResponseEntity<Structured<Map<String, String>>> handleExceptionGlobal(Exception e, WebRequest request) {
+        return StructuredResponseEntityBuilder.<Map<String, String>>builder()
                 .success(false)
                 .message(e.getMessage())
                 .data(Map.of("path", request.getDescription(false)))
@@ -25,8 +25,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundWithIdException.class)
-    public ResponseEntity<Structured<Object>> handleIdNotFoundException(ResourceNotFoundWithIdException e, WebRequest request) {
-        return StructuredResponseEntityBuilder.builder()
+    public ResponseEntity<Structured<Map<String, String>>> handleIdNotFoundException(ResourceNotFoundWithIdException e, WebRequest request) {
+        return StructuredResponseEntityBuilder.<Map<String, String>>builder()
                 .success(false)
                 .message(e.getMessage())
                 .data(Map.of("path", request.getDescription(false)))
@@ -35,8 +35,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Structured<Object>> handleResourceNotFoundException(ResourceNotFoundException e, WebRequest request) {
-        return StructuredResponseEntityBuilder.builder()
+    public ResponseEntity<Structured<Map<String, String>>> handleResourceNotFoundException(ResourceNotFoundException e, WebRequest request) {
+        return StructuredResponseEntityBuilder.<Map<String, String>>builder()
                 .success(false)
                 .message(e.getMessage())
                 .data(Map.of("path", request.getDescription(false)))
@@ -45,8 +45,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(InvalidInputException.class)
-    public ResponseEntity<Structured<Object>> handleInvalidInputException(InvalidInputException e, WebRequest request) {
-        return StructuredResponseEntityBuilder.builder()
+    public ResponseEntity<Structured<Map<String, String>>> handleInvalidInputException(InvalidInputException e, WebRequest request) {
+        return StructuredResponseEntityBuilder.<Map<String, String>>builder()
                 .success(false)
                 .message(e.getMessage())
                 .data(Map.of("path", request.getDescription(false)))

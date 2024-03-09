@@ -39,9 +39,9 @@ public class AddressResponser {
         return ResponseTemplates.created(response);
     }
 
-    public ResponseEntity<Structured<Tuple<AddressResponseMirror>>> update(Long id, AddressSaveRequest request) {
-        Tuple<Address> result = service.update(id, request);
-        Tuple<AddressResponseMirror> response = result.mapped(dtoMapper.toResponseMirror);
+    public ResponseEntity<Structured<AddressResponseMirror>> update(Long id, AddressSaveRequest request) {
+        Address address = service.update(id, request);
+        AddressResponseMirror response = dtoMapper.toResponseMirror.apply(address);
         return ResponseTemplates.ok(response);
     }
 

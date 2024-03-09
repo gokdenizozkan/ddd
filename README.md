@@ -48,7 +48,7 @@ which is an extended version of Semantic Versioning (SemVer).
 
 ~~1. Write "Rating" to be used by "Review" to represent a rating.~~    
 ~~2. Write "Review" to represent a review.~~  
-+3. Reviews should be owned by the store, as well.
+~~+3. Reviews should be owned by the store, as well.~~  
 
 #### f6: Updatable store rating
 
@@ -76,9 +76,9 @@ which is an extended version of Semantic Versioning (SemVer).
 > 16. Review Response Dto(s) are written.
 > 17. Review Request Dto(s) are written.
  
-> 18. Address controller is written.
-> 19. Address service is written.
-> 20. Address repository is written.  
+> ~~18. Address controller is written.~~  
+> ~~19. Address service is written.~~  
+> ~~20. Address repository is written.~~    
 > ~~21. Address Response Dto(s) are written.~~  
 > ~~22. Address Request Dto(s) are written.~~
 
@@ -139,6 +139,36 @@ graph LR
         RecommendationController[Recommendation Controller] -->|directs| RecommendationEngine
     end
 ```
+
+### Layer Architecture
+
+Below is a summary of the layer architecture of the service.
+
+```mermaid
+---
+title: Layer Architecture
+---
+
+graph LR
+    Controller[Controller] -->|directs| Responser[Responser]
+    Responser -->|directs| Service[Service]
+    Service -->|performs| Database[Database]
+    
+    Database -->|retrieves| Service
+    Service -->|returns results| Responser
+    Responser -->|returns response| Controller
+```
+
+One thing different here is the Responser layer.
+Responser is a class that is used to build a response.
+- It acts as an abstraction of both the service and controller layer.
+- It directs the request to the service, **untouched** as well.
+- After service layer performs its actions, service layer returns results back to the responser, **untouched**.
+- Responser maps the raw result to corresponding Dto objects, and wraps response structure around it.
+- Lastly, it returns the response to the controller.
+
+This helps to keep the service layer clean. Service layer does not need to know about the response structure. 
+
 
 ### Entity Relationships
 

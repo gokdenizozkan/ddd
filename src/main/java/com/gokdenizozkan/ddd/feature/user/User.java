@@ -1,6 +1,6 @@
 package com.gokdenizozkan.ddd.feature.user;
 
-import com.gokdenizozkan.ddd.core.AuditableEntity;
+import com.gokdenizozkan.ddd.core.auditableentity.AuditableEntity;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Temporal;

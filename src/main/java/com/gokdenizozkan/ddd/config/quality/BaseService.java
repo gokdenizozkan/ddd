@@ -1,11 +1,10 @@
 package com.gokdenizozkan.ddd.config.quality;
 
 import com.gokdenizozkan.ddd.core.datastructure.Tuple;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.List;
 
-public interface BaseServiceWithSpecifications<TYPE, ID, SAVE_REQUEST> {
+public interface BaseService<TYPE, ID, SAVE_REQUEST> {
     List<TYPE> findAll();
     TYPE findById(ID id);
     TYPE save(SAVE_REQUEST request);
@@ -16,7 +15,7 @@ public interface BaseServiceWithSpecifications<TYPE, ID, SAVE_REQUEST> {
      * @param request the request to update the entity with
      * @return a tuple of the old and new entity
      */
-    Tuple<TYPE> update(ID id, SAVE_REQUEST request);
+    TYPE update(ID id, SAVE_REQUEST request);
     void delete(ID id);
 
 }
