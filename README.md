@@ -93,10 +93,10 @@ which is an extended version of Semantic Versioning (SemVer).
 ~~1. Write custom exceptions that provides detailed information.~~  
 ~~2. Write a global exception handler, capture all custom exceptions and return a detailed error message.~~
  
-#### f10: Structured responses
+#### ~~f10: Structured responses~~
 
-1. Write a response structure.  
-2. Write a response builder to build the response structure.  
+~~1. Write a response structure.~~  
+~~2. Write a response builder to build the response structure.~~  
 ~~3. Write a Tuple record that stores same type of two objects. Tuple should have a mapped function to map the objects to a new object. Main use scenario is update requests.~~
 
 ### Personal to-dos
