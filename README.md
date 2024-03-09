@@ -84,27 +84,20 @@ which is an extended version of Semantic Versioning (SemVer).
 
 #### f8: Services retrieve only active entities
 
-1. Write a general specificiation to be used accross all services
-        that will retrieve only active entities (An entity that is not deleted and is enabled.)
-2. Use the specification in all services.
-3. Services should be scalable to allow custom specifications to be used.
+1. Write a general specificiation to be used accross all services that will retrieve only active entities (An entity that is not deleted and is enabled.)  
+2. Use the specification in all services.  
+3. Services should be scalable to allow custom specifications to be used.  
 
-<del>
-#### f9: Errors are handled  
+#### ~~f9: Errors are handled~~  
 
-1. Write custom exceptions that provides detailed information.
-2. Write a global exception handler, capture all custom exceptions and return a detailed error message.
-</del>
-
+~~1. Write custom exceptions that provides detailed information.~~  
+~~2. Write a global exception handler, capture all custom exceptions and return a detailed error message.~~
  
 #### f10: Structured responses
 
-1. Write a response structure.
-2. Write a response builder to build the response structure.
-3. Write a Tuple record that stores same type of two objects.
-        Tuple should have a mapped function to map the objects to a new object.
-        Main use scenario is update requests.
-
+1. Write a response structure.  
+2. Write a response builder to build the response structure.  
+~~3. Write a Tuple record that stores same type of two objects. Tuple should have a mapped function to map the objects to a new object. Main use scenario is update requests.~~
 
 ### Personal to-dos
 
