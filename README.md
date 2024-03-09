@@ -89,11 +89,14 @@ which is an extended version of Semantic Versioning (SemVer).
 2. Use the specification in all services.
 3. Services should be scalable to allow custom specifications to be used.
 
-#### f9: Errors are handled
+<del>
+#### f9: Errors are handled  
 
 1. Write custom exceptions that provides detailed information.
 2. Write a global exception handler, capture all custom exceptions and return a detailed error message.
+</del>
 
+ 
 #### f10: Structured responses
 
 1. Write a response structure.
