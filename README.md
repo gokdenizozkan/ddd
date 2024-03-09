@@ -78,9 +78,9 @@ which is an extended version of Semantic Versioning (SemVer).
  
 > 18. Address controller is written.
 > 19. Address service is written.
-> 20. Address repository is written.
-> 21. Address Response Dto(s) are written.
-> 22. Address Request Dto(s) are written.
+> 20. Address repository is written.  
+> ~~21. Address Response Dto(s) are written.~~  
+> ~~22. Address Request Dto(s) are written.~~
 
 #### f8: Services retrieve only active entities
 
