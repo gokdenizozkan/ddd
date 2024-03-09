@@ -1,9 +1,10 @@
-package com.gokdenizozkan.ddd.store;
+package com.gokdenizozkan.ddd.feature.store;
 
-import com.gokdenizozkan.ddd.address.Address;
+import com.gokdenizozkan.ddd.feature.address.Address;
 import com.gokdenizozkan.ddd.core.AuditableEntity;
-import com.gokdenizozkan.ddd.legalentity.LegalEntity;
-import com.gokdenizozkan.ddd.user.seller.Seller;
+import com.gokdenizozkan.ddd.feature.legalentity.LegalEntity;
+import com.gokdenizozkan.ddd.feature.review.Review;
+import com.gokdenizozkan.ddd.feature.user.seller.Seller;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,11 +14,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
@@ -56,18 +54,26 @@ public class Store extends AuditableEntity {
     @Size(min = 2, max = 20, message = "Phone number must be between 2 and 20 characters")
     private String phone;
 
+    @Column(name = "store_rating_average", nullable = false)
+    private Float storeRatingAverage;
+    @Column(name = "review_count", nullable = false)
+    private Long reviewCount;
+
     @NotNull(message = "Store type is required")
     @Enumerated(EnumType.STRING)
     @Column(name = "store_type", nullable = false)
     private StoreType storeType;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "legal_entity_id", referencedColumnName = "id")
     private LegalEntity legalEntity;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, optional = false)
     private Address address;
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private List<Seller> sellers;
+
+    @OneToMany(mappedBy = "store", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Review> reviews;
 }

@@ -1,8 +1,8 @@
-package com.gokdenizozkan.ddd.user.seller;
+package com.gokdenizozkan.ddd.feature.review;
 
-import com.gokdenizozkan.ddd.store.Store;
-import com.gokdenizozkan.ddd.user.User;
-import jakarta.persistence.CascadeType;
+import com.gokdenizozkan.ddd.core.AuditableEntity;
+import com.gokdenizozkan.ddd.feature.store.Store;
+import com.gokdenizozkan.ddd.feature.user.buyer.Buyer;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -21,20 +21,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "sellers")
+@Table(name = "reviews")
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Seller extends User {
+public class Review extends AuditableEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sellers_gen")
-    @SequenceGenerator(name = "sellers_gen", sequenceName = "sellers_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reviews_gen")
+    @SequenceGenerator(name = "reviews_gen", sequenceName = "reviews_seq")
     @Column(name = "id", nullable = false)
     private Long id;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private SellerAuthority authority;
+    private Rating rating;
+    private String experience;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "buyer_id", referencedColumnName = "id")
+    private Buyer buyer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_id", referencedColumnName = "id")

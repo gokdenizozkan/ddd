@@ -1,4 +1,4 @@
-package com.gokdenizozkan.ddd.review;
+package com.gokdenizozkan.ddd.feature.review;
 
 public enum Rating {
     EXCELLENT(5),

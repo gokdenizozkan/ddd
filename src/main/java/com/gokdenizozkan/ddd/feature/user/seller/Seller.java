@@ -1,7 +1,7 @@
-package com.gokdenizozkan.ddd.review;
+package com.gokdenizozkan.ddd.feature.user.seller;
 
-import com.gokdenizozkan.ddd.core.AuditableEntity;
-import com.gokdenizozkan.ddd.user.buyer.Buyer;
+import com.gokdenizozkan.ddd.feature.store.Store;
+import com.gokdenizozkan.ddd.feature.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -20,23 +20,22 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "reviews")
+@Table(name = "sellers")
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Review extends AuditableEntity {
+public class Seller extends User {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "reviews_gen")
-    @SequenceGenerator(name = "reviews_gen", sequenceName = "reviews_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sellers_gen")
+    @SequenceGenerator(name = "sellers_gen", sequenceName = "sellers_seq")
     @Column(name = "id", nullable = false)
     private Long id;
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    private Rating rating;
-    private String experience;
+    private SellerAuthority authority;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_id", referencedColumnName = "id")
-    private Buyer buyer;
+    @JoinColumn(name = "store_id", referencedColumnName = "id")
+    private Store store;
 }

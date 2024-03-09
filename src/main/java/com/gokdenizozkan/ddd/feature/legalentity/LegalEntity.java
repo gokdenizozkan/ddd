@@ -1,8 +1,8 @@
-package com.gokdenizozkan.ddd.legalentity;
+package com.gokdenizozkan.ddd.feature.legalentity;
 
-import com.gokdenizozkan.ddd.address.Address;
+import com.gokdenizozkan.ddd.feature.address.Address;
 import com.gokdenizozkan.ddd.core.AuditableEntity;
-import com.gokdenizozkan.ddd.store.Store;
+import com.gokdenizozkan.ddd.feature.store.Store;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

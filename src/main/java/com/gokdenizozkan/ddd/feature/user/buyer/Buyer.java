@@ -1,8 +1,8 @@
-package com.gokdenizozkan.ddd.user.buyer;
+package com.gokdenizozkan.ddd.feature.user.buyer;
 
-import com.gokdenizozkan.ddd.address.Address;
-import com.gokdenizozkan.ddd.review.Review;
-import com.gokdenizozkan.ddd.user.User;
+import com.gokdenizozkan.ddd.feature.address.Address;
+import com.gokdenizozkan.ddd.feature.review.Review;
+import com.gokdenizozkan.ddd.feature.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

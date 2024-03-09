@@ -1,4 +1,4 @@
-package com.gokdenizozkan.ddd.address;
+package com.gokdenizozkan.ddd.feature.address;
 
 import com.gokdenizozkan.ddd.core.AuditableEntity;
 import jakarta.annotation.Nullable;
@@ -32,6 +32,7 @@ public class Address extends AuditableEntity {
     @Column(precision = 9, scale = 6, nullable = false)
     private BigDecimal latitude;
 
+    @NotNull
     @Column(precision = 9, scale = 6, nullable = false)
     private BigDecimal longitude;
 

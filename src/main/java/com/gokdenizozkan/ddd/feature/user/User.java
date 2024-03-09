@@ -1,4 +1,4 @@
-package com.gokdenizozkan.ddd.user;
+package com.gokdenizozkan.ddd.feature.user;
 
 import com.gokdenizozkan.ddd.core.AuditableEntity;
 import jakarta.annotation.Nullable;
