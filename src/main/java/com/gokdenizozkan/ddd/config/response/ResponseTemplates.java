@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
  * Plus, the data field is converted to Structured<T> object, thus, present raw data.</T><br>
  * <br>
  * To write a custom message, please refer to the {@link com.gokdenizozkan.ddd.config.response.StructuredResponseEntityBuilder} class.<br>
- * noContent will return a "Maybe real programming was the bugs we fixed along the way..." message with a 204 status code.
  */
 public class ResponseTemplates {
 

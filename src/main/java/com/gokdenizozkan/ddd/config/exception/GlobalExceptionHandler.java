@@ -54,8 +54,8 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .build();
     }
 
-    @ExceptionHandler(NotActiveException.class)
-    public ResponseEntity<Structured<Map<String, String>>> handleNotActiveException(NotActiveException e, WebRequest request) {
+    @ExceptionHandler(ResourceNotActiveException.class)
+    public ResponseEntity<Structured<Map<String, String>>> handleNotActiveException(ResourceNotActiveException e, WebRequest request) {
         return StructuredResponseEntityBuilder.<Map<String, String>>builder()
                 .success(false)
                 .message(e.getMessage())

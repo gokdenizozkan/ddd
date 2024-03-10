@@ -1,7 +1,5 @@
 package com.gokdenizozkan.ddd.config;
 
-import com.gokdenizozkan.ddd.feature.address.dto.response.AddressResponseCoordinates;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.domain.Specification;
 

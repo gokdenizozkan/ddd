@@ -35,7 +35,7 @@ which is an extended version of Semantic Versioning (SemVer).
 ~~3. Write a StoreType enum to represent the type of store. Currently of no use, but for future scalability.~~    
 ~~4. A store must have Sellers to manage it. (bidirectional one to many)~~  
 
-~~#### f4: Represent an address~~  
+#### ~~f4: Represent an address~~  
 
 ~~1. Write Address class, it can be owned => unidirectional relationship.~~    
 ~~2. Represent a collection of addresses with "AddressCollection" class.~~  
