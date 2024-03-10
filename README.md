@@ -54,7 +54,7 @@ which is an extended version of Semantic Versioning (SemVer).
 
 1. Store rating should be updatable without going through the entire review list and rating again.
 
-#### f7: Fundamental requests should be processable
+#### ~~f7: Fundamental requests should be processable~~
 
 > ~~1. Buyer controller is written.~~
 > ~~2. Buyer service is written.~~
@@ -70,8 +70,8 @@ which is an extended version of Semantic Versioning (SemVer).
 > ~~11. Store Request Dto(s) are written.~~
 > ~~12. Store dto mapper(s) are written.~~
 
-> 13. Review controller is written.
-> 14. Review service is written.
+> ~~13. Review controller is written.~~
+> ~~14. Review service is written.~~
 > ~~15. Review repository is written.~~
 > ~~16. Review Response Dto(s) are written.~~
 > ~~17. Review Request Dto(s) are written.~~

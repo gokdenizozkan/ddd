@@ -37,11 +37,11 @@ public class Review extends AuditableEntity {
     private Rating rating;
     private String experience;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "buyer_id", referencedColumnName = "id")
     private Buyer buyer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "store_id", referencedColumnName = "id")
     private Store store;
 }
