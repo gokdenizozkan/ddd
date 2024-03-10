@@ -83,6 +83,8 @@ which is an extended version of Semantic Versioning (SemVer).
 > ~~22. Address Request Dto(s) are written.~~
 > ~~23. Address coordinates retrieveing api is written.~~
 
+~~24. On update requests, AuditableEntity fields should persist.~~
+
 #### f8: Services retrieve only active entities
 
 ~~1. Write a general specificiation to be used accross all services that will retrieve only active entities (An entity that is not deleted and is enabled.)~~  
