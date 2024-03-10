@@ -81,12 +81,13 @@ which is an extended version of Semantic Versioning (SemVer).
 > ~~20. Address repository is written.~~    
 > ~~21. Address Response Dto(s) are written.~~  
 > ~~22. Address Request Dto(s) are written.~~
+> ~~23. Address coordinates retrieveing api is written.~~
 
 #### f8: Services retrieve only active entities
 
-1. Write a general specificiation to be used accross all services that will retrieve only active entities (An entity that is not deleted and is enabled.)  
+~~1. Write a general specificiation to be used accross all services that will retrieve only active entities (An entity that is not deleted and is enabled.)~~  
 2. Use the specification in all services.  
-3. Services should be scalable to allow custom specifications to be used.  
+~~3. Services should be scalable to allow custom specifications to be used.~~  
 
 #### ~~f9: Errors are handled~~  
 

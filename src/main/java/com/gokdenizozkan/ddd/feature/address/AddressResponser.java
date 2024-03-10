@@ -5,6 +5,7 @@ import com.gokdenizozkan.ddd.config.response.Structured;
 import com.gokdenizozkan.ddd.core.datastructure.Tuple;
 import com.gokdenizozkan.ddd.feature.address.dto.AddressDtoMapper;
 import com.gokdenizozkan.ddd.feature.address.dto.request.AddressSaveRequest;
+import com.gokdenizozkan.ddd.feature.address.dto.response.AddressResponseCoordinates;
 import com.gokdenizozkan.ddd.feature.address.dto.response.AddressResponseMirror;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -48,5 +49,10 @@ public class AddressResponser {
     public ResponseEntity<Structured<Object>> delete(Long id) {
         service.delete(id);
         return ResponseTemplates.noContent();
+    }
+
+    public ResponseEntity<Structured<AddressResponseCoordinates>> findCoordinatesById(Long id) {
+        AddressResponseCoordinates address = service.findCoordinatesById(id);
+        return ResponseTemplates.ok(address);
     }
 }

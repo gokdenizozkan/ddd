@@ -53,4 +53,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .build();
     }
+
+    @ExceptionHandler(NotActiveException.class)
+    public ResponseEntity<Structured<Map<String, String>>> handleNotActiveException(NotActiveException e, WebRequest request) {
+        return StructuredResponseEntityBuilder.<Map<String, String>>builder()
+                .success(false)
+                .message(e.getMessage())
+                .data(Map.of("path", request.getDescription(false)))
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
+    }
 }

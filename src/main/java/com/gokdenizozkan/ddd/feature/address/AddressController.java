@@ -3,6 +3,7 @@ package com.gokdenizozkan.ddd.feature.address;
 import com.gokdenizozkan.ddd.config.response.Structured;
 import com.gokdenizozkan.ddd.core.datastructure.Tuple;
 import com.gokdenizozkan.ddd.feature.address.dto.request.AddressSaveRequest;
+import com.gokdenizozkan.ddd.feature.address.dto.response.AddressResponseCoordinates;
 import com.gokdenizozkan.ddd.feature.address.dto.response.AddressResponseMirror;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -31,6 +33,11 @@ public class AddressController {
     @GetMapping("/{id}")
     public ResponseEntity<Structured<AddressResponseMirror>> findById(@PathVariable Long id) {
         return responser.findById(id);
+    }
+
+    @GetMapping("/{id}/coordinates")
+    public ResponseEntity<Structured<AddressResponseCoordinates>> findCoordinatesById(@PathVariable Long id) {
+        return responser.findCoordinatesById(id);
     }
 
     @PostMapping("/")
