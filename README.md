@@ -72,9 +72,9 @@ which is an extended version of Semantic Versioning (SemVer).
 
 > 13. Review controller is written.
 > 14. Review service is written.
-> 15. Review repository is written.
-> 16. Review Response Dto(s) are written.
-> 17. Review Request Dto(s) are written.
+> ~~15. Review repository is written.~~
+> ~~16. Review Response Dto(s) are written.~~
+> ~~17. Review Request Dto(s) are written.~~
  
 > ~~18. Address controller is written.~~  
 > ~~19. Address service is written.~~  
