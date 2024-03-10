@@ -56,12 +56,12 @@ which is an extended version of Semantic Versioning (SemVer).
 
 #### f7: Fundamental requests should be processable
 
-> 1. Buyer controller is written.
-> 2. Buyer service is written.
-> 3. Buyer repository is written.
-> 4. Buyer Response Dto(s) are written.
-> 5. Buyer Request Dto(s) are written.
-> 6. Buyer dto mapper(s) are written.
+> ~~1. Buyer controller is written.~~
+> ~~2. Buyer service is written.~~
+> ~~3. Buyer repository is written.~~
+> ~~4. Buyer Response Dto(s) are written.~~
+> ~~5. Buyer Request Dto(s) are written.~~
+> ~~6. Buyer dto mapper(s) are written.~~
 
 > ~~7. Store controller is written.~~
 > ~~8. Store service is written.~~
