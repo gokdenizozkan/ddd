@@ -63,9 +63,9 @@ which is an extended version of Semantic Versioning (SemVer).
 > 5. Buyer Request Dto(s) are written.
 > 6. Buyer dto mapper(s) are written.
 
-> 7. Store controller is written.
-> 8. Store service is written.
-> 9. Store repository is written.
+> ~~7. Store controller is written.~~
+> ~~8. Store service is written.~~
+> ~~9. Store repository is written.~~
 > ~~10. Store Response Dto(s) are written.~~
 > ~~11. Store Request Dto(s) are written.~~
 > ~~12. Store dto mapper(s) are written.~~
