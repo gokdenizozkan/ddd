@@ -2,7 +2,6 @@ package com.gokdenizozkan.ddd.feature.address;
 
 import com.gokdenizozkan.ddd.config.response.ResponseTemplates;
 import com.gokdenizozkan.ddd.config.response.Structured;
-import com.gokdenizozkan.ddd.core.datastructure.Tuple;
 import com.gokdenizozkan.ddd.feature.address.dto.AddressDtoMapper;
 import com.gokdenizozkan.ddd.feature.address.dto.request.AddressSaveRequest;
 import com.gokdenizozkan.ddd.feature.address.dto.response.AddressResponseCoordinates;

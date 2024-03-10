@@ -1,6 +1,7 @@
 package com.gokdenizozkan.ddd.feature.address;
 
 import com.gokdenizozkan.ddd.config.Specifications;
+import com.gokdenizozkan.ddd.config.exception.ResourceNotActiveException;
 import com.gokdenizozkan.ddd.config.exception.ResourceNotFoundWithIdException;
 import com.gokdenizozkan.ddd.core.auditableentity.ActiveDetermingFields;
 import com.gokdenizozkan.ddd.feature.address.dto.AddressEntityMapper;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service("AddressServiceActives")
 public class AddressServiceActives implements AddressService {
     private final AddressRepository repository;
     private final Specification<Address> specification;
@@ -38,24 +39,20 @@ public class AddressServiceActives implements AddressService {
 
     /**
      * Finds the coordinates of the address with the given id.<br>
-     * If the address is not active, throws a {@link com.gokdenizozkan.ddd.config.exception.NotActiveException}.<br>
-     * If the address is not found, throws a {@link com.gokdenizozkan.ddd.config.exception.ResourceNotFoundWithIdException}.<br>
      * <br>
      * As an exception to the rule, this method does not use the {@link #specification} to check if the address is active,
      * but instead, it uses a custom query to improve performance with Dto Projection.<br>
-     * Because of this, the return of the method is not Address, but directly, @{@link AddressResponseCoordinates}.
+     * Because of this, the return of the method is not Address, but directly, {@link AddressResponseCoordinates}.
      *
      * @param id the id of the address
      * @return the coordinates of the address
+     * @throws ResourceNotActiveException if the address is not active
+     * @throws ResourceNotFoundWithIdException if the address is not found
      */
     @Override
     public AddressResponseCoordinates findCoordinatesById(Long id) {
-        ActiveDetermingFields activeDetermingFields = repository.findActiveDetermingFields(id)
-                .orElseThrow(() -> new ResourceNotFoundWithIdException(Address.class, id));
-
-        boolean active = activeDetermingFields.isActive();
-        if (!active) {
-            throw new ResourceNotFoundWithIdException(Address.class, id);
+        if (ActiveDetermingFields.of(id, repository, Address.class).isNotActive()) {
+            throw new ResourceNotActiveException(Address.class, id);
         }
 
 
@@ -79,7 +76,7 @@ public class AddressServiceActives implements AddressService {
         Address address = entityMapper.fromSaveRequest.apply(request);
         address.setId(id);
 
-        repository.findActiveDetermingFields(id).get().copyTo(address);
+        ActiveDetermingFields.of(id, repository, Address.class).copyTo(address);
         repository.save(address);
 
         return address;

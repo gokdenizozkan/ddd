@@ -1,7 +1,6 @@
 package com.gokdenizozkan.ddd.feature.address;
 
 import com.gokdenizozkan.ddd.config.response.Structured;
-import com.gokdenizozkan.ddd.core.datastructure.Tuple;
 import com.gokdenizozkan.ddd.feature.address.dto.request.AddressSaveRequest;
 import com.gokdenizozkan.ddd.feature.address.dto.response.AddressResponseCoordinates;
 import com.gokdenizozkan.ddd.feature.address.dto.response.AddressResponseMirror;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -42,8 +40,7 @@ public class AddressController {
 
     @PostMapping("/")
     public ResponseEntity<Structured<AddressResponseMirror>> save(@RequestBody AddressSaveRequest request) {
-        ResponseEntity<Structured<AddressResponseMirror>> saved = responser.save(request);
-        return saved;
+        return responser.save(request);
     }
 
     @PutMapping("/{id}")

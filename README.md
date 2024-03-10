@@ -56,39 +56,39 @@ which is an extended version of Semantic Versioning (SemVer).
 
 #### ~~f7: Fundamental requests should be processable~~
 
-> ~~1. Buyer controller is written.~~
-> ~~2. Buyer service is written.~~
-> ~~3. Buyer repository is written.~~
-> ~~4. Buyer Response Dto(s) are written.~~
-> ~~5. Buyer Request Dto(s) are written.~~
-> ~~6. Buyer dto mapper(s) are written.~~
+~~1. Buyer controller is written.~~  
+~~2. Buyer service is written.~~  
+~~3. Buyer repository is written.~~  
+~~4. Buyer Response Dto(s) are written.~~  
+~~5. Buyer Request Dto(s) are written.~~  
+~~6. Buyer dto mapper(s) are written.~~  
 
-> ~~7. Store controller is written.~~
-> ~~8. Store service is written.~~
-> ~~9. Store repository is written.~~
-> ~~10. Store Response Dto(s) are written.~~
-> ~~11. Store Request Dto(s) are written.~~
-> ~~12. Store dto mapper(s) are written.~~
+~~7. Store controller is written.~~  
+~~8. Store service is written.~~  
+~~9. Store repository is written.~~  
+~~10. Store Response Dto(s) are written.~~  
+~~11. Store Request Dto(s) are written.~~  
+~~12. Store dto mapper(s) are written.~~  
 
-> ~~13. Review controller is written.~~
-> ~~14. Review service is written.~~
-> ~~15. Review repository is written.~~
-> ~~16. Review Response Dto(s) are written.~~
-> ~~17. Review Request Dto(s) are written.~~
- 
-> ~~18. Address controller is written.~~  
-> ~~19. Address service is written.~~  
-> ~~20. Address repository is written.~~    
-> ~~21. Address Response Dto(s) are written.~~  
-> ~~22. Address Request Dto(s) are written.~~
-> ~~23. Address coordinates retrieveing api is written.~~
+~~13. Review controller is written.~~  
+~~14. Review service is written.~~  
+~~15. Review repository is written.~~  
+~~16. Review Response Dto(s) are written.~~  
+~~17. Review Request Dto(s) are written.~~  
+  
+~~18. Address controller is written.~~    
+~~19. Address service is written.~~    
+~~20. Address repository is written.~~      
+~~21. Address Response Dto(s) are written.~~    
+~~22. Address Request Dto(s) are written.~~  
+~~23. Address coordinates retrieveing api is written.~~  
 
 ~~24. On update requests, AuditableEntity fields should persist.~~
 
-#### f8: Services retrieve only active entities
+#### ~~f8: Services retrieve only active entities~~
 
 ~~1. Write a general specificiation to be used accross all services that will retrieve only active entities (An entity that is not deleted and is enabled.)~~  
-2. Use the specification in all services.  
+~~2. Use the specification in all services.~~  
 ~~3. Services should be scalable to allow custom specifications to be used.~~  
 
 #### ~~f9: Errors are handled~~  
