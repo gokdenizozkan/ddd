@@ -102,10 +102,16 @@ which is an extended version of Semantic Versioning (SemVer).
 ~~2. Write a response builder to build the response structure.~~  
 ~~3. Write a Tuple record that stores same type of two objects. Tuple should have a mapped function to map the objects to a new object. Main use scenario is update requests.~~
 
-### Personal to-dos
+#### f11: Retrieve store listing in a recommended order
 
-> - [ ] Figure out a way to sync `store` data with Solr.  
-> (Store service can, but is there a better way? Research DIH for newer versions of solar.)
+1. Write a recommendation engine to retrieve store listing in a recommended order.
+2. Write a recommendation controller to handle requests to retrieve store listing in a recommended order.
+
+#### f12: Store details persists between a relational database and Solr
+
+1. Write an indexing engine to enable indexing operations on Solr.
+2. Better and patch-oriented store service (controller etc.).
+3. Store update requests also update Solr index.
 
 ## Diagrams and Relationships
 
