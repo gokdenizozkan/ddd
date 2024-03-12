@@ -1,5 +1,6 @@
 package com.gokdenizozkan.ddd.recommendationservice.core;
 
+import com.gokdenizozkan.ddd.recommendationservice.core.quality.FieldStringifyable;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
@@ -80,6 +81,16 @@ public class SolrSpatialQuery {
 
     public SolrSpatialQuery fieldList(String fieldList) {
         this.fieldList = fieldList;
+        query.setFields(fieldList);
+        return this;
+    }
+
+    /**
+     * Instead of typing field names manually, this method can be used to stringify fields of a class.<br>
+     * @param clazz the class to stringify fields
+     */
+    public SolrSpatialQuery fieldList(Class<?> clazz) {
+        this.fieldList = FieldStringifyable.stringifyFields(clazz);
         query.setFields(fieldList);
         return this;
     }
