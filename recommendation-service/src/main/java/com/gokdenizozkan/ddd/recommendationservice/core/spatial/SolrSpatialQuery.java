@@ -1,32 +1,24 @@
-package com.gokdenizozkan.ddd.recommendationservice.core;
+package com.gokdenizozkan.ddd.recommendationservice.core.spatial;
 
 import com.gokdenizozkan.ddd.recommendationservice.core.quality.FieldStringifyable;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.SpatialParams;
+import org.apache.solr.common.params.StatsParams;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class SolrSpatialQuery {
-    private String q;
-    private String collectionName;
-    private String point;
-    private String latlonFieldName;
-    private int km;
-    private int rows;
-    private FilterType filterType;
-    private SortType sortType;
-    private SortOrder sortOrder;
-    private String fieldList;
-    private boolean spatial;
+    String collectionName;
     private SolrQuery query;
 
 
     private SolrSpatialQuery(String collectionName) {
         this.collectionName = collectionName;
         this.query = new SolrQuery();
-        this.spatial = true;
+        query.set("spatial", true);
     }
 
     public static SolrSpatialQuery of(String collectionName) {
@@ -34,32 +26,30 @@ public class SolrSpatialQuery {
     }
 
     public SolrSpatialQuery q(String q) {
-        this.q = q;
         query.setQuery(q);
         return this;
     }
 
     public SolrSpatialQuery point(String point) {
-        this.point = point;
         query.set(SpatialParams.POINT, point);
         return this;
     }
 
     public SolrSpatialQuery latlonFieldName(String latlonFieldName) {
-        this.latlonFieldName = latlonFieldName;
         query.set(SpatialParams.FIELD, latlonFieldName);
         return this;
     }
 
     public SolrSpatialQuery distance(int km) {
-        this.km = km;
         query.set(SpatialParams.DISTANCE, km);
         return this;
     }
 
-    public SolrSpatialQuery rows(int rows) {
-        this.rows = rows;
-        query.set("rows", String.valueOf(rows));
+    public SolrSpatialQuery rows(Integer rows) {
+        if (rows <= 0) {
+            return this;
+        }
+        query.set("rows", rows);
         return this;
     }
 
@@ -67,20 +57,16 @@ public class SolrSpatialQuery {
      * If filter type is selected NO_FILTER, response will only contain "score" local parameter.<br>
      */
     public SolrSpatialQuery filter(FilterType filterType) {
-        this.filterType = filterType;
         query.addFilterQuery(filterType.toString());
         return this;
     }
 
-    public SolrSpatialQuery sort(SortType sortType, SortOrder sortOrder) {
-        this.sortType = sortType;
-        this.sortOrder = sortOrder;
-        query.set("sort", String.format("%s %s", sortType, sortOrder));
+    public SolrSpatialQuery sort(QueryFunction queryFunction, SortOrder sortOrder) {
+        query.set("sort", String.format("%s %s", queryFunction, sortOrder));
         return this;
     }
 
     public SolrSpatialQuery fieldList(String fieldList) {
-        this.fieldList = fieldList;
         query.setFields(fieldList);
         return this;
     }
@@ -90,8 +76,19 @@ public class SolrSpatialQuery {
      * @param clazz the class to stringify fields
      */
     public SolrSpatialQuery fieldList(Class<?> clazz) {
-        this.fieldList = FieldStringifyable.stringifyFields(clazz);
+        String fieldList = FieldStringifyable.stringifyFields(clazz);
         query.setFields(fieldList);
+        return this;
+    }
+
+    /**
+     * Adds stats to the query.<br>
+     * Sets "stats" parameter to true if called.<br>
+     * @param statFields fields to set for stats
+     */
+    public SolrSpatialQuery stats(String... statFields) {
+        query.set(StatsParams.STATS, true);
+        Arrays.stream(statFields).forEach(field -> query.add(StatsParams.STATS_FIELD, field));
         return this;
     }
 
@@ -120,20 +117,26 @@ public class SolrSpatialQuery {
     }
 
     public enum FilterType {
-        GEOFILT, BBOX, NO_FILTER;
-
-        @Override
-        public String toString() {
-            return super.name().toLowerCase();
-        }
-    }
-
-    public enum SortType {
-        GEODIST("geodist()"); //DIST, HSIN, SQEDIST;
+        GEOFILT("{!geofilt}"), BBOX(""), NO_FILTER("");
 
         private final String value;
 
-        SortType(String value) {
+        FilterType(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
+    }
+
+    public enum QueryFunction {
+        GEODIST("{!func}geodist()"); //DIST, HSIN, SQEDIST;
+
+        private final String value;
+
+        QueryFunction(String value) {
             this.value = value;
         }
 
