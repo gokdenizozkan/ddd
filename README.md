@@ -7,8 +7,22 @@ that brings local restaurants together with customers looking for a delicious me
 
 - [ddd](#ddd)
     - [Table of Contents](#table-of-contents)
+    - [Technologies](#technologies)
     - [Versioning](#versioning)
+      - [Features](#features) 
     - [Diagrams and Relationships](#diagrams-and-relationships)
+      - [Architecture](#architecture)
+      - [Layer Architecture](#layer-architecture)
+      - [Entity Relationships](#entity-relationships)
+    - [Certain design decisions](#certain-design-decisions)
+      - [Store data is shared between a Relational Database and Solr, why?](#store-data-is-shared-between-a-relational-database-and-solr-why)
+        - [But wouldn't it be complicated to store all store types in a single table, in the future?](#but-wouldnt-it-be-complicated-to-store-all-store-types-in-a-single-table-in-the-future)
+
+## Technologies
+
+- Java 21
+- Spring Boot 3.2.3 across all services
+- SolrJ 9.5.0
 
 ## Versioning
 

@@ -5,6 +5,8 @@ import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.params.SpatialParams;
 
+import java.util.List;
+
 public class SolrSpatialQuery {
     private String q;
     private String collectionName;
@@ -90,6 +92,11 @@ public class SolrSpatialQuery {
             e.printStackTrace();
         }
         return response;
+    }
+
+    public <T> List<T> executeAndGetAllAs(SolrClient client, Class<T> convertToClass) {
+        QueryResponse response = execute(client);
+        return response.getBeans(convertToClass);
     }
 
     public SolrQuery toQuery() {
