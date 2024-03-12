@@ -1,6 +1,6 @@
 package com.gokdenizozkan.ddd.recommendationservice.core.quality;
 
-import com.gokdenizozkan.ddd.recommendationservice.core.SolrSpatialQuery;
+import com.gokdenizozkan.ddd.recommendationservice.core.spatial.SolrSpatialQuery;
 
 import java.util.Arrays;
 
