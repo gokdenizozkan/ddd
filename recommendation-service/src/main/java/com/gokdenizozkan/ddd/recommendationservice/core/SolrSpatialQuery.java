@@ -65,7 +65,7 @@ public class SolrSpatialQuery {
      */
     public SolrSpatialQuery filter(FilterType filterType) {
         this.filterType = filterType;
-        query.addFilterQuery(String.format("{!%s sfield=%s}", filterType, latlonFieldName));
+        query.addFilterQuery(filterType.toString());
         return this;
     }
 
