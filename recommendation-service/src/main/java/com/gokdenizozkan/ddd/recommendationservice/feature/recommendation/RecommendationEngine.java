@@ -1,36 +1,24 @@
 package com.gokdenizozkan.ddd.recommendationservice.feature.recommendation;
 
-import com.gokdenizozkan.ddd.recommendationservice.config.SolrClientProvider;
-import com.gokdenizozkan.ddd.recommendationservice.core.SolrSpatialQuery;
-import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.response.QueryResponse;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
+public interface RecommendationEngine {
 
-
-@Service
-public class RecommendationEngine {
-    private final SolrClient client;
-
-    public RecommendationEngine(SolrClientProvider provider, @Value("${engine.recommendation-engine.base-solr-url}") String baseSolrUrl) {
-        this.client = provider.http2(baseSolrUrl);
+    /**
+     * Normalize a value to a range between 0 and 1
+     *
+     * @param value the value to normalize
+     * @param min   the minimum value of the range
+     * @param max   the maximum value of the range
+     * @return the normalized value
+     */
+    default Double normalize(Double value, Double min, Double max) {
+        return (value - min) / (max - min);
     }
 
-    public QueryResponse findWithinRadius(String collectionName, String query, // required
-                                          String point, String latlonFieldName, Integer km, // required
-                                          SolrSpatialQuery.SortOrder sortOrder,
-                                          String fieldList,
-                                          Integer rows) {
-        return SolrSpatialQuery.of(collectionName)
-                .q(query)
-                .point(point)
-                .distance(km)
-                .latlonFieldName(latlonFieldName)
-                .filter(SolrSpatialQuery.FilterType.GEOFILT)
-                .sort(SolrSpatialQuery.SortType.GEODIST, sortOrder)
-                .fieldList(fieldList)
-                .rows(rows)
-                .execute(client);
+    default Double normalize(Double distance, Double maxDistance) {
+        return 1 - normalize(distance, 0.0, maxDistance);
     }
 
+    default Double correlate(Double normalizedValueA, Double weightA, Double normalizedValueB, Double weightB) {
+        return (normalizedValueA * weightA) + (normalizedValueB * weightB);
+    }
 }
