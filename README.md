@@ -10,6 +10,7 @@ that brings local restaurants together with customers looking for a delicious me
     - [Technologies](#technologies)
     - [Versioning](#versioning)
       - [Features](#features) 
+      - [Features to be implemented after release](#features-to-be-implemented-after-release)
     - [Diagrams and Relationships](#diagrams-and-relationships)
       - [Architecture](#architecture)
       - [Layer Architecture](#layer-architecture)
@@ -118,14 +119,18 @@ which is an extended version of Semantic Versioning (SemVer).
 
 #### f11: Retrieve store listing in a recommended order
 
-1. Write a recommendation engine to retrieve store listing in a recommended order.
-2. Write a recommendation controller to handle requests to retrieve store listing in a recommended order.
+1. Write a spatialRecommendation engine to retrieve store listing in a recommended order.
+2. Write a spatialRecommendation controller to handle requests to retrieve store listing in a recommended order.
 
 #### f12: Store details persists between a relational database and Solr
 
 1. Write an indexing engine to enable indexing operations on Solr.
 2. Better and patch-oriented store service (controller etc.).
 3. Store update requests also update Solr index.
+
+### Features to be implemented after release
+
+- Pageable spatialRecommendation listing (thanks to modifiable query structure). 
 
 ## Diagrams and Relationships
 
