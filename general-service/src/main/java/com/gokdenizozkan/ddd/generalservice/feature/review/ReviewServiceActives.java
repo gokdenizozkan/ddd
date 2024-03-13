@@ -20,16 +20,12 @@ public class ReviewServiceActives implements ReviewService {
     private final Specification<Review> specification;
     private final ReviewEntityMapper entityMapper;
     private final RecommendationClient recommendationClient;
-    private final StoreRepository storeRepository;
 
-    public ReviewServiceActives(ReviewRepository repository, ReviewEntityMapper entityMapper, RecommendationClient recommendationClient,
-                                StoreRepository storeRepository) {
+    public ReviewServiceActives(ReviewRepository repository, ReviewEntityMapper entityMapper, RecommendationClient recommendationClient) {
         this.repository = repository;
         this.specification = Specifications.isActive(Review.class);
         this.entityMapper = entityMapper;
         this.recommendationClient = recommendationClient;
-
-        this.storeRepository = storeRepository;
     }
 
 
@@ -47,7 +43,7 @@ public class ReviewServiceActives implements ReviewService {
     @Override
     public Review save(ReviewSaveRequest request) {
         Review review = entityMapper.fromSaveRequest.apply(request);
-        StoreReviewFields.of(review.getStore().getId(), storeRepository, Store.class)
+        StoreReviewFields.of(review.getStore())
                 .ratingAdded(review.getRating().getValue())
                 .copyTo(review.getStore());
 
@@ -71,7 +67,7 @@ public class ReviewServiceActives implements ReviewService {
         review.setId(id);
 
         ActiveDetermingFields.of(id, repository, Review.class).copyTo(review);
-        StoreReviewFields.of(review.getStore().getId(), storeRepository, Store.class)
+        StoreReviewFields.of(review.getStore())
                 .copyTo(review.getStore());
 
         // Update store rating
@@ -93,7 +89,7 @@ public class ReviewServiceActives implements ReviewService {
 
         review.setDeleted(true);
 
-        StoreReviewFields.of(review.getStore().getId(), storeRepository, Store.class)
+        StoreReviewFields.of(review.getStore())
                 .ratingRemoved(review.getRating().getValue())
                 .copyTo(review.getStore());
 
@@ -111,7 +107,7 @@ public class ReviewServiceActives implements ReviewService {
             Float newRating = rating.getValue();
 
             review.setRating(rating);
-            StoreReviewFields.of(review.getStore().getId(), storeRepository, Store.class)
+            StoreReviewFields.of(review.getStore())
                     .ratingReplaced(oldRating, newRating)
                     .copyTo(review.getStore());
 

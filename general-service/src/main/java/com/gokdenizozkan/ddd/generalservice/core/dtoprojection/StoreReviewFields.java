@@ -3,6 +3,9 @@ package com.gokdenizozkan.ddd.generalservice.core.dtoprojection;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
 import com.gokdenizozkan.ddd.generalservice.config.quality.BaseRepository;
 import com.gokdenizozkan.ddd.generalservice.feature.store.Store;
+import com.gokdenizozkan.ddd.generalservice.feature.store.StoreRepository;
+
+import java.util.ArrayList;
 
 public record StoreReviewFields(
         Float storeRatingAverage,
@@ -11,6 +14,16 @@ public record StoreReviewFields(
     public static <ID, T, R extends BaseRepository<T, ID>> StoreReviewFields of(ID id, R repository, Class<T> entityClass) {
         return repository.findStoreReviewFields(id)
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(entityClass, id));
+    }
+
+    public static StoreReviewFields of(Store store) {
+        return new StoreReviewFields(store.getStoreRatingAverage(), store.getReviewCount());
+    }
+
+    public static void initialize(Store store) {
+        store.setStoreRatingAverage(0F);
+        store.setReviewCount(0L);
+        store.setReviews(new ArrayList<>());
     }
 
     public Float calculateNewAverageByAddingRating(Float rating) {

@@ -34,10 +34,6 @@ public class StoreSaveRequestToStore implements Function<StoreSaveRequest, Store
         store.setAddress(addressRepository.findById(storeSaveRequest.addressId())
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Address.class, storeSaveRequest.addressId())));
 
-        store.setStoreRatingAverage(0F);
-        store.setReviewCount(0L);
-        store.setReviews(new ArrayList<>());
-
         return store;
     }
 }
