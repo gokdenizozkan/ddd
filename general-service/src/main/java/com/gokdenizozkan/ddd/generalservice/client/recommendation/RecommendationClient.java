@@ -13,6 +13,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "recommendation-service", url = "${ddd.client.recommendation-service.complete-url}")
 public interface RecommendationClient {
 
+    @PostMapping("/engine/indexing/{storeType}/{storeId}")
+    ResponseEntity<Structured<Object>> indexStore(@PathVariable String storeType, @PathVariable String storeId,
+                                                  @RequestParam String latitude, @RequestParam String longitude,
+                                                  @RequestParam String name, @RequestParam Float rating);
+
     @PutMapping("/engine/indexing/{storeType}/{storeId}")
     ResponseEntity<Structured<Object>> updateStoreIndex(@PathVariable String storeType, @PathVariable String storeId,
                                                         @RequestParam String latitude, @RequestParam String longitude,
