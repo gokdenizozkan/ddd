@@ -31,4 +31,8 @@ public interface RecommendationClient {
     @PatchMapping("/engine/indexing/{storeType}/{storeId}")
     ResponseEntity<Structured<Object>> updateStoreName(@PathVariable String storeType, @PathVariable String storeId,
                                                        @RequestParam String name);
+    
+    @PatchMapping("/engine/indexing/{storeType}/{storeId}")
+    ResponseEntity<Structured<Object>> updateStoreCoordinates(@PathVariable String storeType, @PathVariable String storeId,
+                                                             @RequestParam String latitude, @RequestParam String longitude);
 }

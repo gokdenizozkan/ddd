@@ -46,4 +46,18 @@ public class IndexingRouter {
         String collectionName = Converter.toCollectionName(storeType);
         engine.updateById(collectionName, storeId, "name", name);
     }
+
+    public void updateStoreLatlon(String storeType, String storeId, String latitude, String longitude) {
+        String collectionName = Converter.toCollectionName(storeType);
+        String latlon = latitude + "," + longitude;
+
+        Map<String, Object> fields = Map.of(
+                "id", storeId,
+                "latlon", latlon,
+                "latitude", latitude,
+                "longitude", longitude
+        );
+
+        engine.updateById(collectionName, storeId, fields);
+    }
 }

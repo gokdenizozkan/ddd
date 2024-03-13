@@ -12,6 +12,7 @@ import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFi
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service("StoreServiceActives")
@@ -118,5 +119,35 @@ public class StoreServiceActives implements StoreService {
                 name);
 
         return name;
+    }
+
+    @Override
+    public String updateCoordinatesById(Long id, BigDecimal latitude, BigDecimal longitude) {
+        Store store = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundWithIdException(Store.class, id));
+
+        if (latitude.compareTo(store.getAddress().getLatitude()) == 0
+                && longitude.compareTo(store.getAddress().getLongitude()) == 0) {
+            return "Coordinates are the same";
+        }
+
+        store.getAddress().setLatitude(latitude);
+        store.getAddress().setLongitude(longitude);
+        repository.save(store);
+        recommendationClient.updateStoreCoordinates(
+                store.getStoreType().toString(),
+                store.getId().toString(),
+                latitude.toString(),
+                longitude.toString());
+
+        return latitude + "<- lat,lon ->" + longitude;
+    }
+
+    @Override
+    public String updateCoordinatesById(Long id, String latitude, String longitude) {
+        BigDecimal latitudeBigDecimal = new BigDecimal(latitude);
+        BigDecimal longitudeBigDecimal = new BigDecimal(longitude);
+
+        return updateCoordinatesById(id, latitudeBigDecimal, longitudeBigDecimal);
     }
 }

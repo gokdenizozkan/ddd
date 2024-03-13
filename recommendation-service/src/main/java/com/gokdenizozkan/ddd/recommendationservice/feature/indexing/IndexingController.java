@@ -61,4 +61,12 @@ public class IndexingController {
         indexingRouter.updateStoreName(storeType, storeId, name);
         return ResponseTemplates.noContent();
     }
+
+    @PatchMapping("/{storeType}/{storeId}")
+    public ResponseEntity<Structured<Object>> updateStoreCoordinates(@PathVariable String storeType, @PathVariable String storeId,
+                                                                    @RequestParam String latitude, @RequestParam String longitude) {
+
+        indexingRouter.updateStoreLatlon(storeType, storeId, latitude, longitude);
+        return ResponseTemplates.noContent();
+    }
 }

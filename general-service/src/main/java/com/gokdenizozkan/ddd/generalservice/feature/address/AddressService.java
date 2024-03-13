@@ -4,6 +4,7 @@ import com.gokdenizozkan.ddd.generalservice.config.quality.BaseService;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.request.AddressSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseCoordinates;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -24,4 +25,8 @@ public interface AddressService extends BaseService<Address, Long, AddressSaveRe
     void delete(Long id);
 
     AddressResponseCoordinates findCoordinatesById(Long id);
+
+    String updateCoordinatesById(Long id, BigDecimal latitude, BigDecimal longitude);
+
+    String updateCoordinatesById(Long id, String latitude, String longitude);
 }

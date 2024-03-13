@@ -50,4 +50,9 @@ public class StoreResponser {
         service.delete(id);
         return ResponseTemplates.noContent();
     }
+
+    public ResponseEntity<Structured<String>> updateCoordinatesById(Long id, String latitude, String longitude) {
+        String response = service.updateCoordinatesById(id, latitude, longitude);
+        return ResponseTemplates.ok(response);
+    }
 }

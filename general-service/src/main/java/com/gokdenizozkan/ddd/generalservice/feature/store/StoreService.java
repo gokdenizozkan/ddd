@@ -4,6 +4,7 @@ import com.gokdenizozkan.ddd.generalservice.feature.store.dto.request.StoreSaveR
 import com.gokdenizozkan.ddd.generalservice.feature.store.dto.response.StoreDetails;
 import com.gokdenizozkan.ddd.generalservice.config.quality.BaseService;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface StoreService extends BaseService<Store, Long, StoreSaveRequest> {
@@ -25,4 +26,8 @@ public interface StoreService extends BaseService<Store, Long, StoreSaveRequest>
     StoreDetails findStoreDetailsById(Long id);
 
     String updateStoreNameById(Long id, String name);
+
+    String updateCoordinatesById(Long id, BigDecimal latitude, BigDecimal longitude);
+
+    String updateCoordinatesById(Long id, String latitude, String longitude);
 }

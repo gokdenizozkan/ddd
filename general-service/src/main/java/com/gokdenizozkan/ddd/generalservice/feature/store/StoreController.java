@@ -41,4 +41,11 @@ public class StoreController {
     public ResponseEntity<Structured<Object>> delete(@PathVariable Long id) {
         return responser.delete(id);
     }
+
+    @PatchMapping("/{id}/address/coordinates")
+    public ResponseEntity<Structured<String>> updateCoordinatesById(@PathVariable Long id,
+                                                                   @RequestParam String latitude,
+                                                                   @RequestParam String longitude) {
+        return responser.updateCoordinatesById(id, latitude, longitude);
+    }
 }
