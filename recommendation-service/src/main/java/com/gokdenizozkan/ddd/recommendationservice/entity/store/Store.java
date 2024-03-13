@@ -1,4 +1,4 @@
-package com.gokdenizozkan.ddd.recommendationservice.entity.foodstore;
+package com.gokdenizozkan.ddd.recommendationservice.entity.store;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class FoodStore {
+public class Store {
     @Field
     private String id;
     @Field

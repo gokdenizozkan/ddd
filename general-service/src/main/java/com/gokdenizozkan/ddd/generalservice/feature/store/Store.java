@@ -1,7 +1,7 @@
 package com.gokdenizozkan.ddd.generalservice.feature.store;
 
 import com.gokdenizozkan.ddd.generalservice.feature.review.Review;
-import generalservice.feature.address.Address;
+import com.gokdenizozkan.ddd.generalservice.feature.address.Address;
 import com.gokdenizozkan.ddd.generalservice.core.auditableentity.AuditableEntity;
 import com.gokdenizozkan.ddd.generalservice.feature.legalentity.LegalEntity;
 import com.gokdenizozkan.ddd.generalservice.feature.user.seller.Seller;

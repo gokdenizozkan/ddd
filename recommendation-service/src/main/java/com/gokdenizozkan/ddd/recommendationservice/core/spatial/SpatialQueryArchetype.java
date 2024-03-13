@@ -2,7 +2,7 @@ package com.gokdenizozkan.ddd.recommendationservice.core.spatial;
 
 import com.gokdenizozkan.ddd.recommendationservice.core.quality.Spatial;
 import com.gokdenizozkan.ddd.recommendationservice.core.quality.FieldStringifyable;
-import com.gokdenizozkan.ddd.recommendationservice.entity.foodstore.dto.response.FoodStoreResponse;
+import com.gokdenizozkan.ddd.recommendationservice.entity.store.foodstore.dto.response.FoodStoreResponse;
 import lombok.Getter;
 
 @Getter

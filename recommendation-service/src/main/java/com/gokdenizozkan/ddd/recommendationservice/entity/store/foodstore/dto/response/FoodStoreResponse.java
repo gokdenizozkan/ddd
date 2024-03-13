@@ -1,4 +1,4 @@
-package com.gokdenizozkan.ddd.recommendationservice.entity.foodstore.dto.response;
+package com.gokdenizozkan.ddd.recommendationservice.entity.store.foodstore.dto.response;
 
 import com.gokdenizozkan.ddd.recommendationservice.core.quality.FieldStringifyable;
 import com.gokdenizozkan.ddd.recommendationservice.core.quality.StoreResponse;

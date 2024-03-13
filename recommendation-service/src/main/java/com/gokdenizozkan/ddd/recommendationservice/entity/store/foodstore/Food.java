@@ -1,4 +1,4 @@
-package com.gokdenizozkan.ddd.recommendationservice.entity.foodstore;
+package com.gokdenizozkan.ddd.recommendationservice.entity.store.foodstore;
 
 import lombok.*;
 import org.apache.solr.client.solrj.beans.Field;

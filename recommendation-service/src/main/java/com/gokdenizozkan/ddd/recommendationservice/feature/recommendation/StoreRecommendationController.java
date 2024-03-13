@@ -3,7 +3,6 @@ package com.gokdenizozkan.ddd.recommendationservice.feature.recommendation;
 import com.gokdenizozkan.ddd.recommendationservice.config.response.ResponseTemplates;
 import com.gokdenizozkan.ddd.recommendationservice.config.response.Structured;
 import com.gokdenizozkan.ddd.recommendationservice.feature.recommendation.dto.response.SpatialRecommendation;
-import com.gokdenizozkan.ddd.recommendationservice.feature.router.StoreRouter;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/engine/recommendation")
 @RequiredArgsConstructor
 public class StoreRecommendationController {
-    private final StoreRouter router;
+    private final RecommendationRouter router;
 
     @GetMapping("/stores-nearby/{latlon}")
     public ResponseEntity<Structured<SpatialRecommendation>> recommendStoresNearby(@NotBlank @PathVariable String latlon,

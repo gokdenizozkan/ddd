@@ -1,28 +1,26 @@
-package com.gokdenizozkan.ddd.recommendationservice.feature.router;
+package com.gokdenizozkan.ddd.recommendationservice.feature.recommendation;
 
 import com.gokdenizozkan.ddd.recommendationservice.core.datastructure.Tuple;
 import com.gokdenizozkan.ddd.recommendationservice.core.spatial.SpatialQueryArchetype;
 import com.gokdenizozkan.ddd.recommendationservice.core.util.Converter;
 import com.gokdenizozkan.ddd.recommendationservice.core.util.ResponseUtil;
 import com.gokdenizozkan.ddd.recommendationservice.entity.Rating;
-import com.gokdenizozkan.ddd.recommendationservice.entity.foodstore.dto.response.FoodStoreResponse;
+import com.gokdenizozkan.ddd.recommendationservice.entity.store.foodstore.dto.response.FoodStoreResponse;
 import com.gokdenizozkan.ddd.recommendationservice.feature.radar.RadarEngine;
-import com.gokdenizozkan.ddd.recommendationservice.feature.recommendation.RecommendationEngine;
 import com.gokdenizozkan.ddd.recommendationservice.feature.recommendation.dto.response.SpatialElement;
 import com.gokdenizozkan.ddd.recommendationservice.feature.recommendation.dto.response.SpatialRecommendation;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
-public class StoreRouter {
+public class RecommendationRouter {
     private final RadarEngine radarEngine;
     private final RecommendationEngine recommendationEngine;
 
-    public StoreRouter(RadarEngine radarEngine,
-                       RecommendationEngine recommendationEngine) {
+    public RecommendationRouter(RadarEngine radarEngine,
+                                RecommendationEngine recommendationEngine) {
         this.radarEngine = radarEngine;
         this.recommendationEngine = recommendationEngine;
     }
