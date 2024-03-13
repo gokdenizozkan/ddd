@@ -1,5 +1,6 @@
 package com.gokdenizozkan.ddd.generalservice.feature.store;
 
+import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.StoreReviewFields;
 import com.gokdenizozkan.ddd.generalservice.feature.store.dto.StoreEntityMapper;
 import com.gokdenizozkan.ddd.generalservice.feature.store.dto.request.StoreSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.feature.store.dto.response.StoreDetails;
@@ -47,6 +48,8 @@ public class StoreServiceActives implements StoreService {
     @Override
     public Store save(StoreSaveRequest request) {
         Store store = entityMapper.fromSaveRequest.apply(request);
+        StoreReviewFields.initialize(store);
+
         return repository.save(store);
     }
 
