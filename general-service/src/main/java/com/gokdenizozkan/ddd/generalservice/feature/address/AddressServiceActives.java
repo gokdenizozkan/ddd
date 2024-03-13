@@ -5,7 +5,7 @@ import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotActiveEx
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
 import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFields;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.AddressEntityMapper;
-import generalservice.feature.address.dto.request.AddressSaveRequest;
+import com.gokdenizozkan.ddd.generalservice.feature.address.dto.request.AddressSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseCoordinates;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

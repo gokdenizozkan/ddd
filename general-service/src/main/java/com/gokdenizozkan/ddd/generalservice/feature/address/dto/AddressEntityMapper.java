@@ -1,6 +1,6 @@
 package com.gokdenizozkan.ddd.generalservice.feature.address.dto;
 
-import generalservice.feature.address.dto.mapper.AddressSaveRequestToAddress;
+import com.gokdenizozkan.ddd.generalservice.feature.address.dto.mapper.AddressSaveRequestToAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

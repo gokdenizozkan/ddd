@@ -1,7 +1,7 @@
 package com.gokdenizozkan.ddd.generalservice.feature.address;
 
 import com.gokdenizozkan.ddd.generalservice.config.quality.BaseService;
-import generalservice.feature.address.dto.request.AddressSaveRequest;
+import com.gokdenizozkan.ddd.generalservice.feature.address.dto.request.AddressSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseCoordinates;
 
 import java.util.List;

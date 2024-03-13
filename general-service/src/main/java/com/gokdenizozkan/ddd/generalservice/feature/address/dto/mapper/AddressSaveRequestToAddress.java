@@ -1,7 +1,7 @@
 package com.gokdenizozkan.ddd.generalservice.feature.address.dto.mapper;
 
-import generalservice.feature.address.Address;
-import generalservice.feature.address.dto.request.AddressSaveRequest;
+import com.gokdenizozkan.ddd.generalservice.feature.address.Address;
+import com.gokdenizozkan.ddd.generalservice.feature.address.dto.request.AddressSaveRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;
