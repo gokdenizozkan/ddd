@@ -131,6 +131,7 @@ which is an extended version of Semantic Versioning (SemVer).
 ### Features to be implemented after release
 
 - Pageable spatialRecommendation listing (thanks to modifiable query structure). 
+- Store rating average should be periodically calculated from scratch and updated in the store table.
 
 ## Diagrams and Relationships
 

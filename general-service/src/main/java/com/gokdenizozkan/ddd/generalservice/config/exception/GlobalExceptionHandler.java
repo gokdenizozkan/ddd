@@ -49,13 +49,26 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return StructuredResponseEntityBuilder.<Map<String, String>>builder()
                 .success(false)
                 .message(e.getMessage())
-                .data(Map.of("path", request.getDescription(false)))
+                .data(Map.of(
+                        "path", request.getDescription(false),
+                        "hint", "Please check the request body and query parameters for invalid input"
+                        ))
                 .httpStatus(HttpStatus.BAD_REQUEST)
                 .build();
     }
 
     @ExceptionHandler(ResourceNotActiveException.class)
     public ResponseEntity<Structured<Map<String, String>>> handleNotActiveException(ResourceNotActiveException e, WebRequest request) {
+        return StructuredResponseEntityBuilder.<Map<String, String>>builder()
+                .success(false)
+                .message(e.getMessage())
+                .data(Map.of("path", request.getDescription(false)))
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Structured<Map<String, String>>> handleIllegalArgumentException(IllegalArgumentException e, WebRequest request) {
         return StructuredResponseEntityBuilder.<Map<String, String>>builder()
                 .success(false)
                 .message(e.getMessage())

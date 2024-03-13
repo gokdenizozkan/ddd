@@ -84,4 +84,33 @@ public class ReviewServiceActives implements ReviewService {
         review.setDeleted(true);
         repository.save(review);
     }
+
+    @Override
+    public void patch(Long id, String experience, String ratingString) {
+        Review review = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundWithIdException(Review.class, id));
+
+        if (!ratingString.isBlank()) {
+            Rating rating = Rating.valueOf(ratingString);
+            int oldRating = review.getRating().getValue();
+            int newRating = rating.getValue();
+
+            review.setRating(rating);
+            StoreReviewFields.of(review.getStore().getId(), storeRepository, Store.class)
+                    .ratingReplaced((float) oldRating, (float) newRating)
+                    .copyTo(review.getStore());
+
+            // Update store rating in recommendation service
+            recommendationClient.updateStoreRating(
+                    review.getStore().getStoreType().toString(),
+                    review.getStore().getId().toString(),
+                    review.getStore().getStoreRatingAverage());
+        }
+
+        if (!experience.isBlank()) {
+            review.setExperience(experience);
+        }
+
+        repository.save(review);
+    }
 }

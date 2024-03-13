@@ -20,4 +20,6 @@ public interface ReviewService extends BaseService<Review, Long, ReviewSaveReque
 
     @Override
     void delete(Long id);
+
+    void patch(Long id, String experience, String ratingString);
 }

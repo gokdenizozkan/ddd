@@ -1,5 +1,6 @@
 package com.gokdenizozkan.ddd.generalservice.feature.review;
 
+import com.gokdenizozkan.ddd.generalservice.config.exception.InvalidInputException;
 import com.gokdenizozkan.ddd.generalservice.feature.review.dto.ReviewDtoMapper;
 import com.gokdenizozkan.ddd.generalservice.feature.review.dto.request.ReviewSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.feature.review.dto.response.ReviewResponseMirror;
@@ -48,6 +49,15 @@ public class ReviewResponser {
 
     public ResponseEntity<Structured<Object>> delete(Long id) {
         service.delete(id);
+        return ResponseTemplates.noContent();
+    }
+
+    public ResponseEntity<Structured<Object>> patch(Long id, String experience, String ratingString) {
+        if (ratingString.isBlank() && experience.isBlank()) {
+            throw new InvalidInputException("Both experience and rating cannot be empty.");
+        }
+
+        service.patch(id, experience, ratingString);
         return ResponseTemplates.noContent();
     }
 }
