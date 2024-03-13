@@ -3,7 +3,7 @@ package com.gokdenizozkan.ddd.generalservice.feature.user.buyer;
 import com.gokdenizozkan.ddd.generalservice.feature.user.buyer.dto.request.BuyerSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.config.Specifications;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
-import com.gokdenizozkan.ddd.generalservice.core.auditableentity.ActiveDetermingFields;
+import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFields;
 import com.gokdenizozkan.ddd.generalservice.feature.user.buyer.dto.BuyerEntityMapper;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;

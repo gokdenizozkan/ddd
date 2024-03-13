@@ -3,7 +3,7 @@ package com.gokdenizozkan.ddd.generalservice.feature.address;
 import com.gokdenizozkan.ddd.generalservice.config.Specifications;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotActiveException;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
-import com.gokdenizozkan.ddd.generalservice.core.auditableentity.ActiveDetermingFields;
+import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFields;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.AddressEntityMapper;
 import generalservice.feature.address.dto.request.AddressSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseCoordinates;

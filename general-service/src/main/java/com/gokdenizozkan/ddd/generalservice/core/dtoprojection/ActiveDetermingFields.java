@@ -1,7 +1,8 @@
-package com.gokdenizozkan.ddd.generalservice.core.auditableentity;
+package com.gokdenizozkan.ddd.generalservice.core.dtoprojection;
 
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
 import com.gokdenizozkan.ddd.generalservice.config.quality.BaseRepository;
+import com.gokdenizozkan.ddd.generalservice.core.auditableentity.AuditableEntity;
 
 import java.util.function.Supplier;
 

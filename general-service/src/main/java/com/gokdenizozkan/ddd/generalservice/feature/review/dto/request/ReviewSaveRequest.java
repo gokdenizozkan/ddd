@@ -1,6 +1,6 @@
 package com.gokdenizozkan.ddd.generalservice.feature.review.dto.request;
 
-import generalservice.feature.review.Rating;
+import com.gokdenizozkan.ddd.generalservice.feature.review.Rating;
 
 public record ReviewSaveRequest(
         Rating rating,

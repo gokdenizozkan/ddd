@@ -3,7 +3,7 @@ package com.gokdenizozkan.ddd.generalservice.feature.store.dto.mapper;
 import com.gokdenizozkan.ddd.generalservice.feature.address.AddressRepository;
 import com.gokdenizozkan.ddd.generalservice.feature.store.dto.request.StoreSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
-import generalservice.feature.address.Address;
+import com.gokdenizozkan.ddd.generalservice.feature.address.Address;
 import com.gokdenizozkan.ddd.generalservice.feature.legalentity.LegalEntity;
 import com.gokdenizozkan.ddd.generalservice.feature.legalentity.LegalEntityRepository;
 import com.gokdenizozkan.ddd.generalservice.feature.store.Store;

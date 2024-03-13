@@ -1,10 +1,14 @@
 package com.gokdenizozkan.ddd.generalservice.feature.review;
 
+import com.gokdenizozkan.ddd.generalservice.client.recommendation.RecommendationClient;
+import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.StoreReviewFields;
 import com.gokdenizozkan.ddd.generalservice.feature.review.dto.ReviewEntityMapper;
 import com.gokdenizozkan.ddd.generalservice.feature.review.dto.request.ReviewSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.config.Specifications;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
-import com.gokdenizozkan.ddd.generalservice.core.auditableentity.ActiveDetermingFields;
+import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFields;
+import com.gokdenizozkan.ddd.generalservice.feature.store.Store;
+import com.gokdenizozkan.ddd.generalservice.feature.store.StoreRepository;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
@@ -15,11 +19,17 @@ public class ReviewServiceActives implements ReviewService {
     private final ReviewRepository repository;
     private final Specification<Review> specification;
     private final ReviewEntityMapper entityMapper;
+    private final RecommendationClient recommendationClient;
+    private final StoreRepository storeRepository;
 
-    public ReviewServiceActives(ReviewRepository repository, ReviewEntityMapper entityMapper) {
+    public ReviewServiceActives(ReviewRepository repository, ReviewEntityMapper entityMapper, RecommendationClient recommendationClient,
+                                StoreRepository storeRepository) {
         this.repository = repository;
         this.specification = Specifications.isActive(Review.class);
         this.entityMapper = entityMapper;
+        this.recommendationClient = recommendationClient;
+
+        this.storeRepository = storeRepository;
     }
 
 
@@ -51,7 +61,19 @@ public class ReviewServiceActives implements ReviewService {
         review.setId(id);
 
         ActiveDetermingFields.of(id, repository, Review.class).copyTo(review);
-        return repository.save(review);
+        StoreReviewFields.of(review.getStore().getId(), storeRepository, Store.class)
+                .copyTo(review.getStore());
+
+        // Update store rating
+        Review savedReview = repository.save(review);
+
+        // Update store rating in recommendation service
+        recommendationClient.updateStoreRating(
+                savedReview.getStore().getStoreType().toString(),
+                savedReview.getStore().getId().toString(),
+                savedReview.getStore().getStoreRatingAverage());
+
+        return savedReview;
     }
 
     @Override

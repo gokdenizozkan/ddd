@@ -6,7 +6,7 @@ import com.gokdenizozkan.ddd.generalservice.feature.store.dto.response.StoreDeta
 import com.gokdenizozkan.ddd.generalservice.config.Specifications;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotActiveException;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
-import com.gokdenizozkan.ddd.generalservice.core.auditableentity.ActiveDetermingFields;
+import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFields;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
