@@ -65,9 +65,9 @@ which is an extended version of Semantic Versioning (SemVer).
 ~~2. Write "Review" to represent a review.~~  
 ~~+3. Reviews should be owned by the store, as well.~~  
 
-#### f6: Updatable store rating
+#### ~~f6: Updatable store rating~~
 
-1. Store rating should be updatable without going through the entire review list and rating again.
+1. ~~Store rating should be updatable without going through the entire review list and rating again.~~
 
 #### ~~f7: Fundamental requests should be processable~~
 
