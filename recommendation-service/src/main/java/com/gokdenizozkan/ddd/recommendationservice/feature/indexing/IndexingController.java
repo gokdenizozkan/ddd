@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -45,11 +46,19 @@ public class IndexingController {
         return ResponseTemplates.noContent();
     }
 
-    @PutMapping("/{storeType}/{storeId}")
+    @PatchMapping("/{storeType}/{storeId}")
     public ResponseEntity<Structured<Object>> updateStoreRating(@PathVariable String storeType, @PathVariable String storeId,
                                                               @RequestParam Float rating) {
 
         indexingRouter.updateStoreRating(storeType, storeId, rating);
+        return ResponseTemplates.noContent();
+    }
+
+    @PatchMapping("/{storeType}/{storeId}")
+    public ResponseEntity<Structured<Object>> updateStoreName(@PathVariable String storeType, @PathVariable String storeId,
+                                                              @RequestParam String name) {
+
+        indexingRouter.updateStoreName(storeType, storeId, name);
         return ResponseTemplates.noContent();
     }
 }

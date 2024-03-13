@@ -41,4 +41,9 @@ public class IndexingRouter {
         String collectionName = Converter.toCollectionName(storeType);
         engine.updateById(collectionName, storeId, "rating", rating.toString());
     }
+
+    public void updateStoreName(String storeType, String storeId, String name) {
+        String collectionName = Converter.toCollectionName(storeType);
+        engine.updateById(collectionName, storeId, "name", name);
+    }
 }

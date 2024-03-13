@@ -23,4 +23,6 @@ public interface StoreService extends BaseService<Store, Long, StoreSaveRequest>
     void delete(Long id);
 
     StoreDetails findStoreDetailsById(Long id);
+
+    String updateStoreNameById(Long id, String name);
 }

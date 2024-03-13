@@ -1,5 +1,6 @@
 package com.gokdenizozkan.ddd.generalservice.feature.store;
 
+import com.gokdenizozkan.ddd.generalservice.client.recommendation.RecommendationClient;
 import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.StoreReviewFields;
 import com.gokdenizozkan.ddd.generalservice.feature.store.dto.StoreEntityMapper;
 import com.gokdenizozkan.ddd.generalservice.feature.store.dto.request.StoreSaveRequest;
@@ -18,12 +19,15 @@ public class StoreServiceActives implements StoreService {
     private final StoreRepository repository;
     private final Specification<Store> specification;
     private final StoreEntityMapper entityMapper;
+    private final RecommendationClient recommendationClient;
 
     public StoreServiceActives(StoreRepository repository,
-                               StoreEntityMapper entityMapper) {
+                               StoreEntityMapper entityMapper,
+                               RecommendationClient recommendationClient) {
         this.repository = repository;
         this.specification = Specifications.isActive(Store.class);
         this.entityMapper = entityMapper;
+        this.recommendationClient = recommendationClient;
     }
 
     @Override
@@ -50,7 +54,18 @@ public class StoreServiceActives implements StoreService {
         Store store = entityMapper.fromSaveRequest.apply(request);
         StoreReviewFields.initialize(store);
 
-        return repository.save(store);
+        Store savedStore = repository.save(store);
+
+        // Index store in recommendation service
+        recommendationClient.indexStore(
+                savedStore.getStoreType().toString(),
+                savedStore.getId().toString(),
+                savedStore.getAddress().getLatitude().toString(),
+                savedStore.getAddress().getLongitude().toString(),
+                savedStore.getName(),
+                savedStore.getStoreRatingAverage());
+
+        return savedStore;
     }
 
     @Override
@@ -64,6 +79,14 @@ public class StoreServiceActives implements StoreService {
         store.setId(id);
 
         ActiveDetermingFields.of(id, repository, Store.class).copyTo(store);
+
+        if (!request.name().equals(repository.findStoreNameById(id).get())) {
+            recommendationClient.updateStoreName(
+                    store.getStoreType().toString(),
+                    store.getId().toString(),
+                    request.name());
+        }
+
         repository.save(store);
 
         return store;
@@ -76,5 +99,24 @@ public class StoreServiceActives implements StoreService {
 
         store.setDeleted(true);
         repository.save(store);
+    }
+
+    @Override
+    public String updateStoreNameById(Long id, String name) {
+        Store store = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundWithIdException(Store.class, id));
+
+        if (name.equals(store.getName())) {
+            return name;
+        }
+
+        store.setName(name);
+        repository.save(store);
+        recommendationClient.updateStoreName(
+                store.getStoreType().toString(),
+                store.getId().toString(),
+                name);
+
+        return name;
     }
 }
