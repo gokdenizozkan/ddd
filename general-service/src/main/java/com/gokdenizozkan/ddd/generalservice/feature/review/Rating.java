@@ -4,16 +4,16 @@ import lombok.Getter;
 
 @Getter
 public enum Rating {
-    EXCELLENT(5),
-    SATISFACTORY(4),
-    DECENT(3),
-    LACKING(2),
-    POOR(1);
+    EXCELLENT(5F),
+    SATISFACTORY(4F),
+    DECENT(3F),
+    LACKING(2F),
+    POOR(1F);
 
-    private final int value;
+    private final Float value;
     private final int availableRatingCount;
 
-    Rating(int value) {
+    Rating(Float value) {
         this.value = value;
         this.availableRatingCount = 5;
     }

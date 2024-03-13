@@ -47,6 +47,16 @@ public class ReviewServiceActives implements ReviewService {
     @Override
     public Review save(ReviewSaveRequest request) {
         Review review = entityMapper.fromSaveRequest.apply(request);
+        StoreReviewFields.of(review.getStore().getId(), storeRepository, Store.class)
+                .ratingAdded(review.getRating().getValue())
+                .copyTo(review.getStore());
+
+        // Update store rating in recommendation service
+        recommendationClient.updateStoreRating(
+                review.getStore().getStoreType().toString(),
+                review.getStore().getId().toString(),
+                review.getStore().getStoreRatingAverage());
+
         return repository.save(review);
     }
 
@@ -82,6 +92,11 @@ public class ReviewServiceActives implements ReviewService {
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Review.class, id));
 
         review.setDeleted(true);
+
+        StoreReviewFields.of(review.getStore().getId(), storeRepository, Store.class)
+                .ratingRemoved(review.getRating().getValue())
+                .copyTo(review.getStore());
+
         repository.save(review);
     }
 
@@ -92,12 +107,12 @@ public class ReviewServiceActives implements ReviewService {
 
         if (!ratingString.isBlank()) {
             Rating rating = Rating.valueOf(ratingString);
-            int oldRating = review.getRating().getValue();
-            int newRating = rating.getValue();
+            Float oldRating = review.getRating().getValue();
+            Float newRating = rating.getValue();
 
             review.setRating(rating);
             StoreReviewFields.of(review.getStore().getId(), storeRepository, Store.class)
-                    .ratingReplaced((float) oldRating, (float) newRating)
+                    .ratingReplaced(oldRating, newRating)
                     .copyTo(review.getStore());
 
             // Update store rating in recommendation service

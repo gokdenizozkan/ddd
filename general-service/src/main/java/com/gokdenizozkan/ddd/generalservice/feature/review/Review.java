@@ -41,7 +41,7 @@ public class Review extends AuditableEntity {
     @JoinColumn(name = "buyer_id", referencedColumnName = "id")
     private Buyer buyer;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {jakarta.persistence.CascadeType.PERSIST, jakarta.persistence.CascadeType.MERGE})
     @JoinColumn(name = "store_id", referencedColumnName = "id")
     private Store store;
 }
