@@ -124,7 +124,7 @@ which is an extended version of Semantic Versioning (SemVer).
 
 #### f12: Store details persists between a relational database and Solr
 
-1. Write an indexing engine to enable indexing operations on Solr.
+1. ~~Write an indexing engine to enable indexing operations on Solr.~~
 2. Better and patch-oriented store service (controller etc.).
 3. Store update requests also update Solr index.
 
