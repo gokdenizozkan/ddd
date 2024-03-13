@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.gokdenizozkan.ddd.recommendationservice.config.SolrClientProvider;
 import com.gokdenizozkan.ddd.recommendationservice.core.util.Surround;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
@@ -32,24 +34,39 @@ public class IndexingEngine {
         updateById("dddfoodstores", "1", "name", "Gokdeniz's Food Store");
     }
 
-    public <T> UpdateResponse index(String collection, T document) throws SolrServerException, IOException {
-        UpdateResponse response = client.addBean(collection, document);
-        return client.commit(collection);
+    public <T> UpdateResponse index(String collectionName, T document) {
+        try {
+            client.addBean(collectionName, document);
+            return client.commit(collectionName);
+        } catch (SolrServerException | IOException e) {
+            e.printStackTrace();
+        }
+        return new UpdateResponse();
     }
 
-    public <T> UpdateResponse indexCollection(String collectionName, Collection<T> documents) throws SolrServerException, IOException {
-        UpdateResponse response = client.addBeans(collectionName, documents);
-        return client.commit(collectionName);
+    public <T> UpdateResponse indexCollection(@NotBlank String collectionName, @NotNull Collection<T> documents) {
+        try {
+            client.addBeans(collectionName, documents);
+            return client.commit(collectionName);
+        } catch (IOException | SolrServerException e) {
+            e.printStackTrace();
+        }
+        return new UpdateResponse();
     }
 
-    public <T> UpdateResponse indexCollection(String collectionName, File json, Class<T> classToMap) throws SolrServerException, IOException {
+    public <T> UpdateResponse indexCollection(@NotBlank String collectionName, @NotNull File json, @NotNull Class<T> classToMap) {
         ObjectMapper mapper = new ObjectMapper();
         CollectionType collectionType = mapper.getTypeFactory().constructCollectionType(List.class, classToMap);
-        Collection<T> documents = mapper.readValue(json, collectionType);
+        Collection<T> documents = null;
+        try {
+            documents = mapper.readValue(json, collectionType);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return indexCollection(collectionName, documents);
     }
 
-    public UpdateResponse updateById(String collectionName, String id, String field, String newValue) {
+    public UpdateResponse updateById(@NotBlank String collectionName, @NotBlank String id, @NotBlank String field, @NotBlank String newValue) {
         // find the existing document
         SolrQuery getQuery = new SolrQuery();
         getQuery.setQuery("id:" + id);
@@ -79,7 +96,7 @@ public class IndexingEngine {
         return Surround.withTryCatch(client, collectionName, updateRequest);
     }
 
-    public UpdateResponse updateById(String collectionName, String id, Map<String, Object> fields) {
+    public UpdateResponse updateById(@NotBlank String collectionName, @NotBlank String id, @NotNull Map<String, Object> fields) {
         // find the existing document
         SolrQuery getQuery = new SolrQuery();
         getQuery.setQuery("id:" + id);
@@ -109,11 +126,21 @@ public class IndexingEngine {
         return Surround.withTryCatch(client, collectionName, updateRequest);
     }
 
-    public UpdateResponse deleteById(String collectionName, String id) throws IOException, SolrServerException {
-        return client.deleteById(collectionName, id);
+    public UpdateResponse deleteById(@NotBlank String collectionName, @NotBlank String id) {
+        try {
+            return client.deleteById(collectionName, id);
+        } catch (IOException | SolrServerException e) {
+            e.printStackTrace();
+        }
+        return new UpdateResponse();
     }
 
-    public UpdateResponse deleteAll(String collectionName) throws IOException, SolrServerException {
-        return client.deleteByQuery(collectionName, "*:*");
+    public UpdateResponse deleteAll(@NotBlank String collectionName) {
+        try {
+            return client.deleteByQuery(collectionName, "*:*");
+        } catch (IOException | SolrServerException e) {
+            e.printStackTrace();
+        }
+        return new UpdateResponse();
     }
 }
