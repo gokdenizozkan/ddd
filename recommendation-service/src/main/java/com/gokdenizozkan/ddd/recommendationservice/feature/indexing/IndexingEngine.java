@@ -29,7 +29,7 @@ public class IndexingEngine {
     public IndexingEngine(SolrClientProvider provider, @Value("${engine.indexing-engine.base-solr-url}") String baseSolrUrl) {
         this.client = provider.http2(baseSolrUrl);
 
-        update("dddfoodstores", "1", "name", "Gokdeniz's Food Store");
+        updateById("dddfoodstores", "1", "name", "Gokdeniz's Food Store");
     }
 
     public <T> UpdateResponse index(String collection, T document) throws SolrServerException, IOException {
@@ -49,7 +49,7 @@ public class IndexingEngine {
         return indexCollection(collectionName, documents);
     }
 
-    public UpdateResponse update(String collectionName, String id, String field, String newValue) {
+    public UpdateResponse updateById(String collectionName, String id, String field, String newValue) {
         // find the existing document
         SolrQuery getQuery = new SolrQuery();
         getQuery.setQuery("id:" + id);
@@ -67,6 +67,36 @@ public class IndexingEngine {
 
             newDoc.addField(entry.getKey(), entry.getValue());
         }
+
+        // prepare the update request and process it
+        UpdateRequest updateRequest = new UpdateRequest();
+        updateRequest.add(newDoc);
+        updateRequest.setCommitWithin(1000);
+        updateRequest.setMethod(SolrRequest.METHOD.POST);
+        updateRequest.setParam("overwrite", "true");
+        updateRequest.setParam("commit", "true");
+
+        return Surround.withTryCatch(client, collectionName, updateRequest);
+    }
+
+    public UpdateResponse updateById(String collectionName, String id, Map<String, Object> fields) {
+        // find the existing document
+        SolrQuery getQuery = new SolrQuery();
+        getQuery.setQuery("id:" + id);
+
+        QueryResponse queryResponse = Surround.withTryCatch(client, collectionName, getQuery);
+        SolrDocument foundDoc = queryResponse.getResults().get(0);
+
+        // create a new document with the new value
+        SolrInputDocument newDoc = new SolrInputDocument();
+        fields.forEach(newDoc::addField);
+
+        foundDoc.forEach((key, value) -> {
+            if (fields.containsKey(key) || key.equals("_version_") || key.equals("name_exact")) {
+                return;
+            }
+            newDoc.addField(key, value);
+        });
 
         // prepare the update request and process it
         UpdateRequest updateRequest = new UpdateRequest();
