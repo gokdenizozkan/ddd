@@ -1,6 +1,6 @@
 package com.gokdenizozkan.ddd.generalservice.feature.address.dto.mapper;
 
-import generalservice.feature.address.Address;
+import com.gokdenizozkan.ddd.generalservice.feature.address.Address;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseCoordinates;
 import org.springframework.stereotype.Component;
 

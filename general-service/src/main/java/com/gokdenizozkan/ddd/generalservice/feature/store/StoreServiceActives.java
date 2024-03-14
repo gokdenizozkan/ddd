@@ -88,9 +88,7 @@ public class StoreServiceActives implements StoreService {
                     request.name());
         }
 
-        repository.save(store);
-
-        return store;
+        return repository.save(store);
     }
 
     @Override

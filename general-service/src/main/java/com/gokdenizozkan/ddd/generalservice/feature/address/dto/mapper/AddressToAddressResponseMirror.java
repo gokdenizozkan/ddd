@@ -1,7 +1,7 @@
 package com.gokdenizozkan.ddd.generalservice.feature.address.dto.mapper;
 
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseMirror;
-import generalservice.feature.address.Address;
+import com.gokdenizozkan.ddd.generalservice.feature.address.Address;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Function;

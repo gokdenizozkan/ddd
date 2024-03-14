@@ -24,15 +24,15 @@ public interface RecommendationClient {
                                                         @RequestParam String latitude, @RequestParam String longitude,
                                                         @RequestParam String name, @RequestParam Float rating);
 
-    @PatchMapping("/engine/indexing/{storeType}/{storeId}")
+    @PatchMapping("/engine/indexing/{storeType}/{storeId}/rating/{rating}")
     ResponseEntity<Structured<Object>> updateStoreRating(@PathVariable String storeType, @PathVariable String storeId,
-                                                         @RequestParam Float rating);
+                                                         @PathVariable Float rating);
 
-    @PatchMapping("/engine/indexing/{storeType}/{storeId}")
+    @PatchMapping("/engine/indexing/{storeType}/{storeId}/name/{name}")
     ResponseEntity<Structured<Object>> updateStoreName(@PathVariable String storeType, @PathVariable String storeId,
-                                                       @RequestParam String name);
+                                                       @PathVariable String name);
     
-    @PatchMapping("/engine/indexing/{storeType}/{storeId}")
+    @PatchMapping("/engine/indexing/{storeType}/{storeId}/coordinates")
     ResponseEntity<Structured<Object>> updateStoreCoordinates(@PathVariable String storeType, @PathVariable String storeId,
                                                              @RequestParam String latitude, @RequestParam String longitude);
 }

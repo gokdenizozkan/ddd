@@ -1,7 +1,7 @@
 package com.gokdenizozkan.ddd.generalservice.feature.address.dto;
 
-import generalservice.feature.address.dto.mapper.AddressToAddressResponseCoordinates;
-import generalservice.feature.address.dto.mapper.AddressToAddressResponseMirror;
+import com.gokdenizozkan.ddd.generalservice.feature.address.dto.mapper.AddressToAddressResponseCoordinates;
+import com.gokdenizozkan.ddd.generalservice.feature.address.dto.mapper.AddressToAddressResponseMirror;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

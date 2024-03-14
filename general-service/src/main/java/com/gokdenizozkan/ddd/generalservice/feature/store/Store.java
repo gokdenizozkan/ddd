@@ -3,7 +3,6 @@ package com.gokdenizozkan.ddd.generalservice.feature.store;
 import com.gokdenizozkan.ddd.generalservice.feature.review.Review;
 import com.gokdenizozkan.ddd.generalservice.feature.address.Address;
 import com.gokdenizozkan.ddd.generalservice.core.auditableentity.AuditableEntity;
-import com.gokdenizozkan.ddd.generalservice.feature.legalentity.LegalEntity;
 import com.gokdenizozkan.ddd.generalservice.feature.user.seller.Seller;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,8 +13,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
@@ -63,10 +60,6 @@ public class Store extends AuditableEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "store_type", nullable = false)
     private StoreType storeType;
-
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "legal_entity_id", referencedColumnName = "id")
-    private LegalEntity legalEntity;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, optional = false)
     private Address address;

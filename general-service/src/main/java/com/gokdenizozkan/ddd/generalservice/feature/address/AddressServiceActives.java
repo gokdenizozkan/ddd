@@ -1,6 +1,5 @@
 package com.gokdenizozkan.ddd.generalservice.feature.address;
 
-import com.gokdenizozkan.ddd.generalservice.client.recommendation.RecommendationClient;
 import com.gokdenizozkan.ddd.generalservice.config.Specifications;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotActiveException;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
@@ -13,23 +12,19 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
 
 @Service("AddressServiceActives")
 public class AddressServiceActives implements AddressService {
     private final AddressRepository repository;
     private final Specification<Address> specification;
     private final AddressEntityMapper entityMapper;
-    private final RecommendationClient recommendationClient;
 
 
     public AddressServiceActives(AddressRepository repository,
-                                 AddressEntityMapper entityMapper,
-                                 RecommendationClient recommendationClient) {
+                                 AddressEntityMapper entityMapper) {
         this.repository = repository;
         this.specification = Specifications.isActive(Address.class);
         this.entityMapper = entityMapper;
-        this.recommendationClient = recommendationClient;
     }
 
     @Override

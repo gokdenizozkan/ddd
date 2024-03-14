@@ -3,9 +3,10 @@ package com.gokdenizozkan.ddd.generalservice.feature.address;
 import com.gokdenizozkan.ddd.generalservice.config.response.ResponseTemplates;
 import com.gokdenizozkan.ddd.generalservice.config.response.Structured;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.AddressDtoMapper;
-import generalservice.feature.address.dto.request.AddressSaveRequest;
+import com.gokdenizozkan.ddd.generalservice.feature.address.dto.request.AddressSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseCoordinates;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseMirror;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +17,7 @@ public class AddressResponser {
     private final AddressService service;
     private final AddressDtoMapper dtoMapper;
 
-    public AddressResponser(AddressServiceActives service, AddressDtoMapper dtoMapper) {
+    public AddressResponser(@Qualifier("AddressServiceActives") AddressService service, AddressDtoMapper dtoMapper) {
         this.service = service;
         this.dtoMapper = dtoMapper;
     }

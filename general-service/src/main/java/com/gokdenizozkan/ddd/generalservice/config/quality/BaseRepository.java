@@ -16,7 +16,7 @@ public interface BaseRepository <T, ID> extends JpaRepository<T, ID>, JpaSpecifi
     @Query("SELECT new com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFields(a.deleted, a.enabled) FROM #{#entityName} a WHERE a.id = ?1")
     Optional<ActiveDetermingFields> findActiveDetermingFields(ID id);
 
-    @Query("SELECT new com.gokdenizozkan.ddd.generalservice.core.dtoprojection.StoreReviewFields(a.storeRatingAverage, a.reviewCount) FROM #{#entityName} a WHERE a.id = ?1")
+    @Query("SELECT new com.gokdenizozkan.ddd.generalservice.core.dtoprojection.StoreReviewFields(a.storeRatingAverage, a.reviewCount) FROM Store a WHERE a.id = ?1")
     Optional<StoreReviewFields> findStoreReviewFields(ID id);
 
     default Optional<T> findById(Specification<T> specification, ID id) {

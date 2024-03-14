@@ -1,7 +1,7 @@
 package com.gokdenizozkan.ddd.generalservice.feature.user.buyer;
 
 import com.gokdenizozkan.ddd.generalservice.feature.review.Review;
-import generalservice.feature.address.Address;
+import com.gokdenizozkan.ddd.generalservice.feature.address.Address;
 import com.gokdenizozkan.ddd.generalservice.feature.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;

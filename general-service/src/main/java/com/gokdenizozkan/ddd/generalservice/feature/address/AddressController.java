@@ -1,7 +1,7 @@
 package com.gokdenizozkan.ddd.generalservice.feature.address;
 
 import com.gokdenizozkan.ddd.generalservice.config.response.Structured;
-import generalservice.feature.address.dto.request.AddressSaveRequest;
+import com.gokdenizozkan.ddd.generalservice.feature.address.dto.request.AddressSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseCoordinates;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseMirror;
 import lombok.RequiredArgsConstructor;

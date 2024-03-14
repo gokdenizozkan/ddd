@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/engine/indexing")
 @RequiredArgsConstructor
@@ -23,14 +25,14 @@ public class IndexingController {
 
     @PostMapping("/{storeType}/{storeId}")
     public ResponseEntity<Structured<Object>> indexStore(@PathVariable String storeType, @PathVariable String storeId,
-                                                       @RequestParam String latitude, @RequestParam String longitude,
-                                                       @RequestParam String name, @RequestParam Float rating) {
+                                                      @RequestParam String latitude, @RequestParam String longitude,
+                                                      @RequestParam String name, @RequestParam Float rating) {
 
         UpdateResponse response = indexingRouter.indexStore(storeType, storeId, latitude, longitude, name, rating);
         HttpStatus status = response.getStatus() == 0 ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR;
 
         return StructuredResponseEntityBuilder.builder()
-                .data(response.getResponse())
+                .data(response.getResponse().asShallowMap())
                 .httpStatus(status)
                 .success(response.getStatus() == 0)
                 .message(response.getStatus() == 0 ? "Indexing successful" : "Indexing failed")
@@ -46,23 +48,23 @@ public class IndexingController {
         return ResponseTemplates.noContent();
     }
 
-    @PatchMapping("/{storeType}/{storeId}")
+    @PatchMapping("/{storeType}/{storeId}/rating/{rating}")
     public ResponseEntity<Structured<Object>> updateStoreRating(@PathVariable String storeType, @PathVariable String storeId,
-                                                              @RequestParam Float rating) {
+                                                              @PathVariable Float rating) {
 
         indexingRouter.updateStoreRating(storeType, storeId, rating);
         return ResponseTemplates.noContent();
     }
 
-    @PatchMapping("/{storeType}/{storeId}")
+    @PatchMapping("/{storeType}/{storeId}/name/{name}")
     public ResponseEntity<Structured<Object>> updateStoreName(@PathVariable String storeType, @PathVariable String storeId,
-                                                              @RequestParam String name) {
+                                                              @PathVariable String name) {
 
         indexingRouter.updateStoreName(storeType, storeId, name);
         return ResponseTemplates.noContent();
     }
 
-    @PatchMapping("/{storeType}/{storeId}")
+    @PatchMapping("/{storeType}/{storeId}/coordinates")
     public ResponseEntity<Structured<Object>> updateStoreCoordinates(@PathVariable String storeType, @PathVariable String storeId,
                                                                     @RequestParam String latitude, @RequestParam String longitude) {
 
