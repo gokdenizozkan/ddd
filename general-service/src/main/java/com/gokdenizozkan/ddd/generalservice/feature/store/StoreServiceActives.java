@@ -80,6 +80,7 @@ public class StoreServiceActives implements StoreService {
         store.setId(id);
 
         ActiveDetermingFields.of(id, repository, Store.class).copyTo(store);
+        StoreReviewFields.of(id, repository, Store.class).copyTo(store);
 
         if (!request.name().equals(repository.findStoreNameById(id).get())) {
             recommendationClient.updateStoreName(
