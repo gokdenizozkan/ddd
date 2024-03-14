@@ -7,6 +7,7 @@ import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFi
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.AddressEntityMapper;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.request.AddressSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseCoordinates;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service("AddressServiceActives")
+@Slf4j
 public class AddressServiceActives implements AddressService {
     private final AddressRepository repository;
     private final Specification<Address> specification;
@@ -52,10 +54,8 @@ public class AddressServiceActives implements AddressService {
      */
     @Override
     public AddressResponseCoordinates findCoordinatesById(Long id) {
-        if (ActiveDetermingFields.of(id, repository, Address.class).isNotActive()) {
-            throw new ResourceNotActiveException(Address.class, id);
-        }
-
+        ActiveDetermingFields.of(id, repository, Address.class)
+                .ifNotActiveThrow(() -> new ResourceNotActiveException(Address.class, id));
 
         return repository.findCoordinatesById(id)
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Address.class, id));
@@ -88,6 +88,7 @@ public class AddressServiceActives implements AddressService {
         Address address = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Address.class, id));
 
+        log.info("Soft deleting address with id {}", id);
         address.setDeleted(true);
         repository.save(address);
     }
@@ -98,7 +99,8 @@ public class AddressServiceActives implements AddressService {
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Address.class, id));
 
         if(latitude.compareTo(address.getLatitude()) == 0 && longitude.compareTo(address.getLongitude()) == 0) {
-            return "Coordinates are the same";
+            log.info("Ending execution of the method because coordinates were the same");
+            return "Coordinates are already the same";
         }
 
         address.setLatitude(latitude);

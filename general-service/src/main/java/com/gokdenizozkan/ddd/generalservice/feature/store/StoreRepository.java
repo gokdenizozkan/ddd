@@ -1,5 +1,6 @@
 package com.gokdenizozkan.ddd.generalservice.feature.store;
 
+import com.gokdenizozkan.ddd.generalservice.feature.review.Rating;
 import com.gokdenizozkan.ddd.generalservice.feature.store.dto.response.StoreDetails;
 import com.gokdenizozkan.ddd.generalservice.config.quality.BaseRepository;
 import jakarta.persistence.Embeddable;

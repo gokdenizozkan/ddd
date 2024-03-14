@@ -9,23 +9,28 @@ import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWit
 import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFields;
 import com.gokdenizozkan.ddd.generalservice.feature.store.Store;
 import com.gokdenizozkan.ddd.generalservice.feature.store.StoreRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component("ReviewServiceActives")
+@Slf4j
 public class ReviewServiceActives implements ReviewService {
     private final ReviewRepository repository;
     private final Specification<Review> specification;
     private final ReviewEntityMapper entityMapper;
     private final RecommendationClient recommendationClient;
+    private final StoreRepository storeRepository;
 
-    public ReviewServiceActives(ReviewRepository repository, ReviewEntityMapper entityMapper, RecommendationClient recommendationClient) {
+    public ReviewServiceActives(ReviewRepository repository, ReviewEntityMapper entityMapper, RecommendationClient recommendationClient,
+                                StoreRepository storeRepository) {
         this.repository = repository;
         this.specification = Specifications.isActive(Review.class);
         this.entityMapper = entityMapper;
         this.recommendationClient = recommendationClient;
+        this.storeRepository = storeRepository;
     }
 
 
@@ -47,7 +52,7 @@ public class ReviewServiceActives implements ReviewService {
                 .ratingAdded(review.getRating().getValue())
                 .copyTo(review.getStore());
 
-        // Update store rating in recommendation service
+        log.info("Saving review with data: {}", review);
         recommendationClient.updateStoreRating(
                 review.getStore().getStoreType().toString(),
                 review.getStore().getId().toString(),
@@ -67,19 +72,20 @@ public class ReviewServiceActives implements ReviewService {
         review.setId(id);
 
         ActiveDetermingFields.of(id, repository, Review.class).copyTo(review);
-        StoreReviewFields.of(review.getStore())
+
+        Float oldRating = repository.findRatingById(id).get().getValue();
+        StoreReviewFields.of(id, storeRepository)
+                .ratingReplaced(oldRating, review.getRating().getValue())
                 .copyTo(review.getStore());
 
-        // Update store rating
-        Review savedReview = repository.save(review);
-
-        // Update store rating in recommendation service
+        log.info("Updating store rating in recommendation service");
         recommendationClient.updateStoreRating(
-                savedReview.getStore().getStoreType().toString(),
-                savedReview.getStore().getId().toString(),
-                savedReview.getStore().getStoreRatingAverage());
+                review.getStore().getStoreType().toString(),
+                review.getStore().getId().toString(),
+                review.getStore().getStoreRatingAverage());
 
-        return savedReview;
+        log.info("Updating review with id {} with data: {}", id, review);
+        return repository.save(review);
     }
 
     @Override
@@ -93,6 +99,7 @@ public class ReviewServiceActives implements ReviewService {
                 .ratingRemoved(review.getRating().getValue())
                 .copyTo(review.getStore());
 
+        log.info("Soft deleting review with id {}", id);
         repository.save(review);
     }
 

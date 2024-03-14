@@ -5,6 +5,7 @@ import com.gokdenizozkan.ddd.generalservice.feature.address.dto.request.AddressS
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseCoordinates;
 import com.gokdenizozkan.ddd.generalservice.feature.address.dto.response.AddressResponseMirror;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/addresses")
 @RequiredArgsConstructor
+@Slf4j
 public class AddressController {
     private final AddressResponser responser;
 
@@ -40,16 +42,19 @@ public class AddressController {
 
     @PostMapping("/")
     public ResponseEntity<Structured<AddressResponseMirror>> save(@RequestBody AddressSaveRequest request) {
+        log.info("Received save request with data: {}", request);
         return responser.save(request);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Structured<AddressResponseMirror>> update(@PathVariable Long id, @RequestBody AddressSaveRequest request) {
+        log.info("Received update request for id {} with data: {}", id, request);
         return responser.update(id, request);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Structured<Object>> delete(@PathVariable Long id) {
+        log.info("Received delete request for id {}", id);
         return responser.delete(id);
     }
 }

@@ -6,6 +6,7 @@ import com.gokdenizozkan.ddd.generalservice.feature.review.dto.request.ReviewSav
 import com.gokdenizozkan.ddd.generalservice.feature.review.dto.response.ReviewResponseMirror;
 import com.gokdenizozkan.ddd.generalservice.config.response.ResponseTemplates;
 import com.gokdenizozkan.ddd.generalservice.config.response.Structured;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+@Slf4j
 public class ReviewResponser {
     private final ReviewService service;
     private final ReviewDtoMapper dtoMapper;
@@ -54,6 +56,7 @@ public class ReviewResponser {
 
     public ResponseEntity<Structured<Object>> patch(Long id, String experience, String ratingString) {
         if (ratingString.isBlank() && experience.isBlank()) {
+            log.warn("Both experience and rating are empty. Cannot proceed to patch.");
             throw new InvalidInputException("Both experience and rating cannot be empty.");
         }
 
