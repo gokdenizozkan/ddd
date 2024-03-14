@@ -6,7 +6,7 @@ import com.gokdenizozkan.ddd.recommendationservice.entity.store.foodstore.dto.re
 import lombok.Getter;
 
 @Getter
-public class SpatialQueryArchetype<R extends Spatial> {
+public class SpatialQueryArchetype<R extends Spatial<Float>> {
     private final String query;
     private final Integer km;
     private final String latlonFieldName;
@@ -38,7 +38,7 @@ public class SpatialQueryArchetype<R extends Spatial> {
     }
 
     public enum FoodStore {
-        DEFAULT("*:*", 1000, "latlon", SolrSpatialQuery.SortOrder.ASC, "id,name,latlon,distance:geodist()", 25, FoodStoreResponse.class),
+        DEFAULT("*:*", 100, "latlon", SolrSpatialQuery.SortOrder.ASC, "id,name,latlon,distance:geodist()", 25, FoodStoreResponse.class),
         ;
 
         private final SpatialQueryArchetype<FoodStoreResponse> archetype;

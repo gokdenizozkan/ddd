@@ -18,9 +18,9 @@ public class FoodStoreResponse implements StoreResponse {
     @Field
     List<String> latlon;
     @Field
-    Double distance;
+    Float distance;
     @Field
-    Double rating;
+    Float rating;
 
     @Override
     public String stringifyFields() {
@@ -33,12 +33,12 @@ public class FoodStoreResponse implements StoreResponse {
     }
 
     @Override
-    public Double getLatitude() {
-        return Double.parseDouble(latlon.getFirst().split(",")[0]);
+    public Float getLatitude() {
+        return Float.parseFloat(latlon.getFirst().split(",")[0]);
     }
 
     @Override
-    public Double getLongitude() {
-        return Double.parseDouble(latlon.getFirst().split(",")[1]);
+    public Float getLongitude() {
+        return Float.parseFloat(latlon.getFirst().split(",")[1]);
     }
 }

@@ -43,13 +43,13 @@ public class RecommendationRouter {
         List<FoodStoreResponse> responses = queryResponse.getBeans(FoodStoreResponse.class);
         List<SpatialElement> appraisedAndSortedResponses = responses.stream()
                 .map(r -> {
-                    Double normalizedRating = recommendationEngine.normalize(
-                            r.getRating(), Rating.MIN_RATING_VALUE.doubleValue(), Rating.MAX_RATING_VALUE.doubleValue());
+                    Float normalizedRating = recommendationEngine.normalize(
+                            r.getRating(), Rating.MIN_RATING_VALUE, Rating.MAX_RATING_VALUE);
 
-                    Double normalizedDistance = recommendationEngine.normalize(
-                            r.getDistance(), distanceMinMax.right());
+                    Float normalizedDistance = recommendationEngine.normalize(
+                            r.getDistance(), distanceMinMax.right().floatValue());
 
-                    Double correlation = recommendationEngine.correlate(normalizedRating, 0.7, normalizedDistance, 0.3);
+                    Float correlation = recommendationEngine.correlate(normalizedRating, 0.7F, normalizedDistance, 0.3F);
                     log.info("Correlation for store {} is {}; normalized rating was {} and normalized distance was {}", r.getName(), correlation, normalizedRating, normalizedDistance);
 
                     log.info("Returning spatial element.");

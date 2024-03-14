@@ -1,8 +1,5 @@
 package com.gokdenizozkan.ddd.recommendationservice.feature.recommendation;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public interface RecommendationEngine {
 
     /**
@@ -13,15 +10,15 @@ public interface RecommendationEngine {
      * @param max   the maximum value of the range
      * @return the normalized value
      */
-    default Double normalize(Double value, Double min, Double max) {
+    default Float normalize(Float value, Float min, Float max) {
         return (value - min) / (max - min);
     }
 
-    default Double normalize(Double distance, Double maxDistance) {
-        return 1 - normalize(distance, 0.0, maxDistance);
+    default Float normalize(Float distance, Float maxDistance) {
+        return 1 - normalize(distance, 0.0F, maxDistance);
     }
 
-    default Double correlate(Double normalizedValueA, Double weightA, Double normalizedValueB, Double weightB) {
+    default Float correlate(Float normalizedValueA, Float weightA, Float normalizedValueB, Float weightB) {
         return (normalizedValueA * weightA) + (normalizedValueB * weightB);
     }
 }

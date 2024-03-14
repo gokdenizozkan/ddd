@@ -23,12 +23,12 @@
 
     <Loggers>
         <Root level="INFO">
-            <AppenderRef ref="CONSOLE"/>
-            <AppenderRef ref="FILE"/>
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
         </Root>
         <Logger name="com.gokdenizozkan.ddd.generalservice" level="DEBUG" additivity="false">
-            <AppenderRef ref="CONSOLE"/>
-            <AppenderRef ref="FILE"/>
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="File"/>
         </Logger>
     </Loggers>
 </Configuration>

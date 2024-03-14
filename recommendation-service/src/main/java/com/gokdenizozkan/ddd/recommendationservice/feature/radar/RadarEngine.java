@@ -29,13 +29,13 @@ public interface RadarEngine {
                 .execute(getClient());
     }
 
-    default <A extends Spatial> QueryResponse findWithinRadius(@NotBlank String collectionName, @NotBlank String point,
+    default <A extends Spatial<Float>> QueryResponse findWithinRadius(@NotBlank String collectionName, @NotBlank String point,
                                                                @NotNull SpatialQueryArchetype<A> archetype) {
         return findWithinRadius(collectionName, archetype.getQuery(), point, archetype.getLatlonFieldName(),
                 archetype.getKm(), archetype.getSortOrder(), archetype.getFieldList(), archetype.getRows());
     }
 
-    default <A extends Spatial, SRC> List<SRC> findWithinRadius(@NotBlank String collectionName, @NotBlank String point,
+    default <A extends Spatial<Float>, SRC> List<SRC> findWithinRadius(@NotBlank String collectionName, @NotBlank String point,
                                                                @NotNull SpatialQueryArchetype<A> archetype,
                                                                @NotNull Class<SRC> solrResponseClass) {
         return SolrSpatialQuery.of(collectionName)
@@ -82,13 +82,13 @@ public interface RadarEngine {
                 .execute(getClient());
     }
 
-    default <A extends Spatial> QueryResponse findWithinRadiusWithStats(@NotBlank String collectionName, @NotBlank String point,
+    default <A extends Spatial<Float>> QueryResponse findWithinRadiusWithStats(@NotBlank String collectionName, @NotBlank String point,
                                                                @NotNull SpatialQueryArchetype<A> archetype) {
         return findWithinRadiusWithStats(collectionName, archetype.getQuery(), point, archetype.getLatlonFieldName(),
                 archetype.getKm(), archetype.getSortOrder(), archetype.getFieldList(), archetype.getRows());
     }
 
-    default <A extends Spatial, SRC> List<SRC> findWithinRadiusWithStats(@NotBlank String collectionName, @NotBlank String point,
+    default <A extends Spatial<Float>, SRC> List<SRC> findWithinRadiusWithStats(@NotBlank String collectionName, @NotBlank String point,
                                                                 @NotNull SpatialQueryArchetype<A> archetype,
                                                                 @NotNull Class<SRC> solrResponseClass) {
         return SolrSpatialQuery.of(collectionName)

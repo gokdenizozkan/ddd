@@ -5,17 +5,17 @@ import com.gokdenizozkan.ddd.recommendationservice.core.quality.Spatial;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class SpatialElement implements Recommendable<Long>, Spatial<Double> {
-    private final Double appraisal;
+public class SpatialElement implements Recommendable<Long>, Spatial<Float> {
+    private final Float appraisal;
     private final Long entityId;
     private final String entityName;
-    private final Double rating;
-    private final Double distance;
-    private final Double latitude;
-    private final Double longitude;
+    private final Float rating;
+    private final Float distance;
+    private final Float latitude;
+    private final Float longitude;
 
     @Override
-    public Double getAppraisal() {
+    public Float getAppraisal() {
         return appraisal;
     }
 
@@ -30,22 +30,22 @@ public class SpatialElement implements Recommendable<Long>, Spatial<Double> {
     }
 
     @Override
-    public Double getRating() {
+    public Float getRating() {
         return rating;
     }
 
     @Override
-    public Double getDistance() {
+    public Float getDistance() {
         return distance;
     }
 
     @Override
-    public Double getLatitude() {
+    public Float getLatitude() {
         return latitude;
     }
 
     @Override
-    public Double getLongitude() {
+    public Float getLongitude() {
         return longitude;
     }
 }

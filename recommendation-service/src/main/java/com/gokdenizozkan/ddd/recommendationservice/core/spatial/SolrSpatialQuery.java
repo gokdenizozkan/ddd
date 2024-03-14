@@ -4,6 +4,7 @@ import com.gokdenizozkan.ddd.recommendationservice.core.quality.FieldStringifyab
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.SpatialParams;
 import org.apache.solr.common.params.StatsParams;
 
@@ -57,7 +58,7 @@ public class SolrSpatialQuery {
      * If filter type is selected NO_FILTER, response will only contain "score" local parameter.<br>
      */
     public SolrSpatialQuery filter(FilterType filterType) {
-        query.addFilterQuery(filterType.toString());
+        query.setFilterQueries(filterType.toString());
         return this;
     }
 

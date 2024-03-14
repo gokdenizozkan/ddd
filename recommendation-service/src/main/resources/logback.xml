@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
-    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
             <pattern>%d{HH:mm:ss.SSS} %-30.30([%thread]) %-5level %logger{36} \(%X{callerInformation}\) - %msg%n%throwable</pattern>
         </layout>
     </appender>
-    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="File" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>logs/recommendation-service/recommendation-service.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %C: %msg%n%throwable</pattern>
@@ -20,13 +20,13 @@
     </appender>
 
     <root level="INFO">
-        <appender-ref ref="CONSOLE"/>
-        <appender-ref ref="FILE"/>
+        <appender-ref ref="Console"/>
+        <appender-ref ref="File"/>
     </root>
 
     <logger name="com.gokdenizozkan.ddd.recommendationservice" level="DEBUG" additivity="false"/>
-    <appender-ref ref="CONSOLE"/>
-    <appender-ref ref="FILE"/>
+    <appender-ref ref="Console"/>
+    <appender-ref ref="File"/>
 </configuration>
 
 
