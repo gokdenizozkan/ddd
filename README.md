@@ -128,10 +128,24 @@ which is an extended version of Semantic Versioning (SemVer).
 2. ~~Better and patch-oriented store service (controller etc.).~~
 3. ~~Store update requests also update Solr index.~~
 
-### Features to be implemented after release
+#### f13: Logging
 
-- Pageable spatialRecommendation listing (thanks to modifiable query structure). 
+1. Prepare logging configurations.
+2. Insert logging statements to certain parts of the code.
+
+#### f14: Swagger Documentation
+
+1. Add fundamental swagger documentation
+
+#### f15: Dockerised Deployment
+
+1. Dockerise the application
+
+### Features can be implemented after release
+
+- Pageable Recommendation listing (thanks to modifiable query structure). 
 - Store rating average should be periodically calculated from scratch and updated in the store table.
+- Extend api documentation
 
 ## Diagrams and Relationships
 
