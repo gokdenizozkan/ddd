@@ -20,6 +20,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/v1/engine/indexing")
 @RequiredArgsConstructor
+/**
+ * ! Disclaimer ! PatchMapping is not supported by FeignClient, that is the reason why "put" mapping is used instead of "patch" for certain methods.<br>
+ * This issue can be overcome by using a 3rd party library/extension called okHttp. But it is not used in this project for the sake of not adding one additional dependency.
+ */
 public class IndexingController {
     private final IndexingRouter indexingRouter;
 
@@ -48,7 +52,7 @@ public class IndexingController {
         return ResponseTemplates.noContent();
     }
 
-    @PatchMapping("/{storeType}/{storeId}/rating/{rating}")
+    @PutMapping("/{storeType}/{storeId}/rating/{rating}")
     public ResponseEntity<Structured<Object>> updateStoreRating(@PathVariable String storeType, @PathVariable String storeId,
                                                               @PathVariable Float rating) {
 
@@ -56,7 +60,7 @@ public class IndexingController {
         return ResponseTemplates.noContent();
     }
 
-    @PatchMapping("/{storeType}/{storeId}/name/{name}")
+    @PutMapping("/{storeType}/{storeId}/name/{name}")
     public ResponseEntity<Structured<Object>> updateStoreName(@PathVariable String storeType, @PathVariable String storeId,
                                                               @PathVariable String name) {
 
@@ -64,7 +68,7 @@ public class IndexingController {
         return ResponseTemplates.noContent();
     }
 
-    @PatchMapping("/{storeType}/{storeId}/coordinates")
+    @PutMapping("/{storeType}/{storeId}/coordinates")
     public ResponseEntity<Structured<Object>> updateStoreCoordinates(@PathVariable String storeType, @PathVariable String storeId,
                                                                     @RequestParam String latitude, @RequestParam String longitude) {
 
