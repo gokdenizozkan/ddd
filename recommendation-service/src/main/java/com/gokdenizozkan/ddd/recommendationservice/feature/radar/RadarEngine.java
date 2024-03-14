@@ -11,7 +11,6 @@ import org.apache.solr.client.solrj.response.QueryResponse;
 
 import java.util.List;
 
-
 public interface RadarEngine {
     default QueryResponse findWithinRadius(@NotBlank String collectionName, @NotBlank String query, @NotBlank String point,
                                           @NotBlank String latlonFieldName, @NotBlank Integer km,
@@ -69,6 +68,7 @@ public interface RadarEngine {
                                            @Nullable SolrSpatialQuery.SortOrder sortOrder,
                                            @Nullable String fieldList,
                                            @Nullable Integer rows) {
+
         return SolrSpatialQuery.of(collectionName)
                 .q(query)
                 .point(point)

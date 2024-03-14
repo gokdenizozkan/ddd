@@ -6,6 +6,7 @@ import com.gokdenizozkan.ddd.recommendationservice.config.SolrClientProvider;
 import com.gokdenizozkan.ddd.recommendationservice.core.util.Surround;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrRequest;
@@ -25,13 +26,12 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class IndexingEngine {
     private final SolrClient client;
 
     public IndexingEngine(SolrClientProvider provider, @Value("${engine.indexing-engine.base-solr-url}") String baseSolrUrl) {
         this.client = provider.http2(baseSolrUrl);
-
-        updateById("dddfoodstores", "1", "name", "Gokdeniz's Food Store");
     }
 
     public <T> UpdateResponse index(String collectionName, T document) {
@@ -39,6 +39,7 @@ public class IndexingEngine {
             client.addBean(collectionName, document);
             return client.commit(collectionName);
         } catch (SolrServerException | IOException e) {
+            log.error("Error while indexing document: {}", e.getMessage());
             e.printStackTrace();
         }
         return new UpdateResponse();
@@ -49,6 +50,7 @@ public class IndexingEngine {
             client.addBeans(collectionName, documents);
             return client.commit(collectionName);
         } catch (IOException | SolrServerException e) {
+            log.error("Error while indexing collection of documents: {}", e.getMessage());
             e.printStackTrace();
         }
         return new UpdateResponse();
@@ -61,20 +63,22 @@ public class IndexingEngine {
         try {
             documents = mapper.readValue(json, collectionType);
         } catch (IOException e) {
+            log.error("Error while reading the file at {}: {}", json.toPath(), e.getMessage());
             e.printStackTrace();
         }
         return indexCollection(collectionName, documents);
     }
 
     public UpdateResponse updateById(@NotBlank String collectionName, @NotBlank String id, @NotBlank String field, @NotBlank String newValue) {
-        // find the existing document
+        log.info("Finding the existing document with id: {}", id);
         SolrQuery getQuery = new SolrQuery();
         getQuery.setQuery("id:" + id);
 
         QueryResponse queryResponse = Surround.withTryCatch(client, collectionName, getQuery);
         SolrDocument foundDoc = queryResponse.getResults().get(0);
+        log.info("Found the document: {}", foundDoc.toString());
 
-        // create a new document with the new value
+        log.info("Creating a new document with the new value {} for the field {}", newValue, field);
         SolrInputDocument newDoc = new SolrInputDocument();
         newDoc.addField(field, newValue);
         for (Map.Entry<String, Object> entry : foundDoc.entrySet()) {
@@ -85,7 +89,7 @@ public class IndexingEngine {
             newDoc.addField(entry.getKey(), entry.getValue());
         }
 
-        // prepare the update request and process it
+        log.info("Preparing the update request...");
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.add(newDoc);
         updateRequest.setCommitWithin(1000);
@@ -93,18 +97,20 @@ public class IndexingEngine {
         updateRequest.setParam("overwrite", "true");
         updateRequest.setParam("commit", "true");
 
+        log.info("Processing the update request: {}", updateRequest);
         return Surround.withTryCatch(client, collectionName, updateRequest);
     }
 
     public UpdateResponse updateById(@NotBlank String collectionName, @NotBlank String id, @NotNull Map<String, Object> fields) {
-        // find the existing document
+        log.info("Finding the existing document with id: {}", id);
         SolrQuery getQuery = new SolrQuery();
         getQuery.setQuery("id:" + id);
 
         QueryResponse queryResponse = Surround.withTryCatch(client, collectionName, getQuery);
         SolrDocument foundDoc = queryResponse.getResults().get(0);
+        log.info("Found the document: {}", foundDoc.toString());
 
-        // create a new document with the new value
+        log.info("Creating a new document with the new values: {}", fields);
         SolrInputDocument newDoc = new SolrInputDocument();
         fields.forEach(newDoc::addField);
 
@@ -115,7 +121,7 @@ public class IndexingEngine {
             newDoc.addField(key, value);
         });
 
-        // prepare the update request and process it
+        log.info("Preparing the update request...");
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.add(newDoc);
         updateRequest.setCommitWithin(1000);
@@ -123,6 +129,7 @@ public class IndexingEngine {
         updateRequest.setParam("overwrite", "true");
         updateRequest.setParam("commit", "true");
 
+        log.info("Processing the update request: {}", updateRequest);
         return Surround.withTryCatch(client, collectionName, updateRequest);
     }
 
@@ -130,6 +137,7 @@ public class IndexingEngine {
         try {
             return client.deleteById(collectionName, id);
         } catch (IOException | SolrServerException e) {
+            log.error("Error while deleting the document with id {} found at {}", id, collectionName);
             e.printStackTrace();
         }
         return new UpdateResponse();
@@ -139,6 +147,7 @@ public class IndexingEngine {
         try {
             return client.deleteByQuery(collectionName, "*:*");
         } catch (IOException | SolrServerException e) {
+            log.error("Error while deleting all documents in the collection: {}", collectionName);
             e.printStackTrace();
         }
         return new UpdateResponse();

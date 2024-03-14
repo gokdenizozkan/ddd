@@ -1,5 +1,8 @@
 package com.gokdenizozkan.ddd.recommendationservice.feature.recommendation;
 
+import org.springframework.stereotype.Service;
+
+@Service
 public interface RecommendationEngine {
 
     /**

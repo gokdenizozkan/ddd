@@ -128,10 +128,10 @@ which is an extended version of Semantic Versioning (SemVer).
 2. ~~Better and patch-oriented store service (controller etc.).~~
 3. ~~Store update requests also update Solr index.~~
 
-#### f13: Logging
+#### ~~f13: Logging~~
 
-1. ~~Prepare logging configurations.~~
-2. Insert logging statements to certain parts of the code.
+~~1. Prepare logging configurations.~~
+~~2. Insert logging statements to certain parts of the code.~~
 
 #### f14: Swagger Documentation
 
