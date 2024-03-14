@@ -5,12 +5,14 @@ import com.gokdenizozkan.ddd.generalservice.config.Specifications;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
 import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFields;
 import com.gokdenizozkan.ddd.generalservice.feature.user.buyer.dto.BuyerEntityMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service("BuyerServiceActives")
+@Slf4j
 public class BuyerServiceActives implements BuyerService {
     private final BuyerRepository repository;
     private final Specification<Buyer> specification;
@@ -58,6 +60,7 @@ public class BuyerServiceActives implements BuyerService {
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Buyer.class, id));
 
         buyer.setDeleted(true);
+        log.info("Soft deleting buyer with id: {}", id);
         repository.save(buyer);
     }
 }

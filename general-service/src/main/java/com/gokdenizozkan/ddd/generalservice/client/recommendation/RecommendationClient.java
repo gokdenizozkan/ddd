@@ -4,6 +4,7 @@ import com.gokdenizozkan.ddd.generalservice.config.response.Structured;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,4 +40,7 @@ public interface RecommendationClient {
     @PutMapping("/engine/indexing/{storeType}/{storeId}/coordinates")
     ResponseEntity<Structured<Object>> updateStoreCoordinates(@PathVariable String storeType, @PathVariable String storeId,
                                                              @RequestParam String latitude, @RequestParam String longitude);
+
+    @DeleteMapping("/engine/indexing/{storeType}/{storeId}")
+    ResponseEntity<Structured<Object>> deleteStoreIndex(@PathVariable String storeType, @PathVariable String storeId);
 }

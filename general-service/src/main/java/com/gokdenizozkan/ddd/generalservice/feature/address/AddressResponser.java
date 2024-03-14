@@ -52,12 +52,13 @@ public class AddressResponser {
 
     public ResponseEntity<Structured<Object>> delete(Long id) {
         service.delete(id);
-        log.info("Address Deleted: {}", id);
+        log.info("Address Deleted: {}, response is being created", id);
         return ResponseTemplates.noContent();
     }
 
     public ResponseEntity<Structured<AddressResponseCoordinates>> findCoordinatesById(Long id) {
-        AddressResponseCoordinates address = service.findCoordinatesById(id);
-        return ResponseTemplates.ok(address);
+        AddressResponseCoordinates addressResponseCoordinates = service.findCoordinatesById(id);
+        log.info("Address Coordinates Found: {} - response to be created", addressResponseCoordinates);
+        return ResponseTemplates.ok(addressResponseCoordinates);
     }
 }

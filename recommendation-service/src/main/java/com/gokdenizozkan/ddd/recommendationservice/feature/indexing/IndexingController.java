@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -73,6 +74,12 @@ public class IndexingController {
                                                                     @RequestParam String latitude, @RequestParam String longitude) {
 
         indexingRouter.updateStoreLatlon(storeType, storeId, latitude, longitude);
+        return ResponseTemplates.noContent();
+    }
+
+    @DeleteMapping("/{storeType}/{storeId}")
+    public ResponseEntity<Structured<Object>> deleteStoreIndex(@PathVariable String storeType, @PathVariable String storeId) {
+        indexingRouter.deleteStoreIndex(storeType, storeId);
         return ResponseTemplates.noContent();
     }
 }

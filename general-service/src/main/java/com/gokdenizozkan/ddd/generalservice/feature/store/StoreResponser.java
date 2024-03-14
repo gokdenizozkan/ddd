@@ -5,6 +5,7 @@ import com.gokdenizozkan.ddd.generalservice.feature.store.dto.request.StoreSaveR
 import com.gokdenizozkan.ddd.generalservice.feature.store.dto.response.StoreDetails;
 import com.gokdenizozkan.ddd.generalservice.config.response.ResponseTemplates;
 import com.gokdenizozkan.ddd.generalservice.config.response.Structured;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
+@Slf4j
 public class StoreResponser {
     private final StoreService service;
     private final StoreDtoMapper dtoMapper;
@@ -36,12 +38,14 @@ public class StoreResponser {
 
     public ResponseEntity<Structured<StoreDetails>> save(StoreSaveRequest request) {
         Store store = service.save(request);
+        log.info("Store Saved: {} - response to be created", store);
         StoreDetails response = dtoMapper.toDetails.apply(store);
         return ResponseTemplates.ok(response);
     }
 
     public ResponseEntity<Structured<StoreDetails>> update(Long id, StoreSaveRequest request) {
         Store store = service.update(id, request);
+        log.info("Store Updated: {} - response to be created", store);
         StoreDetails response = dtoMapper.toDetails.apply(store);
         return ResponseTemplates.ok(response);
     }
@@ -53,6 +57,7 @@ public class StoreResponser {
 
     public ResponseEntity<Structured<String>> updateCoordinatesById(Long id, String latitude, String longitude) {
         String response = service.updateCoordinatesById(id, latitude, longitude);
+        log.info("Store Coordinates Updated: {} - response to be created", response);
         return ResponseTemplates.ok(response);
     }
 }

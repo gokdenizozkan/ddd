@@ -9,6 +9,7 @@ import com.gokdenizozkan.ddd.generalservice.config.Specifications;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotActiveException;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
 import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.ActiveDetermingFields;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Service("StoreServiceActives")
+@Slf4j
 public class StoreServiceActives implements StoreService {
     private final StoreRepository repository;
     private final Specification<Store> specification;
@@ -57,7 +59,7 @@ public class StoreServiceActives implements StoreService {
 
         Store savedStore = repository.save(store);
 
-        // Index store in recommendation service
+        log.info("Indexing store in recommendation service: {}", savedStore);
         recommendationClient.indexStore(
                 savedStore.getStoreType().toString(),
                 savedStore.getId().toString(),
@@ -80,9 +82,10 @@ public class StoreServiceActives implements StoreService {
         store.setId(id);
 
         ActiveDetermingFields.of(id, repository, Store.class).copyTo(store);
-        StoreReviewFields.of(id, repository, Store.class).copyTo(store);
+        StoreReviewFields.of(id, repository).copyTo(store);
 
         if (!request.name().equals(repository.findStoreNameById(id).get())) {
+            log.info("Updating store name in recommendation service: {}", store);
             recommendationClient.updateStoreName(
                     store.getStoreType().toString(),
                     store.getId().toString(),
@@ -98,7 +101,12 @@ public class StoreServiceActives implements StoreService {
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Store.class, id));
 
         store.setDeleted(true);
+        log.info("Soft deleting store with id {}.", store);
         repository.save(store);
+        log.info("Deleting store index in recommendation service: {}", store);
+        recommendationClient.deleteStoreIndex(
+                store.getStoreType().toString(),
+                store.getId().toString());
     }
 
     @Override
@@ -107,11 +115,13 @@ public class StoreServiceActives implements StoreService {
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Store.class, id));
 
         if (name.equals(store.getName())) {
+            log.info("Name update process execution is halted because name is the same for store with id: {}", id);
             return name;
         }
 
         store.setName(name);
         repository.save(store);
+        log.info("Updating store name in recommendation service: {}", store);
         recommendationClient.updateStoreName(
                 store.getStoreType().toString(),
                 store.getId().toString(),
@@ -127,12 +137,14 @@ public class StoreServiceActives implements StoreService {
 
         if (latitude.compareTo(store.getAddress().getLatitude()) == 0
                 && longitude.compareTo(store.getAddress().getLongitude()) == 0) {
+            log.info("Coordinates update process execution is halted because coordinates are the same for store with id: {}", id);
             return "Coordinates are the same";
         }
 
         store.getAddress().setLatitude(latitude);
         store.getAddress().setLongitude(longitude);
         repository.save(store);
+        log.info("Updating store coordinates in recommendation service: latitude {}, longitude {}", latitude, longitude);
         recommendationClient.updateStoreCoordinates(
                 store.getStoreType().toString(),
                 store.getId().toString(),

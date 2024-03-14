@@ -60,4 +60,9 @@ public class IndexingRouter {
 
         engine.updateById(collectionName, storeId, fields);
     }
+
+    public void deleteStoreIndex(String storeType, String storeId) {
+        String collectionName = Converter.toCollectionName(storeType);
+        engine.deleteById(collectionName, storeId);
+    }
 }
