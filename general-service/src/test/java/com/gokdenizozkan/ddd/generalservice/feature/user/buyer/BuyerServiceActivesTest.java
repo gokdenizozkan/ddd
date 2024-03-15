@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class BuyerServiceActivesTest {
+    @InjectMocks
+    private BuyerServiceActives underTest;
 
     @Mock
     private BuyerRepository repository;
@@ -32,16 +33,13 @@ class BuyerServiceActivesTest {
     @Mock
     private BuyerEntityMapper entityMapper;
 
-    @InjectMocks
-    private BuyerServiceActives service;
-
     private AutoCloseable closeable;
 
     @BeforeEach
     void setUp() {
         closeable = MockitoAnnotations.openMocks(this);
         entityMapper = new BuyerEntityMapper(buyerSaveRequestToBuyer);
-        service = new BuyerServiceActives(repository, entityMapper);
+        underTest = new BuyerServiceActives(repository, entityMapper);
     }
 
     @AfterEach
@@ -53,16 +51,16 @@ class BuyerServiceActivesTest {
     @Test
     void whenBuyersExist_thenReturnActiveBuyersList() {
         // Arrange
-        Buyer buyer = new Buyer();
+        var buyer = new Buyer();
         buyer.setEnabled(true);
         buyer.setDeleted(false);
 
-        Specification<Buyer> specification = Specifications.isActive(Buyer.class);
+        var specification = Specifications.isActive(Buyer.class);
 
         when(repository.findAll(specification)).thenReturn(List.of(buyer));
 
         // Act
-        List<Buyer> foundBuyers = service.findAll();
+        var foundBuyers = underTest.findAll();
 
         // Assert
         assertNotNull(foundBuyers);
@@ -75,11 +73,11 @@ class BuyerServiceActivesTest {
     @Test
     void whenBuyersAreNotPresent_thenReturnEmptyList() {
         // Arrange
-        Specification<Buyer> specification = Specifications.isActive(Buyer.class);
+        var specification = Specifications.isActive(Buyer.class);
         when(repository.findAll(specification)).thenReturn(Collections.emptyList());
 
         // Act
-        List<Buyer> foundBuyers = service.findAll();
+        var foundBuyers = underTest.findAll();
 
         // Assert
         assertNotNull(foundBuyers);
@@ -93,17 +91,17 @@ class BuyerServiceActivesTest {
     @Test
     void whenBuyerExistsAndActive_thenReturnBuyer() {
         // Arrange
-        Buyer buyer = new Buyer();
+        var buyer = new Buyer();
         buyer.setId(1L);
         buyer.setEnabled(true);
         buyer.setDeleted(false);
 
-        Specification<Buyer> specification = Specifications.isActive(Buyer.class);
+        var specification = Specifications.isActive(Buyer.class);
         when(repository.existsById(any(Long.class))).thenReturn(true);
         when(repository.findById(specification, buyer.getId())).thenReturn(java.util.Optional.of(buyer));
 
         // Act
-        Buyer foundBuyer = service.findById(1L);
+        var foundBuyer = underTest.findById(1L);
 
         // Assert
         assertNotNull(foundBuyer);
@@ -116,17 +114,17 @@ class BuyerServiceActivesTest {
     @Test
     void whenBuyerExistsAndNotActive_thenThrowResourceNotActiveException() {
         // Arrange
-        Buyer buyer = new Buyer();
+        var buyer = new Buyer();
         buyer.setId(1L);
         buyer.setEnabled(false);
         buyer.setDeleted(true);
 
-        Specification<Buyer> specification = Specifications.isActive(Buyer.class);
+        var specification = Specifications.isActive(Buyer.class);
         when(repository.existsById(any(Long.class))).thenReturn(true);
         when(repository.findById(specification, buyer.getId())).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(ResourceNotActiveException.class, () -> service.findById(1L));
+        assertThrows(ResourceNotActiveException.class, () -> underTest.findById(1L));
         verify(repository, times(1)).findById(specification, buyer.getId());
     }
 
@@ -134,15 +132,15 @@ class BuyerServiceActivesTest {
     @Test
     void whenSaveWithValidRequest_thenReturnSavedBuyer() {
         // Arrange
-        BuyerSaveRequest saveRequest = mock(BuyerSaveRequest.class);
-        Buyer buyer = mock(Buyer.class);
+        var saveRequest = mock(BuyerSaveRequest.class);
+        var buyer = mock(Buyer.class);
 
-        BuyerEntityMapper entityMapper = new BuyerEntityMapper(buyerSaveRequestToBuyer);
+        var entityMapper = new BuyerEntityMapper(buyerSaveRequestToBuyer);
         when(entityMapper.fromSaveRequest.apply(saveRequest)).thenReturn(buyer);
         when(repository.save(buyer)).thenReturn(buyer);
 
         // Act
-        Buyer savedBuyer = service.save(saveRequest);
+        var savedBuyer = underTest.save(saveRequest);
 
         // Assert
         assertNotNull(savedBuyer);
@@ -154,9 +152,9 @@ class BuyerServiceActivesTest {
     @Test
     void whenUpdateWithValidRequest_thenReturnUpdatedBuyer() {
         // Arrange
-        Long id = 1L;
-        BuyerSaveRequest saveRequest = mock(BuyerSaveRequest.class);
-        Buyer buyer = mock(Buyer.class);
+        var id = 1L;
+        var saveRequest = mock(BuyerSaveRequest.class);
+        var buyer = mock(Buyer.class);
 
         when(repository.existsById(id)).thenReturn(true);
         when(repository.save(buyer)).thenReturn(buyer);
@@ -165,7 +163,7 @@ class BuyerServiceActivesTest {
         when(entityMapper.fromSaveRequest.apply(saveRequest)).thenReturn(buyer);
 
         // Act
-        Buyer updatedBuyer = service.update(id, saveRequest);
+        var updatedBuyer = underTest.update(id, saveRequest);
 
         // Assert
         assertNotNull(updatedBuyer);
@@ -176,13 +174,13 @@ class BuyerServiceActivesTest {
     @Test
     void whenUpdateWithInvalidId_thenThrowResourceNotFoundWithIdException() {
         // Arrange
-        Long id = 1L;
-        BuyerSaveRequest saveRequest = mock(BuyerSaveRequest.class);
+        var id = 1L;
+        var saveRequest = mock(BuyerSaveRequest.class);
 
         when(repository.existsById(id)).thenReturn(false);
 
         // Act & Assert
-        assertThrows(ResourceNotFoundWithIdException.class, () -> service.update(id, saveRequest));
+        assertThrows(ResourceNotFoundWithIdException.class, () -> underTest.update(id, saveRequest));
         verify(repository, times(1)).existsById(id);
     }
 
@@ -190,14 +188,14 @@ class BuyerServiceActivesTest {
     @Test
     void whenDeleteWithValidId_thenSoftDeleteBuyer() {
         // Arrange
-        Long id = 1L;
-        Buyer buyer = mock(Buyer.class);
+        var id = 1L;
+        var buyer = mock(Buyer.class);
 
         when(repository.findById(id)).thenReturn(Optional.of(buyer));
         when(repository.save(buyer)).thenReturn(buyer);
 
         // Act
-        service.delete(id);
+        underTest.delete(id);
 
         // Assert
         verify(repository, times(1)).findById(id);

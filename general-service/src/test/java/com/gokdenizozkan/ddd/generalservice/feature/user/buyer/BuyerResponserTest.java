@@ -1,144 +1,142 @@
 package com.gokdenizozkan.ddd.generalservice.feature.user.buyer;
 
-import com.gokdenizozkan.ddd.generalservice.config.response.Structured;
 import com.gokdenizozkan.ddd.generalservice.feature.user.buyer.dto.BuyerDtoMapper;
+import com.gokdenizozkan.ddd.generalservice.feature.user.buyer.dto.mapper.BuyerToBuyerDetails;
+import com.gokdenizozkan.ddd.generalservice.feature.user.buyer.dto.mapper.BuyerToBuyerDetailsWithAddresses;
 import com.gokdenizozkan.ddd.generalservice.feature.user.buyer.dto.request.BuyerSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.feature.user.buyer.dto.response.BuyerDetails;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import java.util.Collections;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 class BuyerResponserTest {
-
-    @Mock
+    private BuyerResponser underTest;
     private BuyerService service;
-
-    @Mock
     private BuyerDtoMapper dtoMapper;
-
-    @InjectMocks
-    private BuyerResponser responser;
-
-    private AutoCloseable closeable;
+    private BuyerToBuyerDetails buyerToBuyerDetails;
+    private BuyerToBuyerDetailsWithAddresses buyerToBuyerDetailsWithAddresses;
 
     @BeforeEach
     void setUp() {
-        closeable = MockitoAnnotations.openMocks(this);
+        service = mock(BuyerService.class);
+        buyerToBuyerDetails = mock(BuyerToBuyerDetails.class);
+        buyerToBuyerDetailsWithAddresses = mock(BuyerToBuyerDetailsWithAddresses.class);
+        dtoMapper = new BuyerDtoMapper(buyerToBuyerDetails, buyerToBuyerDetailsWithAddresses);
+        underTest = new BuyerResponser(service, dtoMapper);
     }
 
     @AfterEach
-    void tearDown() throws Exception {
-        closeable.close();
+    void tearDown() {
+        reset(service, buyerToBuyerDetails, buyerToBuyerDetailsWithAddresses);
     }
 
-    // find all
     @Test
-    void whenBuyerDetailsExist_thenReturnBuyerDetailsList() {
-        // Arrange
-        BuyerDetails buyerDetails = mock(BuyerDetails.class);
-        List<BuyerDetails> buyerDetailsList = Collections.singletonList(buyerDetails);
-        when(service.findAll()).thenReturn(Collections.singletonList(mock(Buyer.class)));
-        when(dtoMapper.toDetails.apply(any(Buyer.class))).thenReturn(buyerDetails);
+    void whenBuyersExist_thenReturnBuyerDetailsListWrapped() {
+        var buyer = new Buyer();
+        var buyerList = Collections.singletonList(buyer);
+        var buyerDto = mock(BuyerDetails.class);
 
-        // Act
-        ResponseEntity<Structured<List<BuyerDetails>>> response = responser.findAll();
+        when(service.findAll()).thenReturn(buyerList);
+        when(dtoMapper.toDetails.apply(buyer)).thenReturn(buyerDto);
 
-        // Assert
+        var response = underTest.findAll();
+
         assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody().data().size());
+
+        verify(service, times(1)).findAll();
+        verify(dtoMapper.toDetails, times(1)).apply(any(Buyer.class));
     }
 
     @Test
-    void whenBuyerDetailsNotExist_thenReturnEmptyList() {
-        // Arrange
+    void whenNoBuyerExists_thenReturnEmptyListWrapped() {
         when(service.findAll()).thenReturn(Collections.emptyList());
 
-        // Act
-        ResponseEntity<Structured<List<BuyerDetails>>> response = responser.findAll();
+        var response = underTest.findAll();
 
-        // Assert
         assertNotNull(response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(0, response.getBody().data().size());
+
+        verify(service, times(1)).findAll();
+        verify(dtoMapper.toDetails, times(0)).apply(any(Buyer.class));
     }
 
-    // find by id
     @Test
-    void whenBuyerDetailsExist_thenReturnBuyerDetails() {
-        // Arrange
-        BuyerDetails buyerDetails = mock(BuyerDetails.class);
-        when(service.findById(any(Long.class))).thenReturn(mock(Buyer.class));
-        when(dtoMapper.toDetails.apply(any(Buyer.class))).thenReturn(buyerDetails);
+    void whenBuyerExistsWithId_thenReturnBuyerDetailsWrapped() {
+        var buyer = new Buyer();
+        var buyerDto = mock(BuyerDetails.class);
 
-        // Act
-        ResponseEntity<Structured<BuyerDetails>> response = responser.findById(1L);
+        when(service.findById(any(Long.class))).thenReturn(buyer);
+        when(dtoMapper.toDetails.apply(any(Buyer.class))).thenReturn(buyerDto);
 
-        // Assert
+        var response = underTest.findById(anyLong());
+
         assertNotNull(response.getBody());
+        assertNotNull(response.getBody().data());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        verify(service, times(1)).findById(anyLong());
+        verify(dtoMapper.toDetails, times(1)).apply(any(Buyer.class));
     }
 
     @Test
-    void whenBuyerDetailsNotExist_thenReturnEmpty() {
-        // Arrange
-        when(service.findById(any(Long.class))).thenReturn(null);
+    void whenSaveWithValidRequest_thenReturnSavedBuyerAsBuyerDetailsWrapped() {
+        var request = mock(BuyerSaveRequest.class);
+        var savedBuyer = mock(Buyer.class);
+        var buyerDetails = mock(BuyerDetails.class);
 
-        // Act
-        ResponseEntity<Structured<BuyerDetails>> response = responser.findById(1L);
+        when(service.save(request)).thenReturn(savedBuyer);
+        when(dtoMapper.toDetails.apply(savedBuyer)).thenReturn(buyerDetails);
 
-        // Assert
-        assertNull(response.getBody());
-    }
+        var response = underTest.save(request);
 
-    // save
-    @Test
-    void whenSaveWithValidRequest_thenReturnSavedBuyerDetails() {
-        // Arrange
-        BuyerDetails buyerDetails = mock(BuyerDetails.class);
-        when(service.save(any(BuyerSaveRequest.class))).thenReturn(mock(Buyer.class));
-        when(dtoMapper.toDetails.apply(any(Buyer.class))).thenReturn(buyerDetails);
-
-        // Act
-        ResponseEntity<Structured<BuyerDetails>> response = responser.save(mock(BuyerSaveRequest.class));
-
-        // Assert
         assertNotNull(response.getBody());
+        assertNotNull(response.getBody().data());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+
+        verify(service, times(1)).save(request);
+        verify(dtoMapper.toDetails, times(1)).apply(savedBuyer);
     }
 
-    // update
     @Test
-    void whenUpdateWithValidRequest_thenReturnUpdatedBuyerDetails() {
-        // Arrange
-        BuyerDetails buyerDetails = mock(BuyerDetails.class);
-        when(service.update(any(Long.class), any(BuyerSaveRequest.class))).thenReturn(mock(Buyer.class));
-        when(dtoMapper.toDetails.apply(any(Buyer.class))).thenReturn(buyerDetails);
+    void whenUpdateWithValidRequest_thenReturnUpdatedBuyerAsBuyerDetailsWrapped() {
+        var id = 1L;
+        var request = mock(BuyerSaveRequest.class);
+        var updatedBuyer = mock(Buyer.class);
+        var buyerDetails = mock(BuyerDetails.class);
 
-        // Act
-        ResponseEntity<Structured<BuyerDetails>> response = responser.update(1L, mock(BuyerSaveRequest.class));
+        when(service.update(id, request)).thenReturn(updatedBuyer);
+        when(dtoMapper.toDetails.apply(updatedBuyer)).thenReturn(buyerDetails);
 
-        // Assert
+        var response = underTest.update(id, request);
+
         assertNotNull(response.getBody());
+        assertNotNull(response.getBody().data());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        verify(service, times(1)).update(id, request);
+        verify(dtoMapper.toDetails, times(1)).apply(updatedBuyer);
     }
 
-    // delete
     @Test
     void whenDeleteWithValidId_thenReturnNoContent() {
-        // Act
-        ResponseEntity<Structured<Object>> response = responser.delete(1L);
+        doNothing().when(service).delete(anyLong());
 
-        // Assert
+        var response = underTest.delete(anyLong());
+
         assertNotNull(response.getBody());
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
-        verify(service, times(1)).delete(1L);
+        verify(service, times(1)).delete(anyLong());
     }
 }

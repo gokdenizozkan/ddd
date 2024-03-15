@@ -7,14 +7,9 @@ import com.gokdenizozkan.ddd.generalservice.config.response.Structured;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -25,12 +20,11 @@ import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class BuyerControllerTest {
+    @InjectMocks
+    private BuyerController underTest;
 
     @Mock
     private BuyerResponser responser;
-
-    @InjectMocks
-    private BuyerController controller;
 
     private AutoCloseable closeable;
 
@@ -46,14 +40,14 @@ class BuyerControllerTest {
 
     // find all
     @Test
-    void whenBuyerDetailsExist_thenReturnBuyerDetailsList() {
+    void whenBuyerExist_thenReturnBuyerDetailsList() {
         // Arrange
         BuyerDetails buyerDetails = mock(BuyerDetails.class);
         List<BuyerDetails> buyerDetailsList = Collections.singletonList(buyerDetails);
         when(responser.findAll()).thenReturn(ResponseTemplates.ok(buyerDetailsList));
 
         // Act
-        ResponseEntity<Structured<List<BuyerDetails>>> response = controller.findAll();
+        ResponseEntity<Structured<List<BuyerDetails>>> response = underTest.findAll();
 
         // Assert
         assertNotNull(response.getBody());
@@ -62,13 +56,13 @@ class BuyerControllerTest {
     }
 
     @Test
-    void whenBuyerDetailsAreNotPresent_thenReturnEmptyList() {
+    void whenNoBuyerIsPresent_thenReturnEmptyList() {
         // Arrange
         List<BuyerDetails> emptyBuyerDetailsList = Collections.emptyList();
         when(responser.findAll()).thenReturn(ResponseTemplates.ok(emptyBuyerDetailsList));
 
         // Act
-        ResponseEntity<Structured<List<BuyerDetails>>> response = controller.findAll();
+        var response = underTest.findAll();
 
         // Assert
         assertNotNull(response.getBody());
@@ -80,12 +74,12 @@ class BuyerControllerTest {
     @Test
     void whenExistentIdIsUsed_thenReturnBuyerDetails() {
         // Arrange
-        Long id = 1L;
-        BuyerDetails buyerDetails = new BuyerDetails(1L, "John", "Doe", "john.doe@example.com", "1234567890", LocalDate.of(2023, 10, 1));
+        var id = 1L;
+        var buyerDetails = new BuyerDetails(1L, "John", "Doe", "john.doe@example.com", "1234567890", LocalDate.of(2023, 10, 1));
         when(responser.findById(id)).thenReturn(ResponseTemplates.ok(buyerDetails));
 
         // Act
-        ResponseEntity<Structured<BuyerDetails>> response = controller.findById(id);
+        var response = underTest.findById(id);
 
         // Assert
         assertNotNull(response.getBody());
@@ -98,18 +92,18 @@ class BuyerControllerTest {
     @Test
     void whenSaveWithValidRequest_thenReturnSavedBuyerDetails() {
         // Arrange
-        BuyerSaveRequest saveRequest = new BuyerSaveRequest("John", "Doe", "john.doe@example.com", "1234567890", LocalDate.of(2023, 10, 1));
-        BuyerDetails savedDetails = new BuyerDetails(1L, "John", "Doe", "john.doe@example.com", "1234567890", LocalDate.of(2023, 10, 1));
+        var saveRequest = new BuyerSaveRequest("John", "Doe", "john.doe@example.com", "1234567890", LocalDate.of(2023, 10, 1));
+        var savedDetails = new BuyerDetails(1L, "John", "Doe", "john.doe@example.com", "1234567890", LocalDate.of(2023, 10, 1));
         when(responser.save(saveRequest)).thenReturn(ResponseTemplates.created(savedDetails));
 
         // Act
-        ResponseEntity<Structured<BuyerDetails>> response = responser.save(saveRequest);
+        var response = responser.save(saveRequest);
 
         // Assert
         assertNotNull(response.getBody());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
-        BuyerDetails responseBody = response.getBody().data();
+        var responseBody = response.getBody().data();
         assertEquals(savedDetails.id(), responseBody.id());
         assertEquals(responseBody.name(), savedDetails.name());
         assertEquals(responseBody.surname(), savedDetails.surname());
@@ -125,13 +119,13 @@ class BuyerControllerTest {
     @Test
     void whenUpdateWithValidRequest_thenReturnUpdatedBuyerDetails() {
         // Arrange
-        Long id = 1L;
-        BuyerSaveRequest updateRequest = new BuyerSaveRequest("John", "Doe", "john.doe@example.com", "1234567890", LocalDate.of(2023, 10, 1));
-        BuyerDetails updatedDetails = new BuyerDetails(1L, "CAN", "DAG", "john.doe@example.com", "1234567890", LocalDate.of(2023, 10, 1));
+        var id = 1L;
+        var updateRequest = new BuyerSaveRequest("John", "Doe", "john.doe@example.com", "1234567890", LocalDate.of(2023, 10, 1));
+        var updatedDetails = new BuyerDetails(1L, "CAN", "DAG", "john.doe@example.com", "1234567890", LocalDate.of(2023, 10, 1));
         when(responser.update(id, updateRequest)).thenReturn(ResponseTemplates.ok(updatedDetails));
 
         // Act
-        ResponseEntity<Structured<BuyerDetails>> response = responser.update(id, updateRequest);
+        var response = responser.update(id, updateRequest);
 
         // Assert
         assertNotNull(response.getBody());
@@ -153,11 +147,11 @@ class BuyerControllerTest {
     @Test
     void whenDeleteWithValidId_thenReturnNoContent() {
         // Arrange
-        Long id = 1L;
+        var id = 1L;
         when(responser.delete(id)).thenReturn(ResponseTemplates.noContent());
 
         // Act
-        ResponseEntity<Structured<Object>> response = responser.delete(id);
+        var response = responser.delete(id);
 
         // Assert
         assertNotNull(response);

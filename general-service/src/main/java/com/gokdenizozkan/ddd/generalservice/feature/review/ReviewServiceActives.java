@@ -1,6 +1,7 @@
 package com.gokdenizozkan.ddd.generalservice.feature.review;
 
 import com.gokdenizozkan.ddd.generalservice.client.recommendation.RecommendationClient;
+import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotActiveException;
 import com.gokdenizozkan.ddd.generalservice.core.dtoprojection.StoreReviewFields;
 import com.gokdenizozkan.ddd.generalservice.feature.review.dto.ReviewEntityMapper;
 import com.gokdenizozkan.ddd.generalservice.feature.review.dto.request.ReviewSaveRequest;
@@ -41,8 +42,13 @@ public class ReviewServiceActives implements ReviewService {
 
     @Override
     public Review findById(Long id) {
+        boolean exists = repository.existsById(id);
+        if (!exists) {
+            throw new ResourceNotFoundWithIdException(Review.class, id);
+        }
+
         return repository.findById(specification, id)
-                .orElseThrow(() -> new ResourceNotFoundWithIdException(Review.class, id));
+                .orElseThrow(() -> new ResourceNotActiveException(Review.class, id));
     }
 
     @Override
