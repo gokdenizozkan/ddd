@@ -68,7 +68,15 @@ public class AddressServiceActives implements AddressService {
     }
 
     @Override
+    /**
+     * ! DISCLAIMER ! It is not advised to update addresses directly.<br>
+     * If you wish to update an address, refer to the related entity and update the address from there.<br>
+     * <br>
+     * The reason for this is that addresses are owner-agnostic, and updating them directly can cause inconsistencies.
+     * This is not an issue on its own but external systems might not be aware of this and might cause issues.
+     */
     public Address update(Long id, AddressSaveRequest request) {
+        log.warn("An address update is in progress. This is not advised as address entities are owner-agnostic. Please refer to the related entity and update the address from there.");
         boolean exists = repository.existsById(id);
         if (!exists) {
             throw new ResourceNotFoundWithIdException(Address.class, id);
@@ -95,6 +103,7 @@ public class AddressServiceActives implements AddressService {
 
     @Override
     public String updateCoordinatesById(Long id, BigDecimal latitude, BigDecimal longitude) {
+        log.warn("An address update is in progress. This is not advised as address entities are owner-agnostic. Please refer to the related entity and update the address from there.");
         Address address = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Address.class, id));
 
