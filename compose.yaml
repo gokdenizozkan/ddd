@@ -1,0 +1,27 @@
+services:
+  ddd-main:
+    build: ./general-service/Dockerfile
+    container_name: ddd-main
+    ports:
+      - "8089:8089"
+
+
+
+  db:
+    image: postgres:16.2
+    environment:
+      POSTGRES_DB: ddd_main
+      POSTGRES_USER: dingdong
+      POSTGRES_PASSWORD: delicious
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - main-network
+
+  solr:
+    image: solr:9.5.0
+    container_name: ddd_solr
+    ports:
+      - "8983:8983"

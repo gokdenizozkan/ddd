@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:16.2
+    environment:
+      POSTGRES_DB: ddd_main
+      POSTGRES_USER: dingdong
+      POSTGRES_PASSWORD: delicious
+    ports:
+      - "5432:5432"
+    restart: always
+
+  ddd-main:
+    build:
+      dockerfile: Dockerfile
+    container_name: ddd_main_service
+    ports:
+      - "8088:8088"
+    environment:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/ddd_main
+        SPRING_DATASOURCE_USERNAME: dingdong
+        SPRING_DATASOURCE_PASSWORD: delicious
+    depends_on:
+      - db
+    restart: always
