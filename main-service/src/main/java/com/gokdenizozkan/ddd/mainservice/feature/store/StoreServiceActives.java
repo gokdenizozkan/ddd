@@ -9,6 +9,7 @@ import com.gokdenizozkan.ddd.mainservice.config.Specifications;
 import com.gokdenizozkan.ddd.mainservice.config.exception.ResourceNotActiveException;
 import com.gokdenizozkan.ddd.mainservice.config.exception.ResourceNotFoundWithIdException;
 import com.gokdenizozkan.ddd.mainservice.core.dtoprojection.ActiveDetermingFields;
+import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,7 @@ public class StoreServiceActives implements StoreService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Store save(StoreSaveRequest request) {
         Store store = entityMapper.fromSaveRequest.apply(request);
         StoreReviewFields.initialize(store);
