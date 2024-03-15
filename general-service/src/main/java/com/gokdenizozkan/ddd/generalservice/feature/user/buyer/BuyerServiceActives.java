@@ -1,5 +1,6 @@
 package com.gokdenizozkan.ddd.generalservice.feature.user.buyer;
 
+import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotActiveException;
 import com.gokdenizozkan.ddd.generalservice.feature.user.buyer.dto.request.BuyerSaveRequest;
 import com.gokdenizozkan.ddd.generalservice.config.Specifications;
 import com.gokdenizozkan.ddd.generalservice.config.exception.ResourceNotFoundWithIdException;
@@ -30,8 +31,13 @@ public class BuyerServiceActives implements BuyerService {
 
     @Override
     public Buyer findById(Long id) {
+        boolean exists = repository.existsById(id);
+        if(!exists) {
+            throw new ResourceNotFoundWithIdException(Buyer.class, id);
+        }
+
         return repository.findById(specification, id)
-                .orElseThrow(() -> new ResourceNotFoundWithIdException(Buyer.class, id));
+                .orElseThrow(() -> new ResourceNotActiveException(Buyer.class, id));
     }
 
     @Override

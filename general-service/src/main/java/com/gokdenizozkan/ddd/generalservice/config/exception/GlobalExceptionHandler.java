@@ -5,6 +5,7 @@ import com.gokdenizozkan.ddd.generalservice.config.response.StructuredResponseEn
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -76,6 +77,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Structured<Map<String, String>>> handleIllegalArgumentException(IllegalArgumentException e, WebRequest request) {
+        logException(e, request);
+        return StructuredResponseEntityBuilder.<Map<String, String>>builder()
+                .success(false)
+                .message(e.getMessage())
+                .data(Map.of("path", request.getDescription(false)))
+                .httpStatus(HttpStatus.BAD_REQUEST)
+                .build();
+    }
+
+    public ResponseEntity<Structured<Map<String, String>>> handleMethodArgumentNotValidException(MethodArgumentNotValidException e, WebRequest request) {
         logException(e, request);
         return StructuredResponseEntityBuilder.<Map<String, String>>builder()
                 .success(false)
