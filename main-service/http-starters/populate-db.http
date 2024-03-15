@@ -1,0 +1,183 @@
+POST localhost:8080/api/v1/addresses/
+content-type: application/json
+
+{
+  "latitude": 30,
+  "longitude": 29,
+  "countryCode": "TUR",
+  "city": "Ankara",
+  "region": "Etimesgut",
+  "addressLine": "Merkez, Öncü Mahallesi",
+  "addressDetails": "67/1",
+  "contactPhone": "+909998887777"
+}
+
+###
+
+POST localhost:8080/api/v1/addresses/
+content-type: application/json
+
+{
+  "latitude": 27,
+  "longitude": 26,
+  "countryCode": "TUR",
+  "city": "İstanbul",
+  "region": "Beylikdüzü",
+  "addressLine": "Atatürk Mahallesi",
+  "addressDetails": "12/1",
+  "contactPhone": "+90 555 555 55 55"
+}
+
+###
+
+POST localhost:8080/api/v1/addresses/
+content-type: application/json
+
+{
+  "latitude": 28,
+  "longitude": 28,
+  "countryCode": "TUR",
+  "city": "Giresun",
+  "region": "Merkez",
+  "addressLine": "Kümbet Mahallesi",
+  "addressDetails": "Kemençe Sokak",
+  "contactPhone": "+90 028 028 28 28"
+}
+
+###
+
+POST localhost:8080/api/v1/stores/
+content-type: application/json
+
+{
+  "name": "Gokdeniz's Kebab World",
+  "email": "gokdeniz@gokdenizozkan.com",
+  "phone": "+12 345 678 9101",
+  "storeType": "FOOD_STORE",
+  "addressId": 2
+}
+
+###
+
+POST localhost:8080/api/v1/stores/
+content-type: application/json
+
+{
+  "name": "Nuri Burger",
+  "email": "burgercim@gmail.com",
+  "phone": "+212 000 00 00",
+  "storeType": "FOOD_STORE",
+  "addressId": 3
+}
+
+###
+
+POST localhost:8080/api/v1/buyers/
+content-type: application/json
+
+{
+  "name": "Ahmety",
+  "surname": "",
+  "email": "ahmad@husain.com",
+  "phone": "+13 131 313 1313",
+  "birthdate": "1980-01-01"
+}
+
+###
+
+POST localhost:8080/api/v1/buyers/
+content-type: application/json
+
+{
+  "name": "Mehmet",
+  "surname": "Yılmaz",
+  "email": "narutoboruto85@hotmail.com",
+  "phone": "+90 0000 000 000",
+  "birthdate": "2010-03-15"
+}
+
+###
+
+POST localhost:8080/api/v1/reviews/
+content-type: application/json
+
+{
+  "rating": "EXCELLENT",
+  "experience": "Oh that lavaş was so crispy and delicious. I loved it!",
+  "buyerId": 1,
+  "storeId": 1
+}
+
+###
+
+POST localhost:8080/api/v1/reviews/
+content-type: application/json
+
+{
+  "rating": "DECENT",
+  "experience": "I think it was okay. I would prefer a different place next time.",
+  "buyerId": 2,
+  "storeId": 1
+}
+
+###
+
+POST localhost:8080/api/v1/reviews/
+content-type: application/json
+
+{
+  "rating": "EXCELLENT",
+  "experience": "I loved the burger. It was so juicy and delicious.",
+  "buyerId": 2,
+  "storeId": 2
+}
+
+###
+
+POST localhost:8080/api/v1/reviews/
+content-type: application/json
+
+{
+  "rating": "EXCELLENT",
+  "experience": "I loved the burger. It was so juicy and delicious.",
+  "buyerId": 1,
+  "storeId": 2
+}
+
+###
+
+POST localhost:8080/api/v1/reviews/
+content-type: application/json
+
+{
+  "rating": "POOR",
+  "experience": "Don't eat from here, all reviews are fake, all of them are bots, it tastes like ****, I spent my entire night at hospital!",
+  "buyerId": 1,
+  "storeId": 2
+}
+
+###
+
+POST localhost:8080/api/v1/reviews/
+content-type: application/json
+
+{
+  "rating": "SATISFACTORY",
+  "experience": "You cannot find better Doner Kebab in the city. I loved it!",
+  "buyerId": 1,
+  "storeId": 1
+}
+
+###
+
+POST localhost:8080/api/v1/reviews/
+content-type: application/json
+
+{
+  "rating": "LACKING",
+  "experience": "Sure, it was okay. But I have eaten better.",
+  "buyerId": 1,
+  "storeId": 2
+}
+
+###
