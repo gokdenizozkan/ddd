@@ -96,14 +96,24 @@ public class ReviewServiceActives implements ReviewService {
 
     @Override
     public void delete(Long id) {
-        Review review = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundWithIdException(Review.class, id));
+        boolean exists = repository.existsById(id);
+        if (!exists) {
+            throw new ResourceNotFoundWithIdException(Review.class, id);
+        }
+
+        Review review = repository.findById(specification, id)
+                        .orElseThrow(() -> new ResourceNotActiveException(Review.class, id));
 
         review.setDeleted(true);
-
         StoreReviewFields.of(review.getStore())
                 .ratingRemoved(review.getRating().getValue())
                 .copyTo(review.getStore());
+
+        log.info("Updating store rating in recommendation service");
+        recommendationClient.updateStoreRating(
+                review.getStore().getStoreType().toString(),
+                review.getStore().getId().toString(),
+                review.getStore().getStoreRatingAverage());
 
         log.info("Soft deleting review with id {}", id);
         repository.save(review);

@@ -38,9 +38,21 @@ public class RecommendationRouter {
         Tuple<Double> distanceMinMax = ResponseUtil.findMinMaxFromStats(queryResponse, "geodist()"); // TODO refactor to use the archetype
         log.info("Stores found within radius with stats: Distance min is {}, max is {}", distanceMinMax.left(), distanceMinMax.right());
 
-
         log.info("Normalizing and correlating store data...");
         List<FoodStoreResponse> responses = queryResponse.getBeans(FoodStoreResponse.class);
+        if (responses.isEmpty()) {
+            log.info("No store found, returning empty spatial recommendation.");
+            return new SpatialRecommendation(0, distanceMinMax.right(), distanceMinMax.left(), List.of());
+        }
+
+        if (responses.size() == 1) {
+            log.info("Found only one store, returning it directly.");
+            FoodStoreResponse response = responses.getFirst();
+            return new SpatialRecommendation(1, distanceMinMax.right(), distanceMinMax.left(), List.of(
+                    new SpatialElement(1F, response.getId(), response.getName(), response.getRating(), response.getDistance(), response.getLatitude(), response.getLongitude())
+            ));
+        }
+
         List<SpatialElement> appraisedAndSortedResponses = responses.stream()
                 .map(r -> {
                     Float normalizedRating = recommendationEngine.normalize(

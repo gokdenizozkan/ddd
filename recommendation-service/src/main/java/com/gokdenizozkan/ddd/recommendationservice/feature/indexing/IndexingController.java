@@ -38,7 +38,7 @@ public class IndexingController {
     @PostMapping("/{storeType}/{storeId}")
     public ResponseEntity<Structured<Object>> indexStore(@PathVariable @NotBlank String storeType, @PathVariable @NotBlank String storeId,
                                                          @RequestParam @NotBlank String latitude, @NotBlank @RequestParam String longitude,
-                                                         @RequestParam @NotBlank String name, @RequestParam @Positive @NotNull Float rating) {
+                                                         @RequestParam @NotBlank String name, @RequestParam @NotNull Float rating) {
         log.info("Received indexing request for storeType: {}, storeId: {}, latitude: {}, longitude: {}, name: {}, rating: {}", storeType, storeId, latitude, longitude, name, rating);
         UpdateResponse response = indexingRouter.indexStore(storeType, storeId, latitude, longitude, name, rating);
         HttpStatus status = response.getStatus() == 0 ? HttpStatus.CREATED : HttpStatus.INTERNAL_SERVER_ERROR;
@@ -53,7 +53,7 @@ public class IndexingController {
     @PutMapping("/{storeType}/{storeId}")
     public ResponseEntity<Structured<Object>> updateStoreIndex(@PathVariable @NotBlank String storeType, @PathVariable @NotBlank String storeId,
                                                                @RequestParam @NotBlank String latitude, @RequestParam @NotBlank String longitude,
-                                                               @RequestParam @NotBlank String name, @RequestParam @Positive @NotNull Float rating) {
+                                                               @RequestParam @NotBlank String name, @RequestParam @NotNull Float rating) {
         log.info("Received index update request for storeType: {}, storeId: {}, latitude: {}, longitude: {}, name: {}, rating: {}", storeType, storeId, latitude, longitude, name, rating);
         indexingRouter.updateStoreIndex(storeType, storeId, latitude, longitude, name, rating);
         return ResponseTemplates.noContent();
@@ -61,7 +61,7 @@ public class IndexingController {
 
     @PutMapping("/{storeType}/{storeId}/rating/{rating}")
     public ResponseEntity<Structured<Object>> updateStoreRating(@PathVariable @NotBlank String storeType, @PathVariable @NotBlank String storeId,
-                                                                @PathVariable @Positive @NotNull Float rating) {
+                                                                @PathVariable @NotNull Float rating) {
         log.info("Received rating update request for storeType: {}, storeId: {}, rating: {}", storeType, storeId, rating);
         indexingRouter.updateStoreRating(storeType, storeId, rating);
         return ResponseTemplates.noContent();
