@@ -146,6 +146,10 @@ which is an extended version of Semantic Versioning (SemVer).
 1. Write unit tests.
 2. Write integration tests.
 
+#### ~~f17: Controllers are validated~~
+
+~~1. Write validation annotations to controllers.~~
+
 ### Features can be implemented after release
 
 - Pageable Recommendation listing (thanks to modifiable query structure). 
