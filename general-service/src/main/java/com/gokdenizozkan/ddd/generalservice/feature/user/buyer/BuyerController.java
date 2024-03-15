@@ -30,24 +30,24 @@ public class BuyerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Structured<BuyerDetails>> findById(@PathVariable @Positive @Valid Long id) {
+    public ResponseEntity<Structured<BuyerDetails>> findById(@PathVariable @Positive @NotNull Long id) {
         return responser.findById(id);
     }
 
     @PostMapping("/")
-    public ResponseEntity<Structured<BuyerDetails>> save(@RequestBody @NotNull @Valid BuyerSaveRequest request) {
+    public ResponseEntity<Structured<BuyerDetails>> save(@RequestBody @Valid BuyerSaveRequest request) {
         log.info("Received request to save buyer: {}", request);
         return responser.save(request);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Structured<BuyerDetails>> update(@PathVariable @Positive @Valid Long id, @RequestBody @NotNull @Valid BuyerSaveRequest request) {
+    public ResponseEntity<Structured<BuyerDetails>> update(@PathVariable @Positive Long id, @RequestBody @Valid BuyerSaveRequest request) {
         log.info("Received request to update buyer with id: {} and request: {}", id, request);
         return responser.update(id, request);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Structured<Object>> delete(@PathVariable @Positive @Valid Long id) {
+    public ResponseEntity<Structured<Object>> delete(@PathVariable @Positive @NotNull Long id) {
         log.info("Received request to delete buyer with id: {}", id);
         return responser.delete(id);
     }
