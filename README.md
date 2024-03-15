@@ -133,13 +133,18 @@ which is an extended version of Semantic Versioning (SemVer).
 ~~1. Prepare logging configurations.~~
 ~~2. Insert logging statements to certain parts of the code.~~
 
-#### f14: Swagger Documentation
+#### ~~f14: Swagger Documentation~~
 
-1. Add fundamental swagger documentation
+~~1. Add fundamental swagger documentation~~
 
 #### f15: Dockerised Deployment
 
 1. Dockerise the application
+
+#### f16: Unit & Testing
+
+1. Write unit tests.
+2. Write integration tests.
 
 ### Features can be implemented after release
 
