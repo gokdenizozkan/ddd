@@ -1,4 +1,4 @@
-package com.gokdenizozkan.ddd.recommendationservice.core.spatial;
+package com.gokdenizozkan.ddd.recommendationservice.core.solrquery;
 
 import com.gokdenizozkan.ddd.recommendationservice.core.quality.Spatial;
 import com.gokdenizozkan.ddd.recommendationservice.core.quality.FieldStringifyable;

@@ -3,16 +3,13 @@ package com.gokdenizozkan.ddd.recommendationservice.feature.indexing;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import com.gokdenizozkan.ddd.recommendationservice.config.SolrClientProvider;
-import com.gokdenizozkan.ddd.recommendationservice.core.util.Surround;
+import com.gokdenizozkan.ddd.recommendationservice.core.solrquery.SolrFetchQuery;
+import com.gokdenizozkan.ddd.recommendationservice.core.solrquery.UpdateRequestQuery;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.solr.client.solrj.SolrClient;
-import org.apache.solr.client.solrj.SolrQuery;
-import org.apache.solr.client.solrj.SolrRequest;
 import org.apache.solr.client.solrj.SolrServerException;
-import org.apache.solr.client.solrj.request.UpdateRequest;
-import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.UpdateResponse;
 import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrInputDocument;
@@ -71,12 +68,9 @@ public class IndexingEngine {
 
     public UpdateResponse updateById(@NotBlank String collectionName, @NotBlank String id, @NotBlank String field, @NotBlank String newValue) {
         log.info("Finding the existing document with id: {}", id);
-        SolrQuery getQuery = new SolrQuery();
-        getQuery.setQuery("id:" + id);
-
-        QueryResponse queryResponse = Surround.withTryCatch(client, collectionName, getQuery);
-        SolrDocument foundDoc = queryResponse.getResults().get(0);
-        log.info("Found the document: {}", foundDoc.toString());
+        SolrDocument foundDoc = SolrFetchQuery.of(collectionName)
+                .findById(id)
+                ._processAndGetFirstResult(client);
 
         log.info("Creating a new document with the new value {} for the field {}", newValue, field);
         SolrInputDocument newDoc = new SolrInputDocument();
@@ -85,30 +79,22 @@ public class IndexingEngine {
             if (entry.getKey().equals(field) || entry.getKey().equals("_version_") || entry.getKey().equals("name_exact")) {
                 continue;
             }
-
             newDoc.addField(entry.getKey(), entry.getValue());
         }
 
-        log.info("Preparing the update request...");
-        UpdateRequest updateRequest = new UpdateRequest();
-        updateRequest.add(newDoc);
-        updateRequest.setCommitWithin(1000);
-        updateRequest.setMethod(SolrRequest.METHOD.POST);
-        updateRequest.setParam("overwrite", "true");
-        updateRequest.setParam("commit", "true");
-
-        log.info("Processing the update request: {}", updateRequest);
-        return Surround.withTryCatch(client, collectionName, updateRequest);
+        return UpdateRequestQuery.of(collectionName)
+                .add(newDoc)
+                .setCommitTrue()
+                .setOverwriteTrue()
+                .setCommitWithin(1000)
+                ._process(client);
     }
 
     public UpdateResponse updateById(@NotBlank String collectionName, @NotBlank String id, @NotNull Map<String, Object> fields) {
         log.info("Finding the existing document with id: {}", id);
-        SolrQuery getQuery = new SolrQuery();
-        getQuery.setQuery("id:" + id);
-
-        QueryResponse queryResponse = Surround.withTryCatch(client, collectionName, getQuery);
-        SolrDocument foundDoc = queryResponse.getResults().get(0);
-        log.info("Found the document: {}", foundDoc.toString());
+        SolrDocument foundDoc = SolrFetchQuery.of(collectionName)
+                .findById(id)
+                ._processAndGetFirstResult(client);
 
         log.info("Creating a new document with the new values: {}", fields);
         SolrInputDocument newDoc = new SolrInputDocument();
@@ -121,16 +107,12 @@ public class IndexingEngine {
             newDoc.addField(key, value);
         });
 
-        log.info("Preparing the update request...");
-        UpdateRequest updateRequest = new UpdateRequest();
-        updateRequest.add(newDoc);
-        updateRequest.setCommitWithin(1000);
-        updateRequest.setMethod(SolrRequest.METHOD.POST);
-        updateRequest.setParam("overwrite", "true");
-        updateRequest.setParam("commit", "true");
-
-        log.info("Processing the update request: {}", updateRequest);
-        return Surround.withTryCatch(client, collectionName, updateRequest);
+        return UpdateRequestQuery.of(collectionName)
+                .add(newDoc)
+                .setCommitTrue()
+                .setOverwriteTrue()
+                .setCommitWithin(1000)
+                ._process(client);
     }
 
     public UpdateResponse deleteById(@NotBlank String collectionName, @NotBlank String id) {

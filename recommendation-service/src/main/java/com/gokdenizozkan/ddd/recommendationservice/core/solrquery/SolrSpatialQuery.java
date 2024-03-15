@@ -1,10 +1,9 @@
-package com.gokdenizozkan.ddd.recommendationservice.core.spatial;
+package com.gokdenizozkan.ddd.recommendationservice.core.solrquery;
 
 import com.gokdenizozkan.ddd.recommendationservice.core.quality.FieldStringifyable;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.QueryResponse;
-import org.apache.solr.common.params.CommonParams;
 import org.apache.solr.common.params.SpatialParams;
 import org.apache.solr.common.params.StatsParams;
 
@@ -19,7 +18,7 @@ public class SolrSpatialQuery {
     private SolrSpatialQuery(String collectionName) {
         this.collectionName = collectionName;
         this.query = new SolrQuery();
-        query.set("spatial", true);
+        query.set("solrquery", true);
     }
 
     public static SolrSpatialQuery of(String collectionName) {

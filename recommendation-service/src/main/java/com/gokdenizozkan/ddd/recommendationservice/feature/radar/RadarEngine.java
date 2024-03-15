@@ -1,8 +1,8 @@
 package com.gokdenizozkan.ddd.recommendationservice.feature.radar;
 
 import com.gokdenizozkan.ddd.recommendationservice.core.quality.Spatial;
-import com.gokdenizozkan.ddd.recommendationservice.core.spatial.SolrSpatialQuery;
-import com.gokdenizozkan.ddd.recommendationservice.core.spatial.SpatialQueryArchetype;
+import com.gokdenizozkan.ddd.recommendationservice.core.solrquery.SolrSpatialQuery;
+import com.gokdenizozkan.ddd.recommendationservice.core.solrquery.SpatialQueryArchetype;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
