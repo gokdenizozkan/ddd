@@ -11,7 +11,7 @@
     <groupId>com.gokdenizozkan.ddd</groupId>
     <artifactId>main-service</artifactId>
     <version>1.0.0</version>
-    <name>ding-dong-delicious</name>
+    <name>ddd-main-service</name>
     <description>General-service of the app Ding Dong Delicious</description>
     <properties>
         <java.version>21</java.version>
@@ -70,11 +70,6 @@
             <optional>true</optional>
         </dependency>
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -97,6 +92,11 @@
             <groupId>org.spockframework</groupId>
             <artifactId>spock-spring</artifactId>
             <version>2.4-M2-groovy-3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

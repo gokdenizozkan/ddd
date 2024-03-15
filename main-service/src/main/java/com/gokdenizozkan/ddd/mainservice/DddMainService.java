@@ -6,10 +6,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
-public class DddGeneralServiceApplication {
+public class DddMainService {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DddGeneralServiceApplication.class, args);
+		SpringApplication.run(DddMainService.class, args);
 	}
 
 }
