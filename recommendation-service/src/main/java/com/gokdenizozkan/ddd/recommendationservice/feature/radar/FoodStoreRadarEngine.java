@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 public class FoodStoreRadarEngine implements RadarEngine {
     private final SolrClient client;
 
-    public FoodStoreRadarEngine(SolrClientProvider provider, @Value("${engine.recommendation-engine.base-solr-url}") String baseSolrUrl) {
+    public FoodStoreRadarEngine(SolrClientProvider provider, @Value("${ddd.recommendation-service.base-solr-url}") String baseSolrUrl) {
         this.client = provider.http2(baseSolrUrl);
     }
 

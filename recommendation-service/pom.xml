@@ -10,8 +10,8 @@
     </parent>
     <groupId>com.gokdenizozkan.ddd</groupId>
     <artifactId>recommendation-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <name>ding-dong-delicious</name>
+    <version>1.0.0</version>
+    <name>ddd-recommendation-service</name>
     <description>Recommendation service of the app Ding Dong Delicious.</description>
     <properties>
         <java.version>21</java.version>
@@ -164,6 +164,20 @@
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <from>
+                        <image>eclipse-temurin:21-jdk</image>
+                    </from>
+                    <to>
+                        <image>ddd-recommendation-service</image>
+                    </to>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

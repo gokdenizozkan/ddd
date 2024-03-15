@@ -27,7 +27,7 @@ import java.util.Map;
 public class IndexingEngine {
     private final SolrClient client;
 
-    public IndexingEngine(SolrClientProvider provider, @Value("${engine.indexing-engine.base-solr-url}") String baseSolrUrl) {
+    public IndexingEngine(SolrClientProvider provider, @Value("${ddd.recommendation-service.base-solr-url}") String baseSolrUrl) {
         this.client = provider.http2(baseSolrUrl);
     }
 
