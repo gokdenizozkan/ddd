@@ -40,7 +40,7 @@ public class StoreResponser {
         Store store = service.save(request);
         log.info("Store Saved: {} - response to be created", store);
         StoreDetails response = dtoMapper.toDetails.apply(store);
-        return ResponseTemplates.ok(response);
+        return ResponseTemplates.created(response);
     }
 
     public ResponseEntity<Structured<StoreDetails>> update(Long id, StoreSaveRequest request) {
