@@ -4,3 +4,15 @@ services:
     container_name: ddd_solr
     ports:
       - "8983:8983"
+
+  ddd-recommendation-service:
+    build: .
+    container_name: ddd_recommendation_service
+    ports:
+      - "8081:8081"
+    environment:
+      - DDD_RECOMMENDATION_SERVICE_PORT=8081
+      - DDD_RECOMMENDATION_SERVICE_BASE_SOLR_URL=http://solr:8983/solr
+    depends_on:
+      - solr
+    restart: always

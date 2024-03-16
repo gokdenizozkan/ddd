@@ -1,6 +1,6 @@
 HELP.md
 target/
-src/main/java/com/gokdenizozkan/ddd/recommendationservice/feature/configuration/
+../configuration/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/

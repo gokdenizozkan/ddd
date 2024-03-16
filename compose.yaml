@@ -1,27 +1,50 @@
 services:
-  ddd-main:
-    build: ./general-service/Dockerfile
-    container_name: ddd-main
+  main:
+    build: main-service/.
+    container_name: ddd_main_service
+    image: gokdenizozkan/ddd-main-service:0.15.2
     ports:
-      - "8089:8089"
-
-
-
-  db:
-    image: postgres:16.2
+      - "8080:8080"
     environment:
-      POSTGRES_DB: ddd_main
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/dddmaindb
+      - SPRING_DATASOURCE_USERNAME=dingdong
+      - SPRING_DATASOURCE_PASSWORD=delicious
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+      - DDD_MAIN_SERVICE_PORT=8080
+      - DDD_CLIENT_RECOMMENDATION_SERVICE_COMPLETE_URL=http://recommendation:8081/api/v1
+    depends_on:
+      - main-db
+    restart: always
+
+  main-db:
+    image: postgres:16.2
+    container_name: ddd_main_database
+    environment:
+      POSTGRES_DB: dddmaindb
       POSTGRES_USER: dingdong
       POSTGRES_PASSWORD: delicious
     ports:
       - "5432:5432"
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - main-network
+    restart: always
 
-  solr:
+  recommendation:
+    build: recommendation-service/.
+    container_name: ddd_recommendation_service
+    image: gokdenizozkan/ddd-recommendation-service:0.15.2
+    ports:
+      - "8081:8081"
+    environment:
+      - DDD_RECOMMENDATION_SERVICE_PORT=8081
+      - DDD_RECOMMENDATION_SERVICE_BASE_SOLR_URL=http://recommendation-solr:8983/solr
+    depends_on:
+      - recommendation-solr
+    restart: always
+
+  recommendation-solr:
     image: solr:9.5.0
-    container_name: ddd_solr
+    container_name: ddd_recommendation_solr
     ports:
       - "8983:8983"
