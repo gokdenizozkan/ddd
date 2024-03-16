@@ -7,9 +7,13 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
+import lombok.ToString;
 
 import java.time.LocalDate;
+import java.util.function.Function;
 
+@Builder
 public record BuyerSaveRequest(
         @NotNull(message = "Name is required")
         String name,
@@ -26,4 +30,11 @@ public record BuyerSaveRequest(
         @Temporal(TemporalType.DATE)
         LocalDate birthdate
 ) {
+
+    public String toJson() {
+        String nullStr = "null";
+        Function<Object, String> wrap = s -> s == null ? nullStr : "\"" + s + "\"";
+
+        return String.format("{\"name\": %s, \"surname\": %s, \"email\": %s, \"phone\": %s, \"birthdate\": %s}", name, wrap.apply(surname), email, phone, wrap.apply(birthdate));
+    }
 }
