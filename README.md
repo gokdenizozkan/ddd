@@ -143,7 +143,7 @@ which is an extended version of Semantic Versioning (SemVer).
 
 #### f16: Unit & Testing
 
-1. Write unit tests.
+~~1. Write unit tests.~~
 2. Write integration tests.
 
 #### ~~f17: Controllers are validated~~

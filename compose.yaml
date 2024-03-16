@@ -48,3 +48,6 @@ services:
     container_name: ddd_recommendation_solr
     ports:
       - "8983:8983"
+    command:
+      - solr-precreate
+      - dddfoodstores
