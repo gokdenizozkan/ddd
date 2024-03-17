@@ -141,10 +141,10 @@ which is an extended version of Semantic Versioning (SemVer).
 
 1. Dockerise the application
 
-#### f16: Unit & Testing
+#### ~~f16: Unit & Testing~~
 
 ~~1. Write unit tests.~~
-2. Write integration tests.
+~~2. Write integration tests.~~
 
 #### ~~f17: Controllers are validated~~
 

@@ -4,7 +4,9 @@ import com.gokdenizozkan.ddd.mainservice.feature.review.Rating;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Builder;
 
+@Builder
 public record ReviewSaveRequest(
         @NotNull
         Rating rating,

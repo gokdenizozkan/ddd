@@ -1,30 +1,28 @@
 package com.gokdenizozkan.ddd.mainservice;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gokdenizozkan.ddd.mainservice.client.recommendation.RecommendationClient;
 import com.gokdenizozkan.ddd.mainservice.feature.address.Address;
 import com.gokdenizozkan.ddd.mainservice.feature.address.AddressRepository;
 import com.gokdenizozkan.ddd.mainservice.feature.address.dto.AddressEntityMapper;
 import com.gokdenizozkan.ddd.mainservice.feature.address.dto.request.AddressSaveRequest;
+import com.gokdenizozkan.ddd.mainservice.feature.review.Rating;
+import com.gokdenizozkan.ddd.mainservice.feature.review.Review;
+import com.gokdenizozkan.ddd.mainservice.feature.review.ReviewRepository;
+import com.gokdenizozkan.ddd.mainservice.feature.review.dto.request.ReviewSaveRequest;
 import com.gokdenizozkan.ddd.mainservice.feature.store.Store;
+import com.gokdenizozkan.ddd.mainservice.feature.store.StoreRepository;
 import com.gokdenizozkan.ddd.mainservice.feature.store.StoreType;
 import com.gokdenizozkan.ddd.mainservice.feature.store.dto.request.StoreSaveRequest;
 import com.gokdenizozkan.ddd.mainservice.feature.user.buyer.Buyer;
+import com.gokdenizozkan.ddd.mainservice.feature.user.buyer.BuyerRepository;
 import com.gokdenizozkan.ddd.mainservice.feature.user.buyer.dto.request.BuyerSaveRequest;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.hibernate.type.descriptor.java.LocalDateJavaType;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,20 +31,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-// import rest assured
+
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasSize;
 import static com.gokdenizozkan.ddd.mainservice.Entity.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -87,6 +83,12 @@ class GeneralServiceApplicationTests {
     AddressRepository addressRepository;
     @Autowired
     AddressEntityMapper addressEntityMapper;
+    @Autowired
+    BuyerRepository buyerRepository;
+    @Autowired
+    StoreRepository storeRepository;
+    @Autowired
+    ReviewRepository reviewRepository;
 
     @BeforeEach
     void beforeEach() {
@@ -115,6 +117,8 @@ class GeneralServiceApplicationTests {
 
     @Test
     void testStore_whenValidStoreSaveRequest_thenStoreSaved() {
+        storeRepository.deleteAll();
+
         // save address
         var addressSaveRequest = addressSaveRequest();
         Address address = addressRepository.save(addressEntityMapper.fromSaveRequest.apply(addressSaveRequest));
@@ -143,6 +147,8 @@ class GeneralServiceApplicationTests {
 
     @Test
     void testBuyer_whenValidBuyerSaveRequest_thenBuyerSaved() {
+        buyerRepository.deleteAll();
+
         // save buyer
         var request = BuyerSaveRequest.builder()
                 .name("Test")
@@ -170,6 +176,118 @@ class GeneralServiceApplicationTests {
                 .body("data[0].surname", equalTo("Buyer"));
     }
 
+    @Test
+    void testReview_whenValidReviewSaveRequest_thenReviewSaved() {
+        reviewRepository.deleteAll();
+
+        var buyer = buyerRepository.save(buyer());
+        var address = addressRepository.save(address());
+        var store = storeRepository.save(store(address));
+
+        var request = reviewSaveRequest(buyer, store);
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(toJson(request))
+                .post("api/v1/reviews/")
+                .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .body("success", equalTo(true));
+
+        // get reviews
+        when()
+                .get("api/v1/reviews/")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("data", hasSize(1))
+                .body("data[0].buyerId", equalTo(buyer.getId().intValue()))
+                .body("data[0].storeId", equalTo(store.getId().intValue()));
+    }
+
+    @Test
+    void testAddress_whenValidAddressUpdateRequest_thenAddressUpdated() {
+        var address = addressRepository.save(address());
+        var request = addressSaveRequest();
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(toJson(request))
+                .put("api/v1/addresses/" + address.getId())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("success", equalTo(true));
+    }
+
+    @Test
+    void testStore_whenValidStoreUpdateRequest_thenStoreUpdated() {
+        var address = addressRepository.save(address());
+        var store = storeRepository.save(store(address));
+        var request = storeSaveRequest(address.getId());
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(toJson(request))
+                .put("api/v1/stores/" + store.getId())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("success", equalTo(true));
+    }
+
+    @Test
+    void testBuyer_whenValidBuyerUpdateRequest_thenBuyerUpdated() {
+        var buyer = buyerRepository.save(buyer());
+        var request = buyerSaveRequest();
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(toJson(request))
+                .put("api/v1/buyers/" + buyer.getId())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("success", equalTo(true));
+    }
+
+    @Test
+    void testReview_whenValidReviewUpdateRequest_thenReviewUpdated() {
+        var buyer = buyerRepository.save(buyer());
+        var address = addressRepository.save(address());
+        var store = storeRepository.save(store(address));
+        var review = reviewRepository.save(review(buyer, store));
+        var request = reviewSaveRequest(buyer, store);
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(toJson(request))
+                .put("api/v1/reviews/" + review.getId())
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("success", equalTo(true));
+    }
+
+    @Test
+    void testUpdatePersists_whenReviewUpdated_thenStoreRatingAverageChanges() {
+        var buyer = buyerRepository.save(buyer());
+        var address = addressRepository.save(address());
+        var store = storeRepository.save(store(address));
+        var request = reviewSaveRequest(buyer, store);
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .body(toJson(request))
+                .post("api/v1/reviews/")
+                .then()
+                .statusCode(HttpStatus.CREATED.value())
+                .body("success", equalTo(true));
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get("api/v1/stores/" + store.getId() + "/details")
+                .then()
+                .statusCode(HttpStatus.OK.value())
+                .body("data.storeRatingAverage", greaterThan(0.0F));
+    }
+
     private String toJson(Object object) {
         try {
             return objectMapper.writeValueAsString(object);
@@ -185,6 +303,7 @@ class Entity {
     public static List<Long> idsAddress = new ArrayList<>();
     public static List<Long> idsStore = new ArrayList<>();
     public static List<Long> idsBuyer = new ArrayList<>();
+    public static List<Long> idsReview = new ArrayList<>();
     public static Random random = new Random();
 
     public static Address address() {
@@ -231,9 +350,19 @@ class Entity {
         store.setEmail("store@at.com");
         store.setPhone("1234567890");
         store.setStoreType(StoreType.FOOD_STORE);
+        store.setReviewCount(0L);
+        store.setStoreRatingAverage(0.0F);
+        store.setReviews(Collections.emptyList());
+        store.setSellers(Collections.emptyList());
 
         store.setEnabled(true);
         store.setDeleted(false);
+        return store;
+    }
+
+    public static Store store(Address address) {
+        var store = store();
+        store.setAddress(address);
         return store;
     }
 
@@ -261,6 +390,36 @@ class Entity {
         buyer.setEnabled(true);
         buyer.setDeleted(false);
         return buyer;
+    }
+
+    public static Review review() {
+        var id = random.nextLong();
+        while (idsReview.contains(id)) {
+            id = random.nextLong();
+        }
+        idsReview.add(id);
+        return review(id);
+    }
+
+    public static Review review(Long id) {
+        Review review = new Review();
+
+        review.setId(id);
+        review.setBuyer(buyer());
+        review.setStore(store());
+        review.setRating(Rating.EXCELLENT);
+        review.setExperience("Good");
+
+        review.setEnabled(true);
+        review.setDeleted(false);
+        return review;
+    }
+
+    public static Review review(Buyer buyer, Store store) {
+        var review = review();
+        review.setBuyer(buyer);
+        review.setStore(store);
+        return review;
     }
 
     public static AddressSaveRequest addressSaveRequest() {
@@ -302,6 +461,26 @@ class Entity {
                 .surname("Buyer")
                 .email("buyer@walmart.com")
                 .phone("1234567890")
+                .build();
+    }
+
+    public static ReviewSaveRequest reviewSaveRequest() {
+        var buyerId = random.nextLong(0, idsBuyer.size());
+        var storeId = random.nextLong(0, idsStore.size());
+        return ReviewSaveRequest.builder()
+                .buyerId(buyerId)
+                .storeId(storeId)
+                .rating(Rating.EXCELLENT)
+                .experience("Good")
+                .build();
+    }
+
+    public static ReviewSaveRequest reviewSaveRequest(Buyer buyer, Store store) {
+        return ReviewSaveRequest.builder()
+                .buyerId(buyer.getId())
+                .storeId(store.getId())
+                .rating(Rating.EXCELLENT)
+                .experience("Good")
                 .build();
     }
 }
