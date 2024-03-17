@@ -3,12 +3,21 @@
 Ding Dong Delicious (DDD) is a web app built with Java Spring Boot
 that brings local restaurants together with customers looking for a delicious meal.
 
+DDD Short Introduction Video:
+[![ddd-short-intro.jpg](asset%2Fddd-short-intro.jpg)](https://youtu.be/UPQtShILJw0)
+
+- DDD Tests: https://youtu.be/SFoJJwOiLGU
+- DDD Solr (How I managed to work with Solr using latest Spring Boot version?): https://youtu.be/hs_AK3dZho4
+
+To test the app, go to `localhost:8080/swagger-ui.html` for Main Service, and `localhost:8081/swagger-ui.html` for Recommendation Service.
+
 ## Table of Contents
 
 - [ddd](#ddd)
     - [Table of Contents](#table-of-contents)
     - [Technologies](#technologies)
     - [Versioning](#versioning)
+    - [Installation](#installation)
     - [Diagrams and Relationships](#diagrams-and-relationships)
       - [Architecture](#architecture)
         - [Main service](#main-service)
@@ -33,6 +42,30 @@ This project uses [AO-SemVer](https://github.com/alcheware/alpha-oriented-semant
 which is an extended version of Semantic Versioning (SemVer).
 
 You may find the features use for versioning in the [VERSIONING-FEATURES.md](VERSIONING-FEATURES.md) file.
+
+## Installation
+
+To install the app,
+make sure you have Docker Engine and Docker Compose installed on your machine (or you can have Docker Desktop, which includes all).
+
+If you prefer video guides, here is a YouTube video of mine: [https://youtu.be/UPQtShILJw0](https://youtu.be/UPQtShILJw0)
+
+1. Clone this repo, or download the [compose.yaml](compose.yaml) file.
+2. `cd` to the directory where `compose.yaml` file is located.
+3. Open your favorite terminal and run `docker compose up`.
+4. When pulling is done and docker containers are started, go to the [http://localhost:8983/solr](http://localhost:8983/solr) address on your browser.
+5. This page is Solr's admin panel. Select the core named `dddfoodstores` from the menu located at the bottom of the left menu.
+6. Navigate to the `Schema` section.
+7. Add the following fields to the schema:
+   - TYPE, FIELD NAME
+   - string, name
+   - location, latlon
+   - pfloat, rating
+   - string, latitude
+   - string, longitude
+8. When you add the fields stated above, you are done!
+9. You may consider populating the database, and Solr with the [populate-db file](./main-service/http-starters/populate-db.http) found in the http-starters directory (in main-service).
+10. That's it! You are ready to go. 
 
 ## Diagrams and Relationships
 
@@ -327,3 +360,5 @@ To handle this, handwritten specifications are used.
 For example, for food store service, such a specification would help the service layer work on active (both enabled and non-deleted) stores only, without explicitly stating that we want to work with active ones.
 
 One disclaimer would be that, current service implementations focusing on active entities are designed to GET active results, but can still perform update, and patch operations on non-active entities. This is a design decision, and can be changed in the future.
+
+![ddd-logo.png](asset%2Fddd-logo.png)
