@@ -1,8 +1,7 @@
 services:
   main:
-    build: main-service/.
     container_name: ddd_main_service
-    image: gokdenizozkan/ddd-main-service:0.15.2
+    image: gokdenizozkan/ddd:main-service-v1.0.0
     ports:
       - "8080:8080"
     environment:
@@ -31,9 +30,8 @@ services:
     restart: always
 
   recommendation:
-    build: recommendation-service/.
+    image: gokdenizozkan/ddd:recommendation-service-v1.0.0
     container_name: ddd_recommendation_service
-    image: gokdenizozkan/ddd-recommendation-service:0.15.2
     ports:
       - "8081:8081"
     environment:
@@ -51,3 +49,4 @@ services:
     command:
       - solr-precreate
       - dddfoodstores
+    restart: always

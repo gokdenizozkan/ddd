@@ -1,6 +1,7 @@
 # PRODUCTION
 FROM eclipse-temurin:21-jdk as BUILDER
-WORKDIR /ddd-recommendation -service
+WORKDIR /ddd-recommendation-service
+
 COPY mvnw .
 COPY .mvn .mvn
 COPY pom.xml .
