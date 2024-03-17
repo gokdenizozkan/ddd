@@ -12,8 +12,8 @@ FROM eclipse-temurin:21-jre
 COPY --from=BUILDER /ddd-main-service/ddd-main-service.jar ddd-main-service.jar
 ENTRYPOINT ["java", "-jar", "ddd-main-service.jar"]
 
-# TESTING
-#FROM eclipse-temurin:21-jdk
-#WORKDIR /ddd-main-service
-#COPY target/*.jar ddd-main-service.jar
-#ENTRYPOINT ["java", "-jar", "ddd-main-service.jar"]
+# QUICK
+FROM eclipse-temurin:21-jdk
+WORKDIR /ddd-main-service
+COPY target/*.jar ddd-main-service.jar
+ENTRYPOINT ["java", "-jar", "ddd-main-service.jar"]
