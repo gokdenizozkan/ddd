@@ -40,11 +40,11 @@ class ReviewControllerTest {
 
     @Test
     void whenReviewExist_thenReturnReviewResponseMirrorList() {
-        ReviewResponseMirror reviewResponseMirror = mock(ReviewResponseMirror.class);
-        List<ReviewResponseMirror> reviewResponseMirrorList = Collections.singletonList(reviewResponseMirror);
+        var reviewResponseMirror = mock(ReviewResponseMirror.class);
+        var reviewResponseMirrorList = Collections.singletonList(reviewResponseMirror);
         when(responser.findAll()).thenReturn(ResponseTemplates.ok(reviewResponseMirrorList));
 
-        ResponseEntity<Structured<List<ReviewResponseMirror>>> response = underTest.findAll();
+        var response = underTest.findAll();
 
         assertNotNull(response.getBody());
         assertEquals(1, response.getBody().data().size());

@@ -23,7 +23,9 @@ that brings local restaurants together with customers looking for a delicious me
 
 - Java 21
 - Spring Boot 3.2.3 across all services
-- SolrJ 9.5.0
+- Apache SolrJ 9.5.0
+- PostgreSQL 16.2
+- Testcontainers for testing
 
 ## Versioning
 
@@ -150,6 +152,10 @@ which is an extended version of Semantic Versioning (SemVer).
 
 ~~1. Write validation annotations to controllers.~~
 
+#### f18: Swagger Documentation
+
+1. Add more detailed swagger documentation.
+
 ### Features can be implemented after release
 
 - Pageable Recommendation listing (thanks to modifiable query structure). 
@@ -160,13 +166,110 @@ which is an extended version of Semantic Versioning (SemVer).
 
 ### Architecture
 
-Below is a summary of the service architecture flow for an incoming request.  
+This app was written in a hybrid architecture, and has two services, one of which is the main service, and the other is the recommendation service.
 
-Service named "Central Service" is composed of multiple controllers and services
-(like User controller, service and repository which uses PostgreSQL as its database).
+#### Main service
 
-The entire central service architecture is shown as if it is composed of a single service
-for the sake of simplicity and purpose of this diagram.
+Main service is written in monolithic architecture. It is composed of multiple controllers and services.
+For more detailed information on how entities relate to each other, see [Entity Relationships](#entity-relationships).
+
+```mermaid
+---
+title: Main Service Architecture
+---
+
+graph BT
+    BuyerController -->|directs| BuyerResponser -->|directs| BuyerService
+    BuyerService -->|uses| BuyerRepository
+    
+    StoreController -->|directs| StoreResponser -->|directs| StoreService
+    StoreService -->|uses| StoreRepository
+    
+    ReviewController -->|directs| ReviewResponser -->|directs| ReviewService
+    ReviewService -->|uses| ReviewRepository
+    
+    AddressController -->|directs| AddressResponser -->|directs| AddressService
+    AddressService -->|uses| AddressRepository
+    
+    
+    BuyerRepository -->|retrieves| BuyerService -->|returns results| BuyerResponser
+    BuyerResponser -->|returns response| BuyerController
+    
+    StoreRepository -->|retrieves| StoreService -->|returns results| StoreResponser
+    StoreResponser -->|returns response| StoreController
+    
+    ReviewRepository -->|retrieves| ReviewService -->|returns results| ReviewResponser
+    ReviewResponser -->|returns response| ReviewController
+    
+    AddressRepository -->|retrieves| AddressService -->|returns results| AddressResponser
+    AddressResponser -->|returns response| AddressController
+    
+    subgraph Buyer 
+        BuyerController
+        BuyerResponser
+        BuyerService
+        BuyerRepository
+    end
+    
+    subgraph Store 
+        StoreController
+        StoreResponser
+        StoreService
+        StoreRepository
+    end
+    
+    subgraph Review 
+        ReviewController
+        ReviewResponser
+        ReviewService
+        ReviewRepository
+    end
+    
+    subgraph Address 
+        AddressController
+        AddressResponser
+        AddressService
+        AddressRepository
+    end
+```
+
+#### Recommendation service
+
+Recommendation service is written in microservice architecture in mind. It is a reactive service that uses Apache Solr to provide spatial recommendations.
+
+```mermaid
+---
+title: Recommendation Service Architecture
+---
+
+graph TB
+    IndexingController -->|directs| IndexingRouter -->|routes| IndexingEngine
+    IndexingEngine -->|uses| Solr
+    
+    RecommendationController -->|directs| RecommendationRouter -->|directs| RecommendationEngine
+    RecommendationEngine -->|uses| Solr
+    
+    IndexingEngine -->|results| IndexingRouter -->|returns response| IndexingController
+    RecommendationEngine -->|results| RecommendationRouter -->|returns response| RecommendationController
+
+    Solr -->|provides| IndexingEngine
+    Solr -->|provides| RecommendationEngine
+    
+    subgraph Indexing
+        IndexingController
+        IndexingRouter
+        IndexingEngine
+    end
+    
+    subgraph Recommendation 
+        RecommendationController
+        RecommendationRouter
+        RecommendationEngine
+    end
+```
+
+
+### Incoming Request Flow
 
 ```mermaid
 ---
@@ -174,21 +277,21 @@ title: Service Architecture Flow -> Incoming Request
 ---
 
 graph LR
-    ExternalRequest -->|sends| CentralControllers[Central Controllers]
-    CentralServices -->|asks| RecommendationController
+    ExternalRequest -->|sends| MainControllers[Main Controllers]
+    MainServices -->|asks| RecommendationControllers
     
     subgraph "External World"
         ExternalRequest[Request]
     end
 
-    subgraph "Central Service"
-        CentralControllers[Central Controllers] -->|directs| CentralServices
-        CentralServices[Central Services] -->|uses| DB[PostgreSQL Database]
+    subgraph "Main Service"
+        MainControllers[Main Controllers] -->|directs| MainServices
+        MainServices[Main Services] -->|uses| DB[Database]
     end
 
     subgraph "Recommendation Service"
-        RecommendationEngine[Recommendation Engine] -->|uses| Solr[Apache Solr]
-        RecommendationController[Recommendation Controller] -->|directs| RecommendationEngine
+        RecommendationEngines[Recommendation Engines] -->|uses| Solr[Apache Solr]
+        RecommendationControllers[Recommendation Controllers] -->|directs| RecommendationEngines
     end
 ```
 
@@ -222,7 +325,7 @@ Responser is a class that is used to build a response.
 This helps to keep the service layer clean. Service layer does not need to know about the response structure. 
 
 
-### Entity Relationships
+### Entity Relationships of Main Service
 
 ```mermaid
 ---
@@ -348,5 +451,7 @@ But, it does not mean that the business will stay this way. It is possible that 
 In the future, store types can have their own tables. Such a refactoring can be handled as all store types will have their own services and layers.
 But of course, this does not lower the complexity of the service layer.
 
-To handle this, handwritten specifications will be used.
-For example, for restaurant service, such a specification would help the service layer work on restaurants only, without explicitly stating that we want to work with restaurants only.
+To handle this, handwritten specifications are used.
+For example, for food store service, such a specification would help the service layer work on active (both enabled and non-deleted) stores only, without explicitly stating that we want to work with active ones.
+
+One disclaimer would be that, current service implementations focusing on active entities are designed to GET active results, but can still perform update, and patch operations on non-active entities. This is a design decision, and can be changed in the future.

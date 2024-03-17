@@ -74,6 +74,7 @@ public class StoreServiceActives implements StoreService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public Store update(Long id, StoreSaveRequest request) {
         boolean exists = repository.existsById(id);
         if (!exists) {
@@ -86,6 +87,8 @@ public class StoreServiceActives implements StoreService {
         ActiveDetermingFields.of(id, repository, Store.class).copyTo(store);
         StoreReviewFields.of(id, repository).copyTo(store);
 
+        Store updatedStore = repository.save(store);
+
         if (!request.name().equals(repository.findStoreNameById(id).get())) {
             log.info("Updating store name in recommendation service: {}", store);
             recommendationClient.updateStoreName(
@@ -94,10 +97,11 @@ public class StoreServiceActives implements StoreService {
                     request.name());
         }
 
-        return repository.save(store);
+        return updatedStore;
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void delete(Long id) {
         Store store = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Store.class, id));
@@ -133,6 +137,7 @@ public class StoreServiceActives implements StoreService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public String updateCoordinatesById(Long id, BigDecimal latitude, BigDecimal longitude) {
         Store store = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundWithIdException(Store.class, id));

@@ -17,6 +17,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+/**
+ * Store repository is used by both the related services and certain static methods outside of the services' boundaries.
+ * This resulted in the need for a stub implementation of the repository to be used in the tests. Otherwise, it was almost impossible to test the service.
+ */
 public class StoreRepositoryStrub implements StoreRepository {
     @Override
     public Optional<StoreReviewFields> findStoreReviewFields(Long aLong) {
