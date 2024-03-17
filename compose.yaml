@@ -3,7 +3,7 @@ services:
     image: gokdenizozkan/ddd:main-service-v1.0.0
     container_name: ddd_main_service
     build:
-      context: .
+      context: ./main-service
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
@@ -24,7 +24,7 @@ services:
   recommendation:
     image: gokdenizozkan/ddd:recommendation-service-v1.0.0
     build:
-      context: .
+      context: ./recommendation-service
       dockerfile: Dockerfile
     container_name: ddd_recommendation_service
     ports:
@@ -37,7 +37,7 @@ services:
     restart: always
 
   main-db:
-    image: postgres:16.2
+    image: gokdenizozkan/ddd:main-database-v1.0.0
     container_name: ddd_main_database
     environment:
       POSTGRES_DB: dddmaindb
@@ -48,11 +48,8 @@ services:
     restart: always
 
   recommendation-solr:
-    image: solr:9.5.0
+    image: gokdenizozkan/ddd:recommendation-solr-v1.0.0
     container_name: ddd_recommendation_solr
     ports:
       - "8983:8983"
-    command:
-      - solr-precreate
-      - dddfoodstores
     restart: always
