@@ -4,7 +4,7 @@ Ding Dong Delicious (DDD) is a web app built with Java Spring Boot
 that brings local restaurants together with customers looking for a delicious meal.
 
 DDD Short Introduction Video:
-[![ddd-short-intro.jpg](asset%2Fddd-short-intro.jpg)](https://youtu.be/UPQtShILJw0)
+[![ddd-short-intro.jpg](asset%2Fddd-short-intro.jpg)](https://youtu.be/dVnsUFvTigs)
 
 - DDD Tests: https://youtu.be/SFoJJwOiLGU
 - DDD Solr (How I managed to work with Solr using latest Spring Boot version?): https://youtu.be/hs_AK3dZho4
