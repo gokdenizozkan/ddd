@@ -3,11 +3,13 @@
 Ding Dong Delicious (DDD) is a web app built with Java Spring Boot
 that brings local restaurants together with customers looking for a delicious meal.
 
-DDD Short Introduction Video:
-[![ddd-short-intro.jpg](asset%2Fddd-short-intro.jpg)](https://youtu.be/dVnsUFvTigs)
+Watch my short introduction to the app: [https://youtu.be/dVnsUFvTigs](https://youtu.be/dVnsUFvTigs)  
+<a href="https://youtu.be/dVnsUFvTigs"><img alt="kısa tanıtım youtube thumbnail" src="asset/kisa-tanitim.png" width="450px"></a>
 
-- DDD Tests: https://youtu.be/SFoJJwOiLGU
-- DDD Solr (How I managed to work with Solr using latest Spring Boot version?): https://youtu.be/hs_AK3dZho4
+Find more videos on the app at the [videos section](#videos)!
+- [General Introduction](https://youtu.be/2rT5s5DAxls) to see how I designed the entire project, and see it in action.
+- [Solr Usage](https://youtu.be/hs_AK3dZho4) to see how I was able to use Solr on newest versions of Spring Boot.
+- [Unit and Integration Tests](https://youtu.be/SFoJJwOiLGU) to see how I was able to write tests for the app, and their results.
 
 To test the app, go to `localhost:8080/swagger-ui.html` for Main Service, and `localhost:8081/swagger-ui.html` for Recommendation Service.
 
@@ -15,8 +17,9 @@ To test the app, go to `localhost:8080/swagger-ui.html` for Main Service, and `l
 
 - [ddd](#ddd)
     - [Table of Contents](#table-of-contents)
-    - [Technologies](#technologies)
+    - [About DDD](#about-ddd)
     - [Versioning](#versioning)
+    - [Videos](#videos)
     - [Installation](#installation)
     - [Diagrams and Relationships](#diagrams-and-relationships)
       - [Architecture](#architecture)
@@ -28,11 +31,26 @@ To test the app, go to `localhost:8080/swagger-ui.html` for Main Service, and `l
       - [Store data is shared between a Relational Database and Solr, why?](#store-data-is-shared-between-a-relational-database-and-solr-why)
         - [But wouldn't it be complicated to store all store types in a single table, in the future?](#but-wouldnt-it-be-complicated-to-store-all-store-types-in-a-single-table-in-the-future)
 
-## Technologies
+## About DDD
 
+**Things DDD stands out:**  
+1. DDD uses Solr on Spring Boot's newest version, through the use of SolrJ API. See more information on the video [here](https://youtu.be/hs_AK3dZho4).
+2. DDD uses DTO Projections to improve performance on certain data retrievals.
+3. DDD uses Specifications to filter out active entities.
+4. DDD uses Testcontainers to test the app.
+
+**Qualities I presented while developing DDD:**
+1. Diving deep into the raw documentations of new technologies.
+2. Learning how to use new technologies in a very short time.
+3. Writing clean, and maintainable code.
+4. Developing re-usable structures that make the codebase more maintainable.
+5. Passion for designing architectures, making them come to life, and seeing them work.
+6. Enjoying the process of learning new things, and applying them to the project.
+
+**Technologies used:**  
 - Java 21
 - Spring Boot 3.2.3 across all services
-- Apache SolrJ 9.5.0
+- Apache Solr 9.5.0 & SolrJ API
 - PostgreSQL 16.2
 - Testcontainers for testing
 
@@ -42,6 +60,13 @@ This project uses [AO-SemVer](https://github.com/alcheware/alpha-oriented-semant
 which is an extended version of Semantic Versioning (SemVer).
 
 You may find the features use for versioning in the [VERSIONING-FEATURES.md](VERSIONING-FEATURES.md) file.
+
+## Videos
+<div>
+<a href="https://youtu.be/2rT5s5DAxls"><img alt="genel tanıtım youtube thumbnail" src="asset/genel-tanitim.png" width="450px"></a>
+<a href="https://youtu.be/hs_AK3dZho4"><img alt="solr kullanım youtube thumbnail" src="asset/solr-kullanim.png" width="450px"></a>
+<a href="https://youtu.be/SFoJJwOiLGU"><img alt="unit ve integration test youtube thumbnail" src="asset/unit-ve-integration-test.png" width="450px"></a>
+</div>
 
 ## Installation
 
@@ -332,9 +357,9 @@ classDiagram
         +DECENT
         +LACKING
         +POOR
-        +int value
-        -Rating(int value)
-        +Double normalized()
+        -Float value
+        -int availableRatingCount
+        -Rating(Float value)
     }
 ```
 
