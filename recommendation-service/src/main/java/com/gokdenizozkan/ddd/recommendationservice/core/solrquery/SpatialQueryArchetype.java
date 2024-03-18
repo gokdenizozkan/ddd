@@ -38,7 +38,7 @@ public class SpatialQueryArchetype<R extends Spatial<Float>> {
     }
 
     public enum FoodStore {
-        DEFAULT("*:*", 100, "latlon", SolrSpatialQuery.SortOrder.ASC, "id,name,latlon,rating,distance:geodist()", 3, FoodStoreResponse.class),
+        DEFAULT("*:*", 10, "latlon", SolrSpatialQuery.SortOrder.ASC, "id,name,latlon,rating,distance:geodist()", 3, FoodStoreResponse.class),
         ;
 
         private final SpatialQueryArchetype<FoodStoreResponse> archetype;
